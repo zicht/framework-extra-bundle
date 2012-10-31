@@ -1,0 +1,18 @@
+{
+    "name": "zicht/framework-extra-bundle",
+    "description": "Utilities for Symfony",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Zicht online",
+            "email": "info@zicht.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0": { "src/": "" }
+    },
+    "minimum-stability": "dev",
+}
