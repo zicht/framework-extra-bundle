@@ -14,5 +14,5 @@
     "autoload": {
         "psr-0": { "src/": "" }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "dev"
 }
