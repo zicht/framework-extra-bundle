@@ -1,0 +1,5 @@
+services:
+    zicht_embed_helper:
+        class: Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
+        arguments:
+            - @service_container
