@@ -9,10 +9,11 @@
         }
     ],
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3",
+        "symfony/symfony": "2.1.*"
     },
     "autoload": {
-        "psr-0": { "src/": "" }
+        "psr-0": { "": ["src/", "tests/"] }
     },
     "minimum-stability": "dev"
 }
