@@ -115,6 +115,8 @@ class EmbedHelper {
 
                 if ($handlerResult && $handlerResult instanceof \Symfony\Component\HttpFoundation\Response) {
                     return $handlerResult;
+                } elseif (is_array($handlerResult)) {
+                    $extraViewVars = $handlerResult + $extraViewVars;
                 }
                 if ($successUrl) {
                     $returnUrl = $successUrl;
