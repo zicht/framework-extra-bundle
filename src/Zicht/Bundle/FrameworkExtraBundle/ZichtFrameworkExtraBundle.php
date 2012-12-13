@@ -10,7 +10,4 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ZichtFrameworkExtraBundle extends \Symfony\Component\HttpKernel\Bundle\Bundle
 {
-    public function build(ContainerBuilder $container)
-    {
-    }
 }

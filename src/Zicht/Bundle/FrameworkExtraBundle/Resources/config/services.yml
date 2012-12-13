@@ -3,3 +3,7 @@ services:
         class: Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
         arguments:
             - @service_container
+    zicht_twig_extension:
+        class: Zicht\Bundle\FrameworkExtraBundle\Twig\Extension
+        tags:
+            - { name: twig.extension }
