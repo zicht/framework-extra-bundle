@@ -4,7 +4,7 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
-namespace Zicht\Bundle\DoctrineExtensionsBundle\Doctrine\FunctionNode;
+namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine\FunctionNode;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
