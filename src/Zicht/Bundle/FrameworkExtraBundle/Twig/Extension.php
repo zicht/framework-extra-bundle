@@ -6,10 +6,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
+use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Twig_Extension;
 use Twig_Filter_Function;
 
 class Extension extends Twig_Extension {
+    function __construct(EmbedHelper $embedHelper)
+    {
+        $this->embedHelper = $embedHelper;
+    }
+
+
+
     function getFilters() {
         return array(
             'dump' => new \Twig_Filter_Method($this, 'dump'),
@@ -17,6 +25,18 @@ class Extension extends Twig_Extension {
         );
     }
 
+
+    /**
+     * Adds
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return array(
+            'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
+            'embed' => new \Twig_Function_Method($this, 'embed'),
+        );
+    }
 
     /**
      * Truncate text at a maximum length, splitting by words, and add an ellipsis "...".
@@ -39,10 +59,47 @@ class Extension extends Twig_Extension {
         return $result;
     }
 
-    function getName() {
-        return 'ZichtTwigExtension';
+    public function getNodeVisitors()
+    {
+        return array(
+            'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor()
+        );
     }
 
+
+    function embed($urlOrArray)
+    {
+        $embedParams = array_filter($this->embedHelper->getEmbedParams());
+        if (!$embedParams) {
+            return $urlOrArray;
+        }
+        if (is_array($urlOrArray)) {
+            return $urlOrArray + $embedParams;
+        } elseif (is_string($urlOrArray)) {
+            $query = parse_url($urlOrArray, PHP_URL_QUERY);
+            $urlOrArray = str_replace($query, '', $urlOrArray);
+            $currentParams = array();
+            parse_str($query, $currentParams);
+            $currentParams += $embedParams;
+            return preg_replace('/\?$/', '', $urlOrArray) . '?' . http_build_query($currentParams);
+        } else {
+            throw new \InvalidArgumentException("Only supports arrays or strings");
+        }
+    }
+
+    function getName() {
+        return 'zicht_framework_extra';
+    }
+
+
+    public function getDefaultOf() {
+        $items = func_get_args();
+        $items = array_filter($items);
+        if (count($items)) {
+            return current($items);
+        }
+        return null;
+    }
 
     /**
      * @param $var
