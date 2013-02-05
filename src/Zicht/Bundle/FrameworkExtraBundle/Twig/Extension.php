@@ -22,6 +22,7 @@ class Extension extends Twig_Extension {
         return array(
             'dump' => new \Twig_Filter_Method($this, 'dump'),
             'truncate' => new \Twig_Filter_Method($this, 'truncate'),
+            'regex_replace' => new \Twig_Filter_Method($this, 'regex_replace')
         );
     }
 
@@ -36,6 +37,12 @@ class Extension extends Twig_Extension {
             'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
             'embed' => new \Twig_Function_Method($this, 'embed'),
         );
+    }
+
+
+    public function regex_replace($subject, $pattern, $replacement)
+    {
+        return preg_replace($pattern, $replacement, $subject);
     }
 
     /**
