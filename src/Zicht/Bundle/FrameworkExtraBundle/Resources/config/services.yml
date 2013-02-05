@@ -7,3 +7,5 @@ services:
         class: Zicht\Bundle\FrameworkExtraBundle\Twig\Extension
         tags:
             - { name: twig.extension }
+        arguments:
+            - @zicht_embed_helper
