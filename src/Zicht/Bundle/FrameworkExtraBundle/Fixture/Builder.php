@@ -67,22 +67,36 @@ class Builder
             $className = $this->namespace . '\\' . ucfirst($entity);
             if (class_exists($className)) {
                 $class = new \ReflectionClass($className);
+
                 $entityInstance = $class->newInstanceArgs($args);
 
                 if ($parent = $this->current()) {
+                    foreach ($this->alwaysDo as $callable) {
+                        call_user_func($callable, $parent);
+                    }
+
                     $parentClass = @array_pop(explode('\\', get_class($parent)));
 
+
                     foreach (array('set', 'add') as $methodPrefix) {
-                        $methodName = $methodPrefix . ucfirst($entity);
+                        if ($parentClass == ucfirst($entity)) {
+                            $methodName = $methodPrefix . 'Child';
+                        } else {
+                            $methodName = $methodPrefix . ucfirst($entity);
+                        }
 
                         if (method_exists($parent, $methodName)) {
                             call_user_func(array($parent, $methodName), $entityInstance);
                             break;
                         }
                     }
-                    if (method_exists($entityInstance, 'set' . $parentClass)) {
+                    $parentSetter = 'set' . $parentClass;
+                    if ($parentClass == ucfirst($entity)) {
+                        $parentSetter = 'setParent';
+                    }
+                    if (method_exists($entityInstance, $parentSetter)) {
                         call_user_func(
-                            array($entityInstance, 'set' . $parentClass),
+                            array($entityInstance, $parentSetter),
                             $parent
                         );
                     }
@@ -129,9 +143,9 @@ class Builder
      */
     public function end()
     {
-        $tail = array_pop($this->stack);
+        $top = array_pop($this->stack);
         foreach ($this->alwaysDo as $callable) {
-            call_user_func($callable, $tail);
+            call_user_func($callable, $top);
         }
         return $this;
     }
