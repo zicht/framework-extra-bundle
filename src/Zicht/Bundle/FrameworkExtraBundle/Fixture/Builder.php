@@ -31,6 +31,7 @@ class Builder
     {
         $this->namespace = $namespace;
         $this->stack    = array();
+        $this->storage  = array();
         $this->alwaysDo = array();
     }
 
@@ -75,15 +76,16 @@ class Builder
                         call_user_func($callable, $parent);
                     }
 
-                    $parentClass = @array_pop(explode('\\', get_class($parent)));
+                    $parentClassName = get_class($parent);
+                    $parentClass = @array_pop(explode('\\', $parentClassName));
 
-
-                    foreach (array('set', 'add') as $methodPrefix) {
-                        if ($parentClass == ucfirst($entity)) {
-                            $methodName = $methodPrefix . 'Child';
-                        } else {
-                            $methodName = $methodPrefix . ucfirst($entity);
+                    if ($entityInstance instanceof $parentClassName) {
+                        if (method_exists($parent, 'addChildren')) {
+                            call_user_func(array($parent, 'addChildren'), $entityInstance);
                         }
+                    }
+                    foreach (array('set', 'add') as $methodPrefix) {
+                        $methodName = $methodPrefix . ucfirst($entity);
 
                         if (method_exists($parent, $methodName)) {
                             call_user_func(array($parent, $methodName), $entityInstance);
@@ -141,12 +143,24 @@ class Builder
      *
      * @return Builder
      */
-    public function end()
+    public function end($identifier = null)
     {
         $top = array_pop($this->stack);
         foreach ($this->alwaysDo as $callable) {
             call_user_func($callable, $top);
         }
+        if (null !== $identifier) {
+            $this->storage[$identifier]= $top;
+        }
         return $this;
+    }
+
+
+
+    public function get($identifier) {
+        if (!isset($this->storage[$identifier])) {
+            throw new \InvalidArgumentException("'$identifier' is not stored in this builder");
+        }
+        return $this->storage[$identifier];
     }
 }
