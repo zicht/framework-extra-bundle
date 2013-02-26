@@ -2,6 +2,12 @@
     "name": "zicht/framework-extra-bundle",
     "description": "Utilities for Symfony",
     "type": "symfony-bundle",
+    "repositories": {
+        "zicht/util": {
+            "type": "svn",
+            "url": "svn://zon/projecten/zicht-libraries/ZichtUtil"
+        }
+    },
     "authors": [
         {
             "name": "Zicht online",
@@ -10,7 +16,8 @@
     ],
     "require": {
         "php": ">=5.3",
-        "symfony/symfony": "2.1.*"
+        "symfony/symfony": "2.1.*",
+        "zicht/util": "*"
     },
     "autoload": {
         "psr-0": { "": ["src/", "tests/"] }
