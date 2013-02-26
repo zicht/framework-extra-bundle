@@ -4,7 +4,7 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
-namespace Zicht\Bundle\FrameworkExtraBundle\Tests;
+namespace ZichtTest\Bundle\FrameworkExtraBundle\Tests;
 
 use Symfony\Component\DependencyInjection\Container;
 

@@ -4,11 +4,11 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
-namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
+namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form\FormFactory;
 
-use Zicht\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
+use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
 
 class MockType extends \Symfony\Component\Form\AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {

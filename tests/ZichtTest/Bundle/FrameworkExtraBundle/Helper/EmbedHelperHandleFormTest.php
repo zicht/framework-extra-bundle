@@ -4,7 +4,7 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
-namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
+namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use \Symfony\Component\Form\FormBuilder;
