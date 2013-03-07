@@ -7,23 +7,44 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
+use \Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Twig_Extension;
 use Twig_Filter_Function;
 
 class Extension extends Twig_Extension {
-    function __construct(EmbedHelper $embedHelper)
+    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry)
     {
         $this->embedHelper = $embedHelper;
+        $this->annotationRegistry = $registry;
     }
-
 
 
     function getFilters() {
         return array(
-            'dump' => new \Twig_Filter_Method($this, 'dump'),
-            'truncate' => new \Twig_Filter_Method($this, 'truncate'),
-            'regex_replace' => new \Twig_Filter_Method($this, 'regex_replace')
+            'dump'          => new \Twig_Filter_Method($this, 'dump'),
+            'truncate'      => new \Twig_Filter_Method($this, 'truncate'),
+            'regex_replace' => new \Twig_Filter_Method($this, 'regex_replace'),
+            'str_uscore'    => new \Twig_Filter_Method($this, 'str_uscore'),
+            'str_dash'      => new \Twig_Filter_Method($this, 'str_dash'),
+            'str_camel'     => new \Twig_Filter_Method($this, 'str_camel'),
         );
+    }
+
+
+
+    public function str_dash($str)
+    {
+        return \Zicht\Util\Str::dash($str);
+    }
+
+    public function str_uscore($str)
+    {
+        return \Zicht\Util\Str::uscore($str);
+    }
+
+    public function str_camel($str)
+    {
+        return \Zicht\Util\Str::camel($str);
     }
 
 
@@ -71,6 +92,20 @@ class Extension extends Twig_Extension {
         return array(
             'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor()
         );
+    }
+
+
+    public function getTokenParsers() {
+        return array(
+            'zicht_meta_annotate' => new \Zicht\Bundle\FrameworkExtraBundle\Twig\Meta\AnnotateTokenParser(),
+            'zicht_meta_annotations' => new \Zicht\Bundle\FrameworkExtraBundle\Twig\Meta\AnnotationsTokenParser()
+        );
+    }
+
+
+    public function getAnnotationRegistry()
+    {
+        return $this->annotationRegistry;
     }
 
 

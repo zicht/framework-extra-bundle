@@ -1,3 +1,5 @@
+#TODO translate to xml.
+
 services:
     zicht_embed_helper:
         class: Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
@@ -9,3 +11,14 @@ services:
             - { name: twig.extension }
         arguments:
             - @zicht_embed_helper
+            - @zicht_annotation_registry
+
+    zicht_annotation_registry:
+        class: Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry
+
+    zicht_framework_extra.form.zicht_parent_choice_type:
+        class: Zicht\Bundle\FrameworkExtraBundle\Form\ParentChoiceType
+        arguments:
+            - @doctrine
+        tags:
+            - { name: form.type, alias: zicht_parent_choice }
