@@ -8,7 +8,7 @@ use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
 /**
  * Pager implementation to handle paging over a countable set of elements
  */
-class Pager implements Iterator, ArrayAccess, Countable {
+class Pager implements \Iterator, \ArrayAccess, \Countable {
     private $currentPage = -1;
     private $total = null;
     private $numPages = -1;
