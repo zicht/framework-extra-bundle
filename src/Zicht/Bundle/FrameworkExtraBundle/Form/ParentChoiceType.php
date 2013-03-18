@@ -66,6 +66,7 @@ class ParentChoiceType extends AbstractType
             $choices = array();
             if (!$parentId) {
                 $list = $repo->getRootNodes();
+                $choices[''] = '';
             } else {
                 $parent = $repo->find($parentId);
                 $choices[$parentId] = '(' . $parent . ')';
