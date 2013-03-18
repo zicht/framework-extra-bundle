@@ -33,6 +33,15 @@ class CRUDController extends BaseCRUDController
     }
 
 
+    public function createAction()
+    {
+        if ($this->get('request')->get('__bind_only')) {
+            return $this->bindAndRender('create');
+        }
+        return parent::createAction();
+    }
+
+
     public function moveUpAction($id)
     {
         $repo = $this->getDoctrine()->getManager()->getRepository($this->admin->getClass());
