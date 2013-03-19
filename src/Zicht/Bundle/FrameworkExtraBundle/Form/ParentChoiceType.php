@@ -43,7 +43,8 @@ class ParentChoiceType extends AbstractType
                 array(
                     'data_class' => function (Options $o) {
                         return $o->get('class');
-                    }
+                    },
+                    'required' => false
                 )
             );
     }
