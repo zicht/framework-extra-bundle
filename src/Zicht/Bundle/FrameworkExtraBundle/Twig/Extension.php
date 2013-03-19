@@ -27,6 +27,7 @@ class Extension extends Twig_Extension {
             'str_uscore'    => new \Twig_Filter_Method($this, 'str_uscore'),
             'str_dash'      => new \Twig_Filter_Method($this, 'str_dash'),
             'str_camel'     => new \Twig_Filter_Method($this, 'str_camel'),
+            'date_format'   => new \Twig_Filter_Method($this, 'date_format')
         );
     }
 
@@ -45,6 +46,19 @@ class Extension extends Twig_Extension {
     public function str_camel($str)
     {
         return \Zicht\Util\Str::camel($str);
+    }
+
+    public function date_format($date, $format = '%e %b %Y')
+    {
+        if ($date instanceof \DateTime) {
+            $ts = $date->getTimestamp();
+        } elseif (is_numeric($date)) {
+            $ts = $date;
+        } else {
+            throw new \InvalidArgumentException(sprintf("Cannot format %s as a date", $date));
+        }
+
+        return strftime($format, $ts);
     }
 
 
