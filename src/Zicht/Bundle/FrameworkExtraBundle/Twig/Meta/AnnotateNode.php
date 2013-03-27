@@ -12,6 +12,8 @@ class AnnotateNode extends Twig_Node
 {
     public function compile(Twig_Compiler $compiler)
     {
+        $has_prio = $this->hasNode('prio');
+        $prio = ($has_prio) ? $this->getNode('prio') : 0 ;
         $compiler->addDebugInfo($this);
         $compiler->write('$this->env->getExtension(\'zicht_framework_extra\')->getAnnotationRegistry()');
         if ($this->hasNode('name')) {
@@ -20,6 +22,10 @@ class AnnotateNode extends Twig_Node
             $compiler->raw('->addAnnotations(');
         }
         $compiler->subcompile($this->getNode('expr'));
+        if($has_prio){
+            $compiler->raw(', ');
+            $compiler->subcompile($prio);
+        }
         $compiler->write(');' . "\n");
     }
 }

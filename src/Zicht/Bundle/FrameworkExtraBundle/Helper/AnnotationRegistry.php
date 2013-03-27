@@ -39,9 +39,37 @@ class AnnotationRegistry
      */
     public function addAnnotation($name, $value, $priority = 0)
     {
-        $this->annotations[]= array('name' => $name, 'value' => $value, 'priority' => $priority);
+        $annotation = $this->getAnnotation($name);
+        $new_annotation = array('name' => $name, 'value' => $value, 'priority' => $priority);
+        if(!empty($annotation)){
+            if($priority > $annotation['value']['priority']){
+                $this->setAnnotation($annotation['key'], $new_annotation);
+            }
+        } else {
+            $this->annotations[]= $new_annotation;
+        }
     }
 
+    public function getAnnotation($name)
+    {
+        $match = array();
+        foreach($this->getAnnotations() as $key => $annotation){
+            if($annotation['name'] == $name)
+            {
+                $match['key'] = $key;
+                $match['value'] = $annotation;
+            }
+        }
+        return $match;
+    }
+
+    public function setAnnotation($key, $annotation)
+    {
+        if(array_key_exists($key, $this->annotations))
+        {
+            $this->annotations[$key] = $annotation;
+        }
+    }
 
     /**
      * Get the annotations.

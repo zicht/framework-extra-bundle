@@ -28,6 +28,10 @@ class AnnotateTokenParser extends \Twig_TokenParser
         } else {
             $info['name']= $first;
             $info['expr']= $this->parser->getExpressionParser()->parseExpression();
+            if (!$stream->test(Twig_Token::BLOCK_END_TYPE))
+            {
+                $info['prio']= $this->parser->getExpressionParser()->parseExpression();
+            }
         }
 
         $node = new AnnotateNode($info);
