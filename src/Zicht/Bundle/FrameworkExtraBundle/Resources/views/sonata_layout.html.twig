@@ -1,0 +1,21 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block logo %}
+    <a href="{{ url('sonata_admin_dashboard') }}" class="brand" style="background:url({{ asset(admin_pool.titlelogo) }}) left 9px no-repeat; padding-left: 35px;">
+        {{ admin_pool.title }}
+        <i class=""></i>
+    </a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ tinymce_init() }}
+{% endblock %}
+
+{% block footer %}
+    {# disabled default footer
+    <div class="pull-right clearfix">
+        <span class="label"><a href="http://sonata-project.org" rel="noreferrer" style="text-decoration: none; color: black">Sonata Project</a></span>
+    </div>
+    #}
+{% endblock %}

@@ -7,6 +7,8 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController as BaseCRUDController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
