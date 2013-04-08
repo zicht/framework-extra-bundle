@@ -1,5 +1,11 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
+{% block top_bar_after_nav %}
+    <ul class="nav">
+        <li><a href="/logout" class="dropdown-toggle" data-toggle="dowpdown">Uitloggen</a></li>
+    </ul>
+{% endblock %}
+
 {% block logo %}
     <a href="{{ url('sonata_admin_dashboard') }}" class="brand" style="background:url({{ asset(admin_pool.titlelogo) }}) left 9px no-repeat; padding-left: 35px;">
         {{ admin_pool.title }}
