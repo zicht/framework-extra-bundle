@@ -11,11 +11,23 @@ use \Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Twig_Extension;
 use Twig_Filter_Function;
 
-class Extension extends Twig_Extension {
-    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry)
+class Extension extends Twig_Extension
+{
+    public static $RELATIVE_DATE_PART_MAP = array(
+        'y' => array('year', 'years'),
+        'm' => array('month', 'months'),
+        'd' => array('day', 'days'),
+        'h' => array('hour', 'hours'),
+        'i' => array('minute', 'minutes'),
+        's' => array('second', 'seconds')
+    );
+
+
+    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, \Symfony\Component\Translation\TranslatorInterface $translator = null)
     {
         $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $registry;
+        $this->translator = $translator;
     }
 
 
@@ -27,7 +39,8 @@ class Extension extends Twig_Extension {
             'str_uscore'    => new \Twig_Filter_Method($this, 'str_uscore'),
             'str_dash'      => new \Twig_Filter_Method($this, 'str_dash'),
             'str_camel'     => new \Twig_Filter_Method($this, 'str_camel'),
-            'date_format'   => new \Twig_Filter_Method($this, 'date_format')
+            'date_format'   => new \Twig_Filter_Method($this, 'date_format'),
+            'relative_date' => new \Twig_Filter_Method($this, 'relative_date')
         );
     }
 
@@ -59,6 +72,36 @@ class Extension extends Twig_Extension {
         }
 
         return strftime($format, $ts);
+    }
+
+
+
+    public function relative_date($date)
+    {
+        $now = new \DateTime();
+        $diff = $date->diff($now);
+        $message = '';
+        foreach (array('y', 'm', 'd', 'h', 'i', 's') as $part) {
+            if ($diff->$part > 0) {
+                list($singular, $plural) = self::$RELATIVE_DATE_PART_MAP[$part];
+                if ($diff->$part > 1) {
+                    $denominator = $plural;
+                } else {
+                    $denominator = $singular;
+                }
+
+                if (null !== $this->translator) {
+                    $message = $this->translator->trans(
+                        '%count% ' . $denominator . ' ago',
+                        array('%count%' => $diff->$part)
+                    );
+                } else {
+                    $message = sprintf('%d %s ago', $diff->$part, $denominator);
+                }
+                break;
+            }
+        }
+        return $message;
     }
 
 

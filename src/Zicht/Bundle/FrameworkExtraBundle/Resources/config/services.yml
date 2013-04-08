@@ -12,6 +12,7 @@ services:
         arguments:
             - @zicht_embed_helper
             - @zicht_annotation_registry
+            - @translator
 
     zicht_annotation_registry:
         class: Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry
