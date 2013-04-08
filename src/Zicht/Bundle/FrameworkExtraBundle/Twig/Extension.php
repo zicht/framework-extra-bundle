@@ -17,6 +17,7 @@ class Extension extends Twig_Extension
         'y' => array('year', 'years'),
         'm' => array('month', 'months'),
         'd' => array('day', 'days'),
+        'w' => array('week', 'weeks'),
         'h' => array('hour', 'hours'),
         'i' => array('minute', 'minutes'),
         's' => array('second', 'seconds')
@@ -80,8 +81,10 @@ class Extension extends Twig_Extension
     {
         $now = new \DateTime();
         $diff = $date->diff($now);
+        // natively, diff doesn't contain 'weeks'.
+        $diff->w = round($diff->d / 7);
         $message = '';
-        foreach (array('y', 'm', 'd', 'h', 'i', 's') as $part) {
+        foreach (array('y', 'm', 'w', 'd', 'h', 'i', 's') as $part) {
             if ($diff->$part > 0) {
                 list($singular, $plural) = self::$RELATIVE_DATE_PART_MAP[$part];
                 if ($diff->$part > 1) {
