@@ -21,3 +21,7 @@
         {% endfor %}
     {% endspaceless %}
 {% endblock choice_widget_options %}
+
+{% block choice_widget %}
+    {{ parent() }}
+{% endblock %}
