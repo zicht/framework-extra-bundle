@@ -41,10 +41,22 @@ class Extension extends Twig_Extension
             'str_dash'      => new \Twig_Filter_Method($this, 'str_dash'),
             'str_camel'     => new \Twig_Filter_Method($this, 'str_camel'),
             'date_format'   => new \Twig_Filter_Method($this, 'date_format'),
-            'relative_date' => new \Twig_Filter_Method($this, 'relative_date')
+            'relative_date' => new \Twig_Filter_Method($this, 'relative_date'),
+            'ga_trackevent' => new \TWig_Filter_Method($this, 'ga_trackevent')
         );
     }
 
+
+    public function ga_trackevent($values = null)
+    {
+        $values = func_get_args();
+        array_unshift($values, '_trackEvent');
+
+        return sprintf(
+            ' onclick="_gaq.push(%s);"',
+            htmlspecialchars(json_encode(array_values($values)))
+        );
+    }
 
 
     public function str_dash($str)
