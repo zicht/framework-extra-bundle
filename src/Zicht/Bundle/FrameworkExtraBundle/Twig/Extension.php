@@ -34,7 +34,7 @@ class Extension extends Twig_Extension
 
     function getFilters() {
         return array(
-            'dump'          => new \Twig_Filter_Method($this, 'dump'),
+            'dump'          => new \Twig_Filter_Method($this, 'dump', array('is_safe' => array('html'))),
             'truncate'      => new \Twig_Filter_Method($this, 'truncate'),
             'regex_replace' => new \Twig_Filter_Method($this, 'regex_replace'),
             'str_uscore'    => new \Twig_Filter_Method($this, 'str_uscore'),
