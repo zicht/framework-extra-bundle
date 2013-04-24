@@ -34,7 +34,7 @@ class SortedSet implements \Countable {
     /**
      * Remove all current values and replace them with the values.
      *
-     * @param Traversable $values
+     * @param \Traversable $values
      * @return void
      */
     function setValues($values) {
@@ -57,7 +57,7 @@ class SortedSet implements \Countable {
      * Add all values in the given array.
      * Values already in the set are ignored, and the set is sorted after adding.
      *
-     * @param Traversable $values
+     * @param \Traversable $values
      * @return void
      */
     function addValues($values) {

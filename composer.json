@@ -16,8 +16,10 @@
     ],
     "require": {
         "php": ">=5.3",
-        "symfony/symfony": "2.1.*",
         "zicht/util": "*"
+    },
+    "require-dev": {
+        "symfony/symfony": "*"
     },
     "autoload": {
         "psr-0": { "": ["src/", "tests/"] }
