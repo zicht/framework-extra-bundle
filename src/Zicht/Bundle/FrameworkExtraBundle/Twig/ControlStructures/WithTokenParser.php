@@ -4,6 +4,12 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
+namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
+
+use \Twig_Token;
+use \Twig_TokenParser;
+use \Twig_NodeInterface;
+
 /**
  * The 'with' tag allows a scope-shift into a defined array. The format is as follows:
  *
@@ -52,8 +58,7 @@
  *
  * etcetera.
  */
-
-class TFD_TokenParser_With extends Twig_TokenParser
+class WithTokenParser extends \Twig_TokenParser
 {
     private $options = array(
         'merged',
@@ -63,7 +68,6 @@ class TFD_TokenParser_With extends Twig_TokenParser
     /**
      * Gets the tag name associated with this token parser.
      *
-     * @param string The tag name
      * @return string
      */
     public function getTag()
@@ -106,11 +110,17 @@ class TFD_TokenParser_With extends Twig_TokenParser
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse(array($this, 'decideWithEnd'), true);
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
-        return new TFD_Node_With($arguments, $body, $options, $start->getLine(), $start->getValue());
+        return new WithNode($arguments, $body, $options, $start->getLine(), $start->getValue());
     }
 
 
-    function decideWithEnd($token)
+    /**
+     * Checks for the end of the control structure.
+     *
+     * @param Twig_Token $token
+     * @return bool
+     */
+    public function decideWithEnd($token)
     {
         return $token->test('endwith');
     }

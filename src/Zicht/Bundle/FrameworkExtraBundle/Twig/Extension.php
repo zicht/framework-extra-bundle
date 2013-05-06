@@ -7,9 +7,10 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
+use \Zicht\Util\Str as StrUtil;
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
-use Twig_Extension;
-use Twig_Filter_Function;
+use \Twig_Extension;
+use \Twig_Filter_Function;
 
 class Extension extends Twig_Extension
 {
@@ -26,27 +27,97 @@ class Extension extends Twig_Extension
 
     function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, \Symfony\Component\Translation\TranslatorInterface $translator = null)
     {
-        $this->embedHelper = $embedHelper;
+        $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
-        $this->translator = $translator;
+        $this->translator         = $translator;
     }
 
 
-    function getFilters() {
+    function getFilters()
+    {
         return array(
-            'dump'          => new \Twig_Filter_Method($this, 'dump', array('is_safe' => array('html'))),
-            'truncate'      => new \Twig_Filter_Method($this, 'truncate'),
-            'regex_replace' => new \Twig_Filter_Method($this, 'regex_replace'),
-            'str_uscore'    => new \Twig_Filter_Method($this, 'str_uscore'),
-            'str_dash'      => new \Twig_Filter_Method($this, 'str_dash'),
-            'str_camel'     => new \Twig_Filter_Method($this, 'str_camel'),
-            'date_format'   => new \Twig_Filter_Method($this, 'date_format'),
-            'relative_date' => new \Twig_Filter_Method($this, 'relative_date'),
-            'ga_trackevent' => new \TWig_Filter_Method($this, 'ga_trackevent')
+            'dump'            => new \Twig_Filter_Method($this, 'dump', array('is_safe' => array('html'))),
+            'truncate'        => new \Twig_Filter_Method($this, 'truncate'),
+            'regex_replace'   => new \Twig_Filter_Method($this, 'regex_replace'),
+            're_replace'      => new \Twig_Filter_Method($this, 'regex_replace'),
+            'str_uscore'      => new \Twig_Filter_Method($this, 'str_uscore'),
+            'str_dash'        => new \Twig_Filter_Method($this, 'str_dash'),
+            'str_camel'       => new \Twig_Filter_Method($this, 'str_camel'),
+            'date_format'     => new \Twig_Filter_Method($this, 'date_format'),
+            'relative_date'   => new \Twig_Filter_Method($this, 'relative_date'),
+            'ga_trackevent'   => new \TWig_Filter_Method($this, 'ga_trackevent'),
+            'form_name2class' => new \Twig_Filter_Method($this, 'formNameToClassName'),
+
+            'with'            => new \Twig_Filter_Method($this, 'with'),
+            'without'         => new \Twig_Filter_Method($this, 'without'),
+
+            'round'           => new \Twig_Filter_Function('round'),
+            'ceil'            => new \Twig_Filter_Function('ceil'),
+            'floor'           => new \Twig_Filter_Function('floor'),
         );
     }
 
 
+    function getFunctions()
+    {
+        return array(
+            'first'    => new \Twig_Function_Method($this, 'first'),
+            'last'     => new \Twig_Function_Method($this, 'last'),
+            'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
+            'embed'    => new \Twig_Function_Method($this, 'embed'),
+        );
+    }
+
+
+
+
+    public function event_snippet($id, $template = null, $type = null)
+    {
+        $language = $this->getLanguageFromServiceContainer();
+
+        $params = array('event_guid' => $id, 'language' => $language);
+
+        if ($template) {
+            $params['template'] = $template;
+        }
+        if ($type) {
+            $params['type'] = $type;
+        }
+        $uri = sprintf('/event-snippet.php?%s', http_build_query($params));
+
+        return $uri;
+    }
+
+    private function getLanguageFromServiceContainer()
+    {
+        $language = 'nl';
+        /** @var $request \Symfony\Component\HttpFoundation\Request */
+        $request = $this->container->get('request');
+        $request->attributes->get('_locale');
+
+        if (!empty($locale)) {
+            $language = $locale;
+        }
+
+        return $language;
+    }
+
+    function first($list)
+    {
+        foreach ($list as $item) {
+            return $item;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Formats some values as an 'onclick' attribute for Google Analytics
+     *
+     * @param null $values
+     * @return string
+     */
     public function ga_trackevent($values = null)
     {
         $values = func_get_args();
@@ -61,17 +132,17 @@ class Extension extends Twig_Extension
 
     public function str_dash($str)
     {
-        return \Zicht\Util\Str::dash($str);
+        return StrUtil::dash($str);
     }
 
     public function str_uscore($str)
     {
-        return \Zicht\Util\Str::uscore($str);
+        return StrUtil::uscore($str);
     }
 
     public function str_camel($str)
     {
-        return \Zicht\Util\Str::camel($str);
+        return StrUtil::camel($str);
     }
 
     public function date_format($date, $format = '%e %b %Y')
@@ -88,10 +159,9 @@ class Extension extends Twig_Extension
     }
 
 
-
     public function relative_date($date)
     {
-        $now = new \DateTime();
+        $now  = new \DateTime();
         $diff = $date->diff($now);
         // natively, diff doesn't contain 'weeks'.
         $diff->w = round($diff->d / 7);
@@ -116,21 +186,10 @@ class Extension extends Twig_Extension
                 break;
             }
         }
+
         return $message;
     }
 
-
-    /**
-     * Adds
-     * @return array
-     */
-    public function getFunctions()
-    {
-        return array(
-            'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
-            'embed' => new \Twig_Function_Method($this, 'embed'),
-        );
-    }
 
 
     public function regex_replace($subject, $pattern, $replacement)
@@ -146,7 +205,8 @@ class Extension extends Twig_Extension
      * @param string $ellipsis
      * @return string
      */
-    function truncate($str, $length, $ellipsis = '...') {
+    function truncate($str, $length, $ellipsis = '...')
+    {
         $result = '';
         foreach (preg_split('/\b/', $str) as $part) {
             if (strlen($result . $part) > $length) {
@@ -156,6 +216,7 @@ class Extension extends Twig_Extension
                 $result .= $part;
             }
         }
+
         return $result;
     }
 
@@ -167,10 +228,13 @@ class Extension extends Twig_Extension
     }
 
 
-    public function getTokenParsers() {
+    public function getTokenParsers()
+    {
         return array(
-            'zicht_meta_annotate' => new \Zicht\Bundle\FrameworkExtraBundle\Twig\Meta\AnnotateTokenParser(),
-            'zicht_meta_annotations' => new \Zicht\Bundle\FrameworkExtraBundle\Twig\Meta\AnnotationsTokenParser()
+            'zicht_with'             => new ControlStructures\WithTokenParser(),
+            'zicht_switch'           => new ControlStructures\SwitchTokenParser(),
+            'zicht_meta_annotate'    => new Meta\AnnotateTokenParser(),
+            'zicht_meta_annotations' => new Meta\AnnotationsTokenParser()
         );
     }
 
@@ -190,28 +254,32 @@ class Extension extends Twig_Extension
         if (is_array($urlOrArray)) {
             return $urlOrArray + $embedParams;
         } elseif (is_string($urlOrArray)) {
-            $query = parse_url($urlOrArray, PHP_URL_QUERY);
-            $urlOrArray = str_replace($query, '', $urlOrArray);
+            $query         = parse_url($urlOrArray, PHP_URL_QUERY);
+            $urlOrArray    = str_replace($query, '', $urlOrArray);
             $currentParams = array();
             parse_str($query, $currentParams);
             $currentParams += $embedParams;
+
             return preg_replace('/\?$/', '', $urlOrArray) . '?' . http_build_query($currentParams);
         } else {
             throw new \InvalidArgumentException("Only supports arrays or strings");
         }
     }
 
-    function getName() {
+    function getName()
+    {
         return 'zicht_framework_extra';
     }
 
 
-    public function getDefaultOf() {
+    public function getDefaultOf()
+    {
         $items = func_get_args();
         $items = array_filter($items);
         if (count($items)) {
             return current($items);
         }
+
         return null;
     }
 
@@ -220,10 +288,11 @@ class Extension extends Twig_Extension
      * @param string $parameters
      * @return mixed
      */
-    function dump($var, $parameters = 'doc') {
+    function dump($var, $parameters = 'doc')
+    {
         switch ($parameters) {
             case 'export':
-                \Doctrine\Common\Util\Debug::dump($var,5);
+                \Doctrine\Common\Util\Debug::dump($var, 5);
                 break;
             default:
             case 'var_dump':

@@ -3,25 +3,27 @@
  * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://zicht.nl>
  */
- 
-class TFD_TokenParser_Switch extends Twig_TokenParser {
+namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
+
+use \Twig_TokenParser;
+use \Twig_Token;
+use \Twig_Node;
+
+class SwitchTokenParser extends Twig_TokenParser
+{
     /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @param string The tag name
+     * @{inheritDoc}
      */
-    public function getTag() {
+    public function getTag()
+    {
         return 'switch';
     }
 
     /**
-     * Parses a token and returns a node.
-     *
-     * @param Twig_Token $token A Twig_Token instance
-     *
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @{inheritDoc}
      */
-    public function parse(Twig_Token $token) {
+    public function parse(Twig_Token $token)
+    {
         $lineno = $token->getLine();
 
         $switchExpr = $this->parser->getExpressionParser()->parseExpression();
@@ -32,8 +34,8 @@ class TFD_TokenParser_Switch extends Twig_TokenParser {
 
 
         // skip whitespace between switch and first case
-        while($stream->test(Twig_Token::TEXT_TYPE)) {
-            if(trim($stream->getCurrent()->getValue()) != '') {
+        while ($stream->test(Twig_Token::TEXT_TYPE)) {
+            if (trim($stream->getCurrent()->getValue()) != '') {
                 $content = $stream->getCurrent()->getValue();
                 throw new Twig_SyntaxError("Can not render content '$content' directly after switch", $stream->getCurrent()->getLine());
             }
@@ -42,16 +44,16 @@ class TFD_TokenParser_Switch extends Twig_TokenParser {
         $stream->expect(Twig_Token::BLOCK_START_TYPE);
 
         $tests = array();
-        
-        while(!$stream->test('endswitch')) {
+
+        while (!$stream->test('endswitch')) {
             $token = $stream->expect(Twig_Token::NAME_TYPE, array('case', 'default'));
-            switch($token->getValue()) {
+            switch ($token->getValue()) {
                 case 'case':
-                    $caseExpr = array();
-                    $caseExpr[]= $this->parser->getExpressionParser()->parseExpression();
-                    while($stream->test(Twig_Token::OPERATOR_TYPE, ',')) {
+                    $caseExpr   = array();
+                    $caseExpr[] = $this->parser->getExpressionParser()->parseExpression();
+                    while ($stream->test(Twig_Token::OPERATOR_TYPE, ',')) {
                         $stream->next();
-                        $caseExpr[]= $this->parser->getExpressionParser()->parseExpression();
+                        $caseExpr[] = $this->parser->getExpressionParser()->parseExpression();
                     }
                     break;
                 case 'default':
@@ -60,14 +62,14 @@ class TFD_TokenParser_Switch extends Twig_TokenParser {
             }
 
             $fallthrough = false;
-            if($stream->test('fallthrough')) {
+            if ($stream->test('fallthrough')) {
                 $stream->next();
                 $fallthrough = true;
             }
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
             $body = $this->parser->subparse(array($this, 'decideSwitchFork'));
 
-            $tests[]= new TFD_Node_Switch_Case(
+            $tests[] = new SwitchCaseNode(
                 $body,
                 $caseExpr,
                 $fallthrough,
@@ -79,12 +81,18 @@ class TFD_TokenParser_Switch extends Twig_TokenParser {
         $stream->expect('endswitch');
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        return new TFD_Node_Switch(new Twig_Node($tests), $switchExpr, $lineno);
+        return new SwitchNode(new Twig_Node($tests), $switchExpr, $lineno);
     }
 
 
-    public function decideSwitchFork($token) {
+    /**
+     * Checks if the token is part of the current control structure.
+     *
+     * @param Twig_Token $token
+     * @return mixed
+     */
+    public function decideSwitchFork($token)
+    {
         return $token->test(array('case', 'default', 'endswitch'));
     }
 }
-
