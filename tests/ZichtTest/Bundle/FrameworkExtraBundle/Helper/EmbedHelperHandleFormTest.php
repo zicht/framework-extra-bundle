@@ -16,7 +16,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormReturnsExpectedFormUrl() {
@@ -27,7 +27,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormReturnsExpectedFormUrlWithEmbeddedParams() {
@@ -46,7 +46,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillStoreFormStateIfNotXmlHttpRequest() {
@@ -57,7 +57,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillNotStoreFormStateIfXmlHttpRequest() {
@@ -72,7 +72,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormStateWillContainErrorsIfAddedByCallback() {
@@ -103,7 +103,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillRedirectToReturnUrlIfSuccessful() {
@@ -127,7 +127,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillRedirectToReturnUrlIfNotSuccessful() {
@@ -150,7 +150,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillNotRedirectToReturnUrlIfSuccessfulAndXmlHttpRequest() {
@@ -172,7 +172,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillYieldJsonResponseWithSuccessUrlIfSuccessfulAndXmlHttpRequest() {
@@ -195,7 +195,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\SroBundle\Extension\EmbedHelper::handleForm
+     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillRestoreFormStateWhenDisplayed() {
