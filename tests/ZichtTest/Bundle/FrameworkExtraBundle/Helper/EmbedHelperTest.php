@@ -46,6 +46,10 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
         $this->request = new \Symfony\Component\HttpFoundation\Request();
         $this->request->setSession($this->session);
         self::$container->set('request', $this->request);
+
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
+        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
+        self::$container->set('router', $this->router);
     }
 
 
@@ -123,7 +127,7 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
 
 
     function testGetFormId() {
-        $form = self::$container->get('form.factory')->create(new MockType(), new MockData());
+        $form = $this->form;
         $this->assertInternalType('string', $this->helper->getFormId($form));
     }
 }

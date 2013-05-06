@@ -18,10 +18,6 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase {
     static $testParams = array();
 
     static function setUpBeforeClass() {
-//         $params = parse_ini_file(__DIR__.'/../../assets/test-parameters.ini', true);
-//         if($params && !empty($params[APPLICATION_ENV])) {
-//             self::$testParams = $params[APPLICATION_ENV];
-//         }
         self::$container = new Container();
     }
 
