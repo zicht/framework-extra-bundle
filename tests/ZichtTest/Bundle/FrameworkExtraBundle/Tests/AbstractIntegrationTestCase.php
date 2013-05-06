@@ -6,7 +6,7 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Tests;
 
-use Symfony\Component\DependencyInjection\Container;
+use \Symfony\Component\DependencyInjection\Container;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
 

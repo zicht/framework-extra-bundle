@@ -6,6 +6,7 @@ Bundle with utility classes.
 * Twig extensions
   * dump filter
   * truncate(length, ellipsis = '...') filter
+  * 'switch' and 'with' control structures
 * Doctrine extensions
   * RAND() function
 

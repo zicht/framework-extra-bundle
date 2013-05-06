@@ -6,8 +6,10 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
+use \Symfony\Component\Translation\TranslatorInterface;
+
 use \Zicht\Util\Str as StrUtil;
+use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use \Twig_Extension;
 use \Twig_Filter_Function;
@@ -25,7 +27,7 @@ class Extension extends Twig_Extension
     );
 
 
-    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, \Symfony\Component\Translation\TranslatorInterface $translator = null)
+    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null)
     {
         $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
@@ -67,39 +69,6 @@ class Extension extends Twig_Extension
         );
     }
 
-
-
-
-    public function event_snippet($id, $template = null, $type = null)
-    {
-        $language = $this->getLanguageFromServiceContainer();
-
-        $params = array('event_guid' => $id, 'language' => $language);
-
-        if ($template) {
-            $params['template'] = $template;
-        }
-        if ($type) {
-            $params['type'] = $type;
-        }
-        $uri = sprintf('/event-snippet.php?%s', http_build_query($params));
-
-        return $uri;
-    }
-
-    private function getLanguageFromServiceContainer()
-    {
-        $language = 'nl';
-        /** @var $request \Symfony\Component\HttpFoundation\Request */
-        $request = $this->container->get('request');
-        $request->attributes->get('_locale');
-
-        if (!empty($locale)) {
-            $language = $locale;
-        }
-
-        return $language;
-    }
 
     function first($list)
     {
