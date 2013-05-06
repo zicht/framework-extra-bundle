@@ -46,7 +46,6 @@ class Extension extends Twig_Extension
             'date_format'     => new \Twig_Filter_Method($this, 'date_format'),
             'relative_date'   => new \Twig_Filter_Method($this, 'relative_date'),
             'ga_trackevent'   => new \TWig_Filter_Method($this, 'ga_trackevent'),
-            'form_name2class' => new \Twig_Filter_Method($this, 'formNameToClassName'),
 
             'with'            => new \Twig_Filter_Method($this, 'with'),
             'without'         => new \Twig_Filter_Method($this, 'without'),
@@ -191,7 +190,14 @@ class Extension extends Twig_Extension
     }
 
 
-
+    /**
+     * Filter implementation for regular expression replacement
+     *
+     * @param string $subject
+     * @param string $pattern
+     * @param string $replacement
+     * @return string
+     */
     public function regex_replace($subject, $pattern, $replacement)
     {
         return preg_replace($pattern, $replacement, $subject);
