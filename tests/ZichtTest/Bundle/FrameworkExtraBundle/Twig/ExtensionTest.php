@@ -79,5 +79,4 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             array('round', array(1.6), 2),
         );
     }
-
 }
