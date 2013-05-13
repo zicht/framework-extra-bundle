@@ -62,7 +62,8 @@ class WithTokenParser extends \Twig_TokenParser
 {
     private $options = array(
         'merged',
-        'sandboxed'
+        'sandboxed',
+        'always'
     );
 
     /**

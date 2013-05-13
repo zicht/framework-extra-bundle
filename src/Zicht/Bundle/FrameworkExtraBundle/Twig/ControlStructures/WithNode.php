@@ -65,31 +65,34 @@ class WithNode extends \Twig_Node
             ->write("\n")
             ->write('array_push($withStack, $context);' . "\n");
 
-        if ($this->hasOption('sandboxed')) {
-            $compiler->write('$values = array();' . "\n");
-        } elseif ($this->hasOption('merged')) {
-            $compiler->write('$values = $context;' . "\n");
-        } else {
-            $compiler->write('$values = array(\'_parent\' => $context);');
-        }
-
-        $compiler
-            ->write('$values = array_merge(' . "\n")
-            ->indent()
-            ->write('$values');
+        $compiler->write('$values = array_merge(' . "\n")->indent();
+        $i = 0;
         foreach ($this->getAttribute('items') as $argument) {
-            $compiler->raw(',' . "\n");
+            if ($i ++ > 0) {
+                $compiler->raw(',' . "\n");
+            }
             $this->compileArgument($compiler, $argument);
         }
+        $compiler->raw("\n")->outdent()->write(");\n");
 
-        $compiler
-            ->raw("\n")
-            ->outdent()
-            ->write(");\n");
+        if (!$this->hasOption('always')) {
+            $compiler->write('if (count(array_filter($values))) {');
+        }
+
+        if ($this->hasOption('merged')) {
+            $compiler->write('$values += $context;' . "\n");
+        } else {
+            $compiler->write('$values += array(\'_parent\' => $context);');
+        }
+
         $compiler
             ->write('$context = $values;')
             ->subcompile($this->getNode('body'))
-            ->write('$context = array_pop($withStack);' . "\n");
+        ;
+        if (!$this->hasOption('always')) {
+            $compiler->write('}');
+        }
+        $compiler->write('$context = array_pop($withStack);' . "\n");
     }
 
 
