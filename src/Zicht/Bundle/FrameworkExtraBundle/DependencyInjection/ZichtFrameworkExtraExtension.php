@@ -19,5 +19,9 @@ class ZichtFrameworkExtraExtension extends DIExtension
     public function load(array $config, ContainerBuilder $container) {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if ($container->hasDefinition('doctrine')) {
+//            $container->getDefinition('doctrine')->addMethodCall()
+        }
     }
 }
