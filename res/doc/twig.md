@@ -94,7 +94,7 @@ The switch node implements a switch statement in twig. The main differences with
 * Fallthrough is annotated on the node you want to fallthrough into
 * You can pass multiple expressions to one case
 
-Example:
+*Example*:
 
     {% switch value %}
         {% case "a", "b" %}
@@ -120,5 +120,3 @@ This would roughly compile to the following PHP code:
             break;
     }
 
----------------------------
-[index.html](index)
