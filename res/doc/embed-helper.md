@@ -50,7 +50,7 @@ And inside the template:
 
 Now, including this action within another template can be done as such:
 
-~~~~html+django
+~~~~
 {% render 'MyController:myForm' with {'return_url': app.request.requestUri, 'success_url': '/done'} %}
 ~~~~
 
