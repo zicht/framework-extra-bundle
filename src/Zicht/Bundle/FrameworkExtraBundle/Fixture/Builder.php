@@ -69,7 +69,11 @@ class Builder
             $className = $this->resolve($entity);
             if ($className) {
                 $class = new \ReflectionClass($className);
-                $entityInstance = $class->newInstanceArgs($args);
+                if ($args) {
+                    $entityInstance = $class->newInstanceArgs($args);
+                } else {
+                    $entityInstance = $class->newInstance();
+                }
                 $this->push($entityInstance);
             } else {
                 throw new \BadMethodCallException(
