@@ -13,7 +13,7 @@
         "zicht/util": "*"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.*",
+        "symfony/symfony": ">=2.1",
         "sonata-project/admin-bundle": "*",
         "twig/twig": "*",
         "doctrine/orm": "*"
