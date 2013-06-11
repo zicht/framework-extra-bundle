@@ -51,7 +51,7 @@ And inside the template:
 Now, including this action within another template can be done as such:
 
 ~~~~
-{% render 'MyController:myForm' with {'return_url': app.request.requestUri, 'success_url': '/done'} %}
+{{ render(controller('MyController:myForm', {'return_url': app.request.requestUri, 'success_url': '/done'} )) }}
 ~~~~
 
 The template will be rendered, and the return_url and success_url parameters will be carried to the handle-request in
