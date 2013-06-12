@@ -6,6 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Admin;
 
 use \Sonata\AdminBundle\Admin\Admin;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use \Sonata\AdminBundle\Datagrid\ListMapper;
 use \Sonata\AdminBundle\Form\FormMapper;
 use \Sonata\AdminBundle\Route\RouteCollection;
@@ -16,18 +17,29 @@ use \Sonata\AdminBundle\Datagrid\DatagridMapper;
  */
 class TreeAdmin extends Admin
 {
-    /**
-     * @{inheritDoc}
-     */
-    public function __construct($code, $class, $baseControllerName)
+    public function createQuery($context = 'list')
     {
-        parent::__construct($code, $class, $baseControllerName);
+        if ($context === 'list') {
+            /** @var $em \Doctrine\ORM\EntityManager */
+            $em = $this->getModelManager()->getEntityManager($this->getClass());
 
-        $this->datagridValues = array(
-            '_sort_order' => 'ASC',
-            '_sort_by'    => 'root,lft',
-            '_per_page'   => 200
-        );
+            /** @var $cmd \Doctrine\Common\Persistence\Mapping\ClassMetadata */
+            $cmd = $em->getMetadataFactory()->getMetadataFor($this->getClass());
+
+            $queryBuilder = $em->createQueryBuilder();
+            $queryBuilder
+                ->select('n')
+                ->from($this->getClass(), 'n')
+            ;
+            if ($cmd->hasField('root')) {
+                $queryBuilder->orderBy('n.root, n.lft');
+            } else {
+                $queryBuilder->orderBy('n.lft');
+            }
+
+            return new ProxyQuery($queryBuilder);
+        }
+        return parent::createQuery($context);
     }
 
 
