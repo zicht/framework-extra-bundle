@@ -19,6 +19,21 @@ class TreeAdmin extends Admin
     /**
      * @{inheritDoc}
      */
+    public function __construct($code, $class, $baseControllerName)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+
+        $this->datagridValues = array(
+            '_sort_order' => 'ASC',
+            '_sort_by'    => 'root,lft',
+            '_per_page'   => 200
+        );
+    }
+
+
+    /**
+     * @{inheritDoc}
+     */
     public function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -36,23 +51,6 @@ class TreeAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('parent');
-    }
-
-
-    /**
-     * @{inheritDoc}
-     */
-    public function __construct($code, $class, $baseControllerName)
-    {
-        parent::__construct($code, $class, $baseControllerName);
-
-        if (!$this->hasRequest()) {
-            $this->datagridValues = array(
-                '_sort_order' => 'ASC',
-                '_sort_by'    => 'root,lft',
-                '_per_page'   => 200
-            );
-        }
     }
 
 
