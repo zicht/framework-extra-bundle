@@ -6,6 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
 use \Symfony\Component\DependencyInjection\Container;
+use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
 use \Symfony\Component\Form\Form;
@@ -16,7 +17,8 @@ use \Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
  */
-class EmbedHelper {
+class EmbedHelper
+{
     /**
      * Service container
      *
@@ -30,7 +32,8 @@ class EmbedHelper {
      *
      * @param \Symfony\Component\DependencyInjection\Container $container
      */
-    function __construct(Container $container) {
+    public function __construct(Container $container)
+    {
         $this->container = $container;
     }
 
@@ -42,7 +45,8 @@ class EmbedHelper {
      * @param array $params
      * @return string
      */
-    function url($route, $params) {
+    public function url($route, $params)
+    {
         // use array filter to remove keys with null values
         $params += array_filter($this->getEmbedParams());
 
@@ -55,19 +59,21 @@ class EmbedHelper {
      *
      * @return array
      */
-    function getEmbedParams() {
+    public function getEmbedParams()
+    {
         $params = array('return_url' => null, 'success_url' => null, 'do' => null);
 
-        if ($returnUrl = $this->container->get('request')->get('return_url') ) {
+        if ($returnUrl = $this->container->get('request')->get('return_url')) {
             $params['return_url'] = $returnUrl;
         }
-        if ($returnUrl = $this->container->get('request')->get('success_url') ) {
+        if ($returnUrl = $this->container->get('request')->get('success_url')) {
             $params['success_url'] = $returnUrl;
         }
         // eg: do=change
-        if ($doAction = $this->container->get('request')->get('do') ) {
+        if ($doAction = $this->container->get('request')->get('do')) {
             $params['do'] = $doAction;
         }
+
         return $params;
     }
 
@@ -89,33 +95,37 @@ class EmbedHelper {
      * @param string $formTargetRoute
      * @param array $formTargetParams
      * @param array $extraViewVars
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse|\Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse
+     * @return array|\Symfony\Component\HttpFoundation\Response
      */
-    function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
-        $formTargetParams = array(), $extraViewVars = array()) {
+    public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
+                        $formTargetParams = array(), $extraViewVars = array())
+    {
 
         $formId = $this->getFormId($form);
 
-        $formState = $request->getSession()->get($formId);
+        $formState  = $request->getSession()->get($formId);
         $formStatus = '';
 
         // if the method is post, we may assume that the user has posted the form
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
-            $returnUrl = $request->get('return_url');
-            $successUrl = $request->get('success_url');
+            $returnUrl     = $request->get('return_url');
+            $successUrl    = $request->get('success_url');
             $handlerResult = false;
 
             // if it is valid, we can use the callback to handle the actual handling
-            if ($form->isValid() && ($handlerResult = call_user_func($handlerCallback, $request, $form, $this->container))) {
+            if (
+                $form->isValid()
+                && ($handlerResult = call_user_func($handlerCallback, $request, $form, $this->container))
+            ) {
                 // any lingering errors may be removed now.
                 unset($formState['has_errors']);
                 unset($formState['data']);
                 unset($formState['form_errors']);
                 $formStatus = 'ok';
 
-                if ($handlerResult && $handlerResult instanceof \Symfony\Component\HttpFoundation\Response) {
+                if ($handlerResult && $handlerResult instanceof Response) {
                     return $handlerResult;
                 } elseif (is_array($handlerResult)) {
                     $extraViewVars = $handlerResult + $extraViewVars;
@@ -129,9 +139,9 @@ class EmbedHelper {
             } else {
                 $formStatus = 'errors';
 
-                $formState['has_errors'] = true;
-                $formState['data'] = $request->request->get($form->getName());
-                $formState['form_errors']= $form->getErrors();
+                $formState['has_errors']  = true;
+                $formState['data']        = $request->request->get($form->getName());
+                $formState['form_errors'] = $form->getErrors();
             }
             // redirect to the return url, if available
             if ($returnUrl && !$request->isXmlHttpRequest()) {
@@ -170,8 +180,8 @@ class EmbedHelper {
             $viewVars['form_status'] = $formStatus;
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
-            $viewVars['form'] = $form->createView();
-            $viewVars['flash'] = $request->getSession()->getFlash($form->getName());
+            $viewVars['form']     = $form->createView();
+            $viewVars['flash']    = $request->getSession()->getFlash($form->getName());
 
             return $viewVars;
         }
@@ -186,7 +196,8 @@ class EmbedHelper {
      * @param \Symfony\Component\Form\FormInterface $form
      * @return mixed
      */
-    public function getFormId(FormInterface $form) {
+    public function getFormId(FormInterface $form)
+    {
         return preg_replace('/\W/', '_', get_class($form->getData()));
     }
 }
