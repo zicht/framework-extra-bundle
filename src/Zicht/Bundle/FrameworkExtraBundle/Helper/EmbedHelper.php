@@ -97,6 +97,7 @@ class EmbedHelper {
         $formId = $this->getFormId($form);
 
         $formState = $request->getSession()->get($formId);
+        $formStatus = '';
 
         // if the method is post, we may assume that the user has posted the form
         if ($request->getMethod() == 'POST') {
@@ -112,6 +113,7 @@ class EmbedHelper {
                 unset($formState['has_errors']);
                 unset($formState['data']);
                 unset($formState['form_errors']);
+                $formStatus = 'ok';
 
                 if ($handlerResult && $handlerResult instanceof \Symfony\Component\HttpFoundation\Response) {
                     return $handlerResult;
@@ -125,6 +127,8 @@ class EmbedHelper {
                     }
                 }
             } else {
+                $formStatus = 'errors';
+
                 $formState['has_errors'] = true;
                 $formState['data'] = $request->request->get($form->getName());
                 $formState['form_errors']= $form->getErrors();
@@ -134,6 +138,8 @@ class EmbedHelper {
                 $response = new RedirectResponse($returnUrl);
             }
         } elseif (!empty($formState['has_errors'])) {
+            $formStatus = 'errors';
+
             // see if there were any errors left in the session from a previous post, so we show them
             if (!empty($formState['data']) && is_array($formState['data'])) {
                 $form->bind($formState['data']);
@@ -156,12 +162,20 @@ class EmbedHelper {
         $viewVars = $extraViewVars;
 
         if (empty($response)) {
+            if ($request->get('extension')) {
+                $formTargetParams += array(
+                    'extension' => $request->get('extension')
+                );
+            }
+            $viewVars['form_status'] = $formStatus;
+
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form'] = $form->createView();
             $viewVars['flash'] = $request->getSession()->getFlash($form->getName());
 
             return $viewVars;
         }
+
         return $response;
     }
 
