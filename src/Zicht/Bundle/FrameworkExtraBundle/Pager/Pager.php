@@ -41,11 +41,11 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @param int $itemsPerPage
      * @return void
-     * @throws InvalidArgumentException if the number of items is not a valid non-negative integer
+     * @throws \InvalidArgumentException if the number of items is not a valid non-negative integer
      */
     function setItemsPerPage($itemsPerPage) {
         if ($itemsPerPage <= 0) {
-            throw new InvalidArgumentException("Number of items per page must be positive integer");
+            throw new \InvalidArgumentException("Number of items per page must be positive integer");
         }
         $this->itemsPerPage = $itemsPerPage;
     }
@@ -62,14 +62,14 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param int $page
      * @return void
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     function setCurrentPage($page) {
         if (is_null($this->total)) {
             $this->total = (int)$this->results->getTotal();
         }
         if ((int)$page != $page) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "Invalid argument \$page, expected integer number, got " . gettype($page)
             );
         }
@@ -308,10 +308,10 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param mixed $value
      * @return void
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      */
     public function offsetSet($offset, $value) {
-        throw new BadMethodCallException(__CLASS__ . ' is read only');
+        throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
 
@@ -321,10 +321,10 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param int $offset
      * @return void
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      */
     public function offsetUnset($offset) {
-        throw new BadMethodCallException(__CLASS__ . ' is read only');
+        throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
 
@@ -336,6 +336,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
     public function count() {
         return $this->numPages;
     }
+
 
     public function getItemsPerPage() {
         return $this->itemsPerPage;
