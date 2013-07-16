@@ -264,17 +264,21 @@ class Extension extends Twig_Extension
      * @param string $parameters
      * @return mixed
      */
-    public function dump($var, $parameters = 'doc')
+    public function dump($var, $mode = null)
     {
-        switch ($parameters) {
-            case 'export':
-                \Doctrine\Common\Util\Debug::dump($var, 5);
-                break;
-            default:
-            case 'var_dump':
-                var_dump($var);
-                break;
+        if (null === $mode && class_exists('Zicht\Util\Debug')) {
+            return htmlspecialchars(\Zicht\Util\Debug::dump($var));
+        } else {
+            switch ($mode) {
+                case 'export':
+                    \Doctrine\Common\Util\Debug::dump($var, 5);
+                    break;
+                default:
+                    var_dump($var);
+                    break;
+            }
         }
+        return null;
     }
 
 
