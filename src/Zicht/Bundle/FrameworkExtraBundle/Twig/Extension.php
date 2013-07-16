@@ -39,6 +39,7 @@ class Extension extends Twig_Extension
     {
         return array(
             'dump'            => new \Twig_Filter_Method($this, 'dump', array('is_safe' => array('html'))),
+            'xml'             => new \Twig_Filter_Method($this, 'xml'),
             'truncate'        => new \Twig_Filter_Method($this, 'truncate'),
             'regex_replace'   => new \Twig_Filter_Method($this, 'regex_replace'),
             're_replace'      => new \Twig_Filter_Method($this, 'regex_replace'),
@@ -263,7 +264,7 @@ class Extension extends Twig_Extension
      * @param string $parameters
      * @return mixed
      */
-    function dump($var, $parameters = 'doc')
+    public function dump($var, $parameters = 'doc')
     {
         switch ($parameters) {
             case 'export':
@@ -274,5 +275,17 @@ class Extension extends Twig_Extension
                 var_dump($var);
                 break;
         }
+    }
+
+
+    public function xml($data)
+    {
+        if ($data instanceof \SimpleXMLElement) {
+            $data = $data->saveXML();
+        }
+        $dom = new \DOMDocument();
+        $dom->loadXml($data);
+        $dom->formatOutput = true;
+        return $dom->saveXML();
     }
 }
