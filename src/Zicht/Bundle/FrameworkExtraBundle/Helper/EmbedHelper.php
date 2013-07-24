@@ -100,10 +100,11 @@ class EmbedHelper
     public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
                         $formTargetParams = array(), $extraViewVars = array())
     {
-
-        $formId = $this->getFormId($form);
+        $formId = $formTargetRoute . $this->getFormId($form);
 
         $formState  = $request->getSession()->get($formId);
+        var_dump($formId);
+        var_dump($formState);
         $formStatus = '';
 
         // if the method is post, we may assume that the user has posted the form
@@ -181,7 +182,7 @@ class EmbedHelper
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
-            $viewVars['flash']    = $request->getSession()->getFlash($form->getName());
+            $viewVars['flash']    = $request->getSession()->getFlashBag()->get($form->getName());
 
             return $viewVars;
         }
@@ -198,6 +199,6 @@ class EmbedHelper
      */
     public function getFormId(FormInterface $form)
     {
-        return preg_replace('/\W/', '_', get_class($form->getData()));
+        return preg_replace('/\W/', '_', $form->getConfig()->getType()->getInnerType()->getName());
     }
 }
