@@ -103,8 +103,6 @@ class EmbedHelper
         $formId = $formTargetRoute . $this->getFormId($form);
 
         $formState  = $request->getSession()->get($formId);
-        var_dump($formId);
-        var_dump($formState);
         $formStatus = '';
 
         // if the method is post, we may assume that the user has posted the form
@@ -163,6 +161,7 @@ class EmbedHelper
             }
             // and we only show them once.
             unset($formState['has_errors']);
+            unset($formState['form_errors']);
         }
         if ($formState && !$request->isXmlHttpRequest()) {
             $request->getSession()->set($formId, $formState);
