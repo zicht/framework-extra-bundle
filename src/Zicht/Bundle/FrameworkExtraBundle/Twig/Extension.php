@@ -99,13 +99,19 @@ class Extension extends Twig_Extension
     }
 
 
-    public function str_dash($str)
+    public function str_dash($str, $camelFirst = true)
     {
+        if ($camelFirst) {
+            $str = StrUtil::camel($str);
+        }
         return StrUtil::dash($str);
     }
 
-    public function str_uscore($str)
+    public function str_uscore($str, $camelFirst = true)
     {
+        if ($camelFirst) {
+            $str = StrUtil::camel($str);
+        }
         return StrUtil::uscore($str);
     }
 
