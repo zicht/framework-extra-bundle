@@ -46,6 +46,7 @@ class Extension extends Twig_Extension
             'str_uscore'      => new \Twig_Filter_Method($this, 'str_uscore'),
             'str_dash'        => new \Twig_Filter_Method($this, 'str_dash'),
             'str_camel'       => new \Twig_Filter_Method($this, 'str_camel'),
+            'str_humanize'    => new \Twig_Filter_Method($this, 'str_humanize'),
             'date_format'     => new \Twig_Filter_Method($this, 'date_format'),
             'relative_date'   => new \Twig_Filter_Method($this, 'relative_date'),
             'ga_trackevent'   => new \TWig_Filter_Method($this, 'ga_trackevent'),
@@ -118,6 +119,12 @@ class Extension extends Twig_Extension
     public function str_camel($str)
     {
         return StrUtil::camel($str);
+    }
+
+
+    public function str_humanize($str)
+    {
+        return StrUtil::humanize($str);
     }
 
     public function date_format($date, $format = '%e %b %Y')
