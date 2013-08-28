@@ -74,7 +74,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
             );
         }
         $this->numPages = (int)ceil($this->total / $this->itemsPerPage);
-        $this->currentPage = min($this->getLast(), max($this->getFirst(), $page));
+        $this->currentPage = min(max(0, $this->getLast()), max($this->getFirst(), $page));
 
         $this->offset = $this->itemsPerPage * $this->currentPage;
         $this->lengthOfRange = $this->itemsPerPage;
