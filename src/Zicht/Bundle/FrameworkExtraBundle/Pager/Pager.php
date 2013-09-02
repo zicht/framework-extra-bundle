@@ -216,6 +216,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      */
     private function itemAt($i) {
         return array(
+            'index' => $i,
             'title' => $i + 1,
             'is_previous' => $i == ($this->currentPage - 1),
             'is_current' => $i == $this->currentPage,
