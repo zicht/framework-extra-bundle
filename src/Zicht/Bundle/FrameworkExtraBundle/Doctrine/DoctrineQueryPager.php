@@ -10,9 +10,10 @@ use Doctrine\ORM\QueryBuilder;
 
 class DoctrineQueryPager implements Pageable
 {
-    function __construct(QueryBuilder $q)
+    function __construct(QueryBuilder $q, $alias = 'f')
     {
         $this->qb = $q;
+        $this->alias = $alias;
     }
 
 
@@ -24,7 +25,7 @@ class DoctrineQueryPager implements Pageable
     function getTotal()
     {
         $c = clone $this->qb;
-        $c->select('COUNT(f) c');
+        $c->select('COUNT(' . $this->alias . ') c');
         return $c->getQuery()->getSingleScalarResult();
     }
 
