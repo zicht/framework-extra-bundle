@@ -76,7 +76,13 @@ class WithNode extends \Twig_Node
         $compiler->raw("\n")->outdent()->write(");\n");
 
         if (!$this->hasOption('always')) {
-            $compiler->write('if (count(array_filter($values))) {');
+            $compiler->write('if (count(array_filter($values, function($o) {
+                if ($o instanceof \Countable) {
+                    return count($o) > 0;
+                } else {
+                    return !empty($o);
+                }
+            }))) {');
         }
 
         if ($this->hasOption('merged')) {
