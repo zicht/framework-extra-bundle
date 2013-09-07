@@ -57,6 +57,7 @@ class Extension extends Twig_Extension
             'round'           => new \Twig_Filter_Function('round'),
             'ceil'            => new \Twig_Filter_Function('ceil'),
             'floor'           => new \Twig_Filter_Function('floor'),
+            'groups'          => new \Twig_Filter_Method($this, 'groups')
         );
     }
 
@@ -79,6 +80,19 @@ class Extension extends Twig_Extension
         }
 
         return null;
+    }
+
+
+    function groups($list, $numGroups)
+    {
+        $items = ($list instanceof \Traversable ? iterator_to_array($list) : $list);
+
+        $groups = array();
+        $i = 0;
+        foreach ($items as $item) {
+            $groups[$i++ % $numGroups][]= $item;
+        }
+        return $groups;
     }
 
 
