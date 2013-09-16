@@ -7,7 +7,6 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 use \Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
 
 use \Zicht\Util\Str as StrUtil;
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;

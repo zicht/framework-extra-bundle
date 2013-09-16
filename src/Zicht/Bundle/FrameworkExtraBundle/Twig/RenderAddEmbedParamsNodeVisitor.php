@@ -33,9 +33,22 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
      * @return \Twig_NodeInterface The modified node
      */
     function leaveNode(Twig_NodeInterface $node, Twig_Environment $env) {
-//        if ($node instanceof \Symfony\Bundle\TwigBundle\Node\RenderNode) {
-//            return new DecoratedRenderNode($node);
-//        }
+        if ($node instanceof \Twig_Node_Expression_Function) {
+            if ($node->getAttribute('name') === 'controller') {
+                $args = $node->getNode('arguments');
+                if (!$args->hasNode(1)) {
+                    $args->setNode(1, new \Twig_Node_Expression_Array(array(), $node->getLine()));
+                }
+                $args->setNode(
+                    1,
+                    new \Twig_Node_Expression_Function(
+                        'embed',
+                        new \Twig_Node(array($args->getNode(1))),
+                        $node->getLine()
+                    )
+                );
+            }
+        }
         return $node;
     }
 
