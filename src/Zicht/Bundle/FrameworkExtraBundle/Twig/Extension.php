@@ -7,6 +7,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 use \Symfony\Component\Translation\TranslatorInterface;
+use Twig_Environment;
 
 use \Zicht\Util\Str as StrUtil;
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
@@ -26,12 +27,20 @@ class Extension extends Twig_Extension
         's' => array('second', 'seconds')
     );
 
+    protected $uglifyConfig = null;
+
 
     function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null)
     {
         $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
         $this->translator         = $translator;
+    }
+
+
+    function setUglifyConfiguration($config)
+    {
+        $this->uglifyConfig = $config;
     }
 
 
@@ -59,6 +68,16 @@ class Extension extends Twig_Extension
             'floor'           => new \Twig_Filter_Function('floor'),
             'groups'          => new \Twig_Filter_Method($this, 'groups')
         );
+    }
+
+
+    public function getGlobals()
+    {
+        $ret = array();
+        if (isset($this->uglifyConfig)) {
+            $ret['zicht_uglify'] = new UglifyGlobal($this->uglifyConfig);
+        }
+        return $ret;
     }
 
 
