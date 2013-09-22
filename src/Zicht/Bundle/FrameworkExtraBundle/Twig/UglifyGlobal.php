@@ -9,7 +9,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 /**
  * Helper twig global for zicht_uglify configuration
  */
-class UglifyGlobal implements \ArrayAccess
+class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * Constructor
@@ -96,5 +96,17 @@ class UglifyGlobal implements \ArrayAccess
     public function offsetUnset($offset)
     {
         throw new \RuntimeException(__CLASS__ . ' is read-only');
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public function getIterator()
+    {
+        $ret = array();
+        foreach (array_keys($this->config['resources']) as $key) {
+            $ret[$key] = $this[$key];
+        }
+        return new \ArrayIterator($ret);
     }
 }

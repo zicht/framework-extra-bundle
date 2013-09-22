@@ -7,6 +7,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
 use Zicht\Bundle\FrameworkExtraBundle\Uglify\TwigUglifyGlobal;
 use \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -49,7 +50,12 @@ class ZichtFrameworkExtraExtension extends DIExtension
                 $e
             );
         }
-        $container->getDefinition('zicht_twig_extension')
-            ->addMethodCall('setUglifyConfiguration', array($uglifyConfig));
+        $global = new Definition('Zicht\Bundle\FrameworkExtraBundle\Twig\UglifyGlobal', array(
+            $uglifyConfig,
+            $container->getParameter('kernel.debug')
+        ));
+        $global->addTag('twig.global');
+        $global->addMethodCall('setDebug', array($container->getParameter('kernel.debug')));
+        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_uglify', $global));
     }
 }

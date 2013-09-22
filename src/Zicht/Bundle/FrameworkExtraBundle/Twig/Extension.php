@@ -26,22 +26,25 @@ class Extension extends Twig_Extension
         's' => array('second', 'seconds')
     );
 
-    protected $uglifyConfig = null;
-
 
     function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null)
     {
         $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
         $this->translator         = $translator;
+        $this->globals            = array();
     }
 
 
-    function setUglifyConfiguration($config)
+    function setGlobal($name, $value)
     {
-        $this->uglifyConfig = $config;
+        $this->globals[$name] = $value;
     }
 
+    public function getGlobals()
+    {
+        return $this->globals;
+    }
 
     function getFilters()
     {
@@ -67,16 +70,6 @@ class Extension extends Twig_Extension
             'floor'           => new \Twig_Filter_Function('floor'),
             'groups'          => new \Twig_Filter_Method($this, 'groups')
         );
-    }
-
-
-    public function getGlobals()
-    {
-        $ret = array();
-        if (isset($this->uglifyConfig)) {
-            $ret['zicht_uglify'] = new UglifyGlobal($this->uglifyConfig);
-        }
-        return $ret;
     }
 
 
