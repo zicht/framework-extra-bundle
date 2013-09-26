@@ -78,6 +78,11 @@ class Builder
             } else {
                 throw new \BadMethodCallException(
                     "No class found for {$entity} in [" . join(", ", $this->namespaces) . "]"
+                    . (
+                        $this->current()
+                            ? ", nor is it a method in " . get_class($this->current())
+                            : ""
+                    )
                 );
             }
         }
