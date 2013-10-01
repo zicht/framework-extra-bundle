@@ -342,4 +342,21 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
     public function getItemsPerPage() {
         return $this->itemsPerPage;
     }
+
+
+    public function withGaps($surround = 2)
+    {
+        $ret = array();
+        $isPreviousGap = false;
+        foreach ($this as $i => $page) {
+            if ($i >= $this->currentPage - $surround && $i <= $this->currentPage + $surround) {
+                $ret[$i] = $page;
+                $isPreviousGap = false;
+            } elseif (!$isPreviousGap) {
+                $isPreviousGap = true;
+                $ret[$i]= null;
+            }
+        }
+        return $ret;
+    }
 }
