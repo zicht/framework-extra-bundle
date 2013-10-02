@@ -349,7 +349,11 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
         $ret = array();
         $isPreviousGap = false;
         foreach ($this as $i => $page) {
-            if ($i >= $this->currentPage - $surround && $i <= $this->currentPage + $surround) {
+            if (
+                ($i >= $this->currentPage - $surround && $i <= $this->currentPage + $surround)
+                || ($i < $this->getFirst() + $surround)
+                || ($i > $this->getLast() - $surround)
+            ) {
                 $ret[$i] = $page;
                 $isPreviousGap = false;
             } elseif (!$isPreviousGap) {
