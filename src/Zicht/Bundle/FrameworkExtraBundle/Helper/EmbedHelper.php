@@ -103,7 +103,11 @@ class EmbedHelper
 
         $formId = $this->getFormId($form);
 
-        $formState  = $request->getSession()->get($formId);
+        if ($request->hasPreviousSession()) {
+            $formState  = $request->getSession()->get($formId);
+        } else {
+            $formState = null;
+        }
         $formStatus = '';
 
         // if the method is post, we may assume that the user has posted the form
@@ -182,7 +186,11 @@ class EmbedHelper
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
-            $viewVars['flash']    = $request->getSession()->getFlash($form->getName());
+            if ($request->hasPreviousSession()) {
+                $viewVars['flash']    = $request->getSession()->getFlash($form->getName());
+            } else {
+                $viewVars['flash']    = '';
+            }
 
             return $viewVars;
         }
