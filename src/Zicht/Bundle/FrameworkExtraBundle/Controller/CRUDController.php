@@ -37,6 +37,23 @@ class CRUDController extends BaseCRUDController
 
     public function createAction()
     {
+        $refl = new \ReflectionClass($this->admin->getClass());
+        if ($refl->isAbstract()) {
+            $delegates = array();
+            foreach ($this->getDoctrine()->getManager()->getClassMetadata($this->admin->getClass())->subClasses as $subClass) {
+                if ($admin = $this->get('sonata.admin.pool')->getAdminByClass($subClass)) {
+                    if ($admin->isGranted('CREATE')) {
+                        $delegates[]= $admin;
+                    }
+                }
+            }
+
+            if (count($delegates)) {
+                return $this->render('ZichtFrameworkExtraBundle:CRUD:create-subclass.html.twig', array('admins' => $delegates));
+            }
+        }
+
+
         if ($this->get('request')->get('__bind_only')) {
             return $this->bindAndRender('create');
         }
