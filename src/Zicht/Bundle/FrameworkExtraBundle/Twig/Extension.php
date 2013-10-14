@@ -158,6 +158,10 @@ class Extension extends Twig_Extension
             $ts = $date->getTimestamp();
         } elseif (is_numeric($date)) {
             $ts = $date;
+        } elseif (preg_match('/^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}T[0-9]{2,2}:[0-9]{2,2}.*/', $date)) {
+            // timestamp format 2013-01-01T00:00:00
+            $ts = new \DateTime($date);
+            $ts = $ts->getTimestamp();
         } else {
             throw new \InvalidArgumentException(sprintf("Cannot format %s as a date", $date));
         }
