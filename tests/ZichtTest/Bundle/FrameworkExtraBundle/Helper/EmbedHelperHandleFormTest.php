@@ -191,33 +191,4 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         );
         $this->assertInstanceOf('\Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse', $response);
     }
-
-
-
-    /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
-     * @return void
-     */
-    function testHandleFormWillRestoreFormStateWhenDisplayed() {
-        $state = array(
-            'has_errors' => true,
-            'form_errors' => array(
-                new \Symfony\Component\Form\FormError("BazQuux")
-            ),
-            'data' => array(
-                'foo' => '123456789'
-            )
-        );
-        $this->session->set($this->helper->getFormId($this->form), $state);
-        $this->form->expects($this->once())->method('addError')->with($state['form_errors'][0]);
-        $this->form->expects($this->once())->method('bind')->with($state['data']);
-        $response = $this->helper->handleForm(
-            $this->form,
-            self::$container->get('request'),
-            function($request, $form) {
-                return true;
-            },
-            'user_login'
-        );
-    }
 }
