@@ -6,26 +6,32 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\Yaml\Yaml;
-use Zicht\Bundle\FrameworkExtraBundle\Uglify\TwigUglifyGlobal;
+use \Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use \Symfony\Component\DependencyInjection\Definition;
+use \Symfony\Component\Yaml\Yaml;
 use \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use \Symfony\Component\HttpKernel\DependencyInjection\Extension as DIExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
+use \Symfony\Component\DependencyInjection\ContainerBuilder;
+use \Symfony\Component\Config\FileLocator;
+use \Symfony\Component\Config\Resource\FileResource;
 
+use \Zicht\Bundle\FrameworkExtraBundle\Uglify\TwigUglifyGlobal;
+
+/**
+ * DI extension for the bundle
+ */
 class ZichtFrameworkExtraExtension extends DIExtension
 {
     /**
      * @{inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container) {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
         if (!empty($config['uglify'])) {
             $this->addUglifyConfiguration($config['uglify'], $container);
@@ -33,6 +39,15 @@ class ZichtFrameworkExtraExtension extends DIExtension
     }
 
 
+    /**
+     * Adds the uglify configuration
+     *
+     * @param string $uglifyConfigFile
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @return void
+     *
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
     public function addUglifyConfiguration($uglifyConfigFile, ContainerBuilder $container)
     {
         if (!is_file($uglifyConfigFile)) {
@@ -40,7 +55,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
                 "zicht_framework_extra.uglify setting '$uglifyConfigFile' is not a file"
             );
         }
-        $container->addResource(new \Symfony\Component\Config\Resource\FileResource($uglifyConfigFile));
+        $container->addResource(new FileResource($uglifyConfigFile));
         try {
             $uglifyConfig = Yaml::parse($uglifyConfigFile);
         } catch (\Exception $e) {

@@ -9,7 +9,8 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
 /**
  * A key based map of sorted sets.
  */
-class SortedSetMap {
+class SortedSetMap
+{
     private $values = null;
 
     /**
@@ -18,7 +19,8 @@ class SortedSetMap {
      *
      * @param array $values
      */
-    function __construct($values = array()) {
+    public function __construct($values = array())
+    {
         $this->setValues($values);
     }
 
@@ -29,7 +31,8 @@ class SortedSetMap {
      * @param array $values
      * @return void
      */
-    function setValues($values) {
+    public function setValues($values)
+    {
         $this->values = array();
         foreach ($values as $key => $value) {
             $this->replace($key, (array)$value);
@@ -44,12 +47,13 @@ class SortedSetMap {
      * @param scalar $value
      * @return void
      */
-    function add($key, $value) {
+    public function add($key, $value)
+    {
         if (!isset($this->values[$key])) {
             $this->values[$key] = new SortedSet();
         }
         $this->values[$key]->add($value);
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -60,9 +64,10 @@ class SortedSetMap {
      * @param array $values
      * @return void
      */
-    function replace($key, $values) {
+    public function replace($key, $values)
+    {
         $this->values[$key] = new SortedSet($values);
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -73,10 +78,12 @@ class SortedSetMap {
      * @param string $key
      * @return array
      */
-    function get($key) {
+    public function get($key)
+    {
         if (isset($this->values[$key])) {
             return $this->values[$key]->toArray();
         }
+
         return array();
     }
 
@@ -88,10 +95,12 @@ class SortedSetMap {
      * @param scalar $value
      * @return bool
      */
-    function contains($key, $value) {
+    public function contains($key, $value)
+    {
         if (isset($this->values[$key])) {
             return $this->values[$key]->contains($value);
         }
+
         return false;
     }
 
@@ -102,7 +111,8 @@ class SortedSetMap {
      * @param string $key
      * @return bool
      */
-    function containsKey($key) {
+    public function containsKey($key)
+    {
         return isset($this->values[$key]);
     }
 
@@ -114,11 +124,12 @@ class SortedSetMap {
      * @param scalar $value
      * @return void
      */
-    function remove($key, $value) {
+    public function remove($key, $value)
+    {
         if (isset($this->values[$key])) {
             $this->values[$key]->remove($value);
         }
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -128,11 +139,12 @@ class SortedSetMap {
      * @param string $key
      * @return void
      */
-    function removeKey($key) {
+    public function removeKey($key)
+    {
         if (isset($this->values[$key])) {
             unset($this->values[$key]);
         }
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -143,11 +155,12 @@ class SortedSetMap {
      * @param Traversable $values
      * @return void
      */
-    function merge($key, $values) {
+    public function merge($key, $values)
+    {
         foreach ((array)$values as $value) {
             $this->add($key, $value);
         }
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -157,7 +170,8 @@ class SortedSetMap {
      * @param array $values
      * @return void
      */
-    function mergeAll(array $values) {
+    public function mergeAll(array $values)
+    {
         foreach ($values as $key => $value) {
             $this->merge($key, $value);
         }
@@ -170,11 +184,13 @@ class SortedSetMap {
      *
      * @return array
      */
-    function toArray() {
+    public function toArray()
+    {
         $ret = array();
         foreach (array_keys($this->values) as $key) {
             $ret[$key] = $this->get($key);
         }
+
         return $ret;
     }
 
@@ -184,7 +200,8 @@ class SortedSetMap {
      *
      * @return void
      */
-    private function _stateChanged() {
+    private function stateChanged()
+    {
         $keys = array_keys($this->values);
         foreach ($keys as $key) {
             if (!count($this->values[$key])) {
@@ -200,7 +217,8 @@ class SortedSetMap {
      *
      * @return void
      */
-    function __clone() {
+    public function __clone()
+    {
         foreach (array_keys($this->values) as $key) {
             $this->values[$key] = clone $this->values[$key];
         }

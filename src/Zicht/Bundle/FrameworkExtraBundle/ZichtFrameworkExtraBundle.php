@@ -6,8 +6,12 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use \Symfony\Component\DependencyInjection\ContainerBuilder;
+use \Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ZichtFrameworkExtraBundle extends \Symfony\Component\HttpKernel\Bundle\Bundle
+/**
+ * Bundle entry point
+ */
+class ZichtFrameworkExtraBundle extends Bundle
 {
 }

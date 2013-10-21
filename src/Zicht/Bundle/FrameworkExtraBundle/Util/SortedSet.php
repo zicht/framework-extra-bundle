@@ -12,7 +12,8 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
  * All values are ensured unique.
  * All values are ensured sorted.
  */
-class SortedSet implements \Countable {
+class SortedSet implements \Countable
+{
     /**
      * The set values
      *
@@ -26,7 +27,8 @@ class SortedSet implements \Countable {
      *
      * @param array $values
      */
-    function __construct(array $values = array()) {
+    public function __construct(array $values = array())
+    {
         $this->setValues($values);
     }
 
@@ -37,7 +39,8 @@ class SortedSet implements \Countable {
      * @param \Traversable $values
      * @return void
      */
-    function setValues($values) {
+    public function setValues($values)
+    {
         $this->values = array();
         $this->addValues($values);
     }
@@ -48,7 +51,8 @@ class SortedSet implements \Countable {
      *
      * @return array
      */
-    function toArray() {
+    public function toArray()
+    {
         return $this->values;
     }
 
@@ -60,7 +64,8 @@ class SortedSet implements \Countable {
      * @param \Traversable $values
      * @return void
      */
-    function addValues($values) {
+    public function addValues($values)
+    {
         foreach ($values as $value) {
             $this->add($value);
         }
@@ -73,7 +78,8 @@ class SortedSet implements \Countable {
      * @param scalar $value
      * @return array
      */
-    function contains($value) {
+    public function contains($value)
+    {
         return in_array($value, $this->values);
     }
 
@@ -85,9 +91,10 @@ class SortedSet implements \Countable {
      * @param scalar $value
      * @return void
      */
-    function add($value) {
+    public function add($value)
+    {
         $this->values[] = $value;
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -97,14 +104,15 @@ class SortedSet implements \Countable {
      * @param scalar $value
      * @return void
      */
-    function remove($value) {
+    public function remove($value)
+    {
         foreach ($this->values as $i => $v) {
             if ($value == $v) {
                 unset($this->values[$i]);
                 break;
             }
         }
-        $this->_stateChanged();
+        $this->stateChanged();
     }
 
 
@@ -113,7 +121,8 @@ class SortedSet implements \Countable {
      *
      * @return int|void
      */
-    public function count() {
+    public function count()
+    {
         return count($this->values);
     }
 
@@ -123,7 +132,8 @@ class SortedSet implements \Countable {
      *
      * @return void
      */
-    private function _stateChanged() {
+    private function stateChanged()
+    {
         if (count($this->values)) {
             $this->values = array_unique(array_values($this->values));
             sort($this->values);

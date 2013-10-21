@@ -5,14 +5,16 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
-use \Monolog\Logger;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use \Symfony\Component\Console\Output\OutputInterface;
-use \Symfony\Component\Console\Input\InputInterface;
-use \Monolog\Handler\StreamHandler;
 use \Exception;
+
+use \Monolog\Logger;
+use \Monolog\Handler\StreamHandler;
 use \Monolog\Processor\MemoryUsageProcessor;
 use \Monolog\Processor\MemoryPeakUsageProcessor;
+
+use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use \Symfony\Component\Console\Output\OutputInterface;
+use \Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Simple utility class for console applications. Uses Monolog for logging and error/exception reporting.
@@ -38,10 +40,12 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      * Initialize the logger and attach it to error/exception handling and the clean shutdown function.
      *
      * @param \Monolog\Logger $logger
+     * @param int $verbosity
      * @param bool $paranoid Whether or not non-clean shutdown should be logged.
      * @return void
      */
-    function setLogger(Logger $logger, $verbosity = 0, $paranoid = true) {
+    public function setLogger(Logger $logger, $verbosity = 0, $paranoid = true)
+    {
         $this->logger = $logger;
         if ($paranoid) {
             register_shutdown_function(array($this, 'endOfScript'));
@@ -71,7 +75,8 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      * @param \Exception $exception
      * @return void
      */
-    function exceptionHandler(Exception $exception) {
+    public function exceptionHandler(Exception $exception)
+    {
         $this->logger->addError($exception->getMessage(), array($exception->getFile(), $exception->getLine()));
         exit(-1);
     }
@@ -86,7 +91,8 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      * @param int $line
      * @return void
      */
-    function errorHandler($errno, $errstr, $file, $line) {
+    public function errorHandler($errno, $errstr, $file, $line)
+    {
         switch ($errno) {
             case E_USER_ERROR:
             case E_ERROR:
@@ -110,7 +116,8 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      *
      * @return void
      */
-    function endOfScript() {
+    public function endOfScript()
+    {
         if (!$this->isFinishedCleanly) {
             $this->logger->addCritical('Unexpected end of script!');
         }
@@ -122,18 +129,27 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      *
      * @return void
      */
-    function cleanup() {
+    public function cleanup()
+    {
         $this->isFinishedCleanly = true;
         restore_error_handler();
         restore_exception_handler();
     }
 
 
+    /**
+     * Run the command.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
+     */
     public function run(InputInterface $input, OutputInterface $output)
     {
         $this->isFinishedCleanly = false;
-        $ret = parent::run($input, $output);
+        $ret                     = parent::run($input, $output);
         $this->cleanup();
+
         return $ret;
     }
 }

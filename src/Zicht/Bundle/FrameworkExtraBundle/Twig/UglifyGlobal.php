@@ -27,7 +27,8 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     /**
      * Set debugging flag. With debugging on, the source files are used as resources in stead of the target files.
      *
-     * @param $debug
+     * @param bool $debug
+     * @return void
      */
     public function setDebug($debug)
     {

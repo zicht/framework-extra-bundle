@@ -6,7 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Admin;
 
 use \Sonata\AdminBundle\Admin\Admin;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use \Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use \Sonata\AdminBundle\Datagrid\ListMapper;
 use \Sonata\AdminBundle\Form\FormMapper;
 use \Sonata\AdminBundle\Route\RouteCollection;
@@ -17,6 +17,12 @@ use \Sonata\AdminBundle\Datagrid\DatagridMapper;
  */
 class TreeAdmin extends Admin
 {
+    /**
+     * Override the default query builder to utilize correct sorting
+     *
+     * @param string $context
+     * @return ProxyQueryInterface
+     */
     public function createQuery($context = 'list')
     {
         if ($context === 'list') {
