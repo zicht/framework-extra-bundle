@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block logo %}
-    <a href="{{ url('sonata_admin_dashboard') }}" class="brand" style="background:url({{ asset(admin_pool.titlelogo) }}) left 9px no-repeat; padding-left: 35px;">
+    <a href="{{ url('sonata_admin_dashboard') }}" class="brand" style="position: relative; padding-left: 35px;">
         {{ admin_pool.title }}
-        <i class=""></i>
+        <i style="position: absolute; left: 0; top: 5px; display: block; width: 30px; height: 30px; background:url('{{ asset(admin_pool.titlelogo) }}') center center no-repeat;"></i>
     </a>
 {% endblock %}
 
