@@ -44,7 +44,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
      */
     public function getSourceFile($file)
     {
-        return $this->config['src_dir'] . '/' . $file;
+        return ltrim($this->config['src_dir'] . '/' . $file, '/');
     }
 
 
@@ -56,7 +56,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
      */
     public function getTargetFile($file)
     {
-        return $this->config['target_dir'] . '/' . $file;
+        return ltrim($this->config['target_dir'] . '/' . $file, '/');
     }
 
 

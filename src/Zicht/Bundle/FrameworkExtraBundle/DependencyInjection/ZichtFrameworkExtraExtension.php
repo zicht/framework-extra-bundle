@@ -23,32 +23,16 @@ use \Zicht\Bundle\FrameworkExtraBundle\Uglify\TwigUglifyGlobal;
 class ZichtFrameworkExtraExtension extends DIExtension
 {
     /**
-     * @{inheritDoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
-
-        $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
-
-        if (!empty($config['uglify'])) {
-            $this->addUglifyConfiguration($config['uglify'], $container);
-        }
-    }
-
-
-    /**
      * Adds the uglify configuration
      *
      * @param string $uglifyConfigFile
+     * @param boolean $isDebug
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @return void
      *
      * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
-    public function addUglifyConfiguration($uglifyConfigFile, ContainerBuilder $container)
+    public function addUglifyConfiguration($uglifyConfigFile, $isDebug, ContainerBuilder $container)
     {
         if (!is_file($uglifyConfigFile)) {
             throw new InvalidConfigurationException(
@@ -67,10 +51,31 @@ class ZichtFrameworkExtraExtension extends DIExtension
         }
         $global = new Definition('Zicht\Bundle\FrameworkExtraBundle\Twig\UglifyGlobal', array(
             $uglifyConfig,
-            $container->getParameter('kernel.debug')
+            $isDebug
         ));
         $global->addTag('twig.global');
-        $global->addMethodCall('setDebug', array($container->getParameter('kernel.debug')));
+        $global->addMethodCall('setDebug', array($isDebug));
         $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_uglify', $global));
+    }
+
+
+    /**
+     * @{inheritDoc}
+     */
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('services.yml');
+
+        $configuration = new Configuration();
+        $config        = $this->processConfiguration($configuration, $configs);
+
+        if (!empty($config['uglify'])) {
+            if (!isset($config['uglify_debug'])) {
+                $config['uglify_debug']= $container->getParameter('kernel.debug');
+            }
+
+            $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
+        }
     }
 }
