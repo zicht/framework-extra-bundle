@@ -207,6 +207,10 @@ class EmbedHelper
      */
     public function getFormId(FormInterface $form)
     {
-        return preg_replace('/\W/', '_', get_class($form->getData()));
+        if (is_object($form->getData())) {
+            return preg_replace('/\W/', '_', get_class($form->getData()));
+        } else {
+            return $form->getName();
+        }
     }
 }
