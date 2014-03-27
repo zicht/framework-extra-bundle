@@ -21,7 +21,7 @@ class CRUDController extends BaseCRUDController
      */
     public function showAction($id = null)
     {
-        $obj = $this->admin->getObject($id);
+        $obj = $this->admin->getObject($this->get('request')->get($this->admin->getIdParameter()));
         if ($this->container->has('zicht_url.provider') && $this->get('zicht_url.provider')->supports($obj)) {
             return $this->redirect($this->get('zicht_url.provider')->url($obj));
         }
