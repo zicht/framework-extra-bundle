@@ -68,7 +68,29 @@ class TreeAdmin extends Admin
      */
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $filter->add('parent');
+        $filter
+            ->add(
+                'root',
+                'doctrine_orm_callback',
+                array(
+                    'label' => 'Sectie',
+                    'callback' => function($qb, $alias, $f, $v) {
+                        if ($v['value']) {
+                            $qb
+                                ->andWhere($alias . '.root=:root')
+                                ->setParameter(':root', $v['value'])
+                            ;
+                        }
+                    },
+                    'field_type' => 'entity',
+                    'field_options' => array(
+                        'query_builder' => function($repo) {
+                            return $repo->createQueryBuilder('t')->andWhere('t.parent IS NULL');
+                        },
+                        'class' => $this->getClass()
+                    )
+                )
+            );
     }
 
 
