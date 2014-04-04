@@ -196,6 +196,12 @@ class Builder
     }
 
 
+    /**
+     * Returns the object that is currently the subject of building
+     *
+     * @return mixed
+     * @throws \UnexpectedValueException
+     */
     public function peek()
     {
         $c = count($this->stack);
