@@ -15,6 +15,8 @@ use \Monolog\Processor\MemoryPeakUsageProcessor;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Component\Console\Output\OutputInterface;
 use \Symfony\Component\Console\Input\InputInterface;
+use Zicht\Util\Mutex;
+use Zicht\Util\Str;
 
 /**
  * Simple utility class for console applications. Uses Monolog for logging and error/exception reporting.
@@ -35,6 +37,13 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      * @var \Monolog\Logger
      */
     protected $logger;
+
+    /**
+     * Set this to a filename if a mutex should be used.
+     *
+     * @var bool
+     */
+    protected $mutex = false;
 
     /**
      * Initialize the logger and attach it to error/exception handling and the clean shutdown function.
@@ -147,9 +156,55 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
     public function run(InputInterface $input, OutputInterface $output)
     {
         $this->isFinishedCleanly = false;
-        $ret                     = parent::run($input, $output);
-        $this->cleanup();
+        if ($mutexFile = $this->getMutexFile()) {
+            $self = $this;
+            $result = null;
 
-        return $ret;
+            $mutex = new Mutex($mutexFile, false);
+            $isLockAcquired = $mutex->run(function() use($self, $input, $output, &$result) {
+                $result = $self->doParentRun($input, $output);
+            });
+            if (!$isLockAcquired && $this->logger) {
+                $this->logger->addWarning("Mutex failed in " . get_class($this) . ", job was not run");
+            }
+        } else {
+            $result = $this->doParentRun($input, $output);
+        }
+        $this->cleanup();
+        return $result;
+    }
+
+
+    /**
+     * Wrapped in a separate method so we can call it from the mutex closure.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    final public function doParentRun(InputInterface $input, OutputInterface $output)
+    {
+        return parent::run($input, $output);
+    }
+
+
+    /**
+     * Returns a path to the file which can be used as a mutex.
+     *
+     * @return bool|string
+     */
+    protected function getMutexFile()
+    {
+        $file = false;
+
+        if (true === $this->mutex) {
+            $file = $this->getContainer()->getParameter('kernel.cache_dir')
+                . '/'
+                . Str::dash(lcfirst(Str::classname(get_class($this))))
+                . '.lock';
+        } elseif ($this->mutex) {
+            $file = $this->mutex;
+        }
+        return $file;
     }
 }
