@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "zicht/util": ">=1.1.0"
+        "zicht/util": "~1.1"
     },
     "require-dev": {
         "symfony/symfony": ">=2.1",
