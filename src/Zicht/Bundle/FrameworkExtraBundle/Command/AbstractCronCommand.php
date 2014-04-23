@@ -161,9 +161,10 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
             $result = null;
 
             $mutex = new Mutex($mutexFile, false);
-            $isLockAcquired = $mutex->run(function() use($self, $input, $output, &$result) {
-                $result = $self->doParentRun($input, $output);
-            });
+            $isLockAcquired = false;
+            $mutex->run(function() use($self, $input, $output, &$result) {
+                return $self->doParentRun($input, $output);
+            }, $isLockAcquired);
             if (!$isLockAcquired && $this->logger) {
                 $this->logger->addWarning("Mutex failed in " . get_class($this) . ", job was not run");
             }
