@@ -9,6 +9,9 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use \Symfony\Component\Form\FormBuilder;
 
+/**
+ * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
+ */
 class EmbedHelperHandleFormTest extends EmbedHelperTest
 {
     protected $form;
@@ -16,7 +19,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormReturnsExpectedFormUrl() {
@@ -27,7 +29,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormReturnsExpectedFormUrlWithEmbeddedParams() {
@@ -46,7 +47,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillStoreFormStateIfNotXmlHttpRequest() {
@@ -57,7 +57,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     }
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillNotStoreFormStateIfXmlHttpRequest() {
@@ -72,7 +71,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormStateWillContainErrorsIfAddedByCallback() {
@@ -103,7 +101,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillRedirectToReturnUrlIfSuccessful() {
@@ -127,7 +124,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillRedirectToReturnUrlIfNotSuccessful() {
@@ -150,7 +146,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillNotRedirectToReturnUrlIfSuccessfulAndXmlHttpRequest() {
@@ -172,7 +167,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
 
     /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
      * @return void
      */
     function testHandleFormWillYieldJsonResponseWithSuccessUrlIfSuccessfulAndXmlHttpRequest() {
@@ -190,5 +184,43 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
             'user_login'
         );
         $this->assertInstanceOf('\Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse', $response);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    function testExceptionHandlingWillThrowExceptionIfNotMarkedAsError()
+    {
+        $this->request->setMethod('POST');
+        $this->request->request->set('mock', array('foo' => '321'));
+
+        $this->helper->setMarkExceptionsAsFormErrors(false);
+        $this->request->setMethod('POST');
+        $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $this->form->expects($this->never())->method('addError');
+        $this->helper->handleForm($this->form, self::$container->get('request'), function() {
+            throw new \Exception("foo");
+        }, '');
+    }
+
+    /**
+     */
+    function testExceptionHandlingWillNotThrowExceptionIfNotMarkedAsError()
+    {
+        $this->request->setMethod('POST');
+        $this->request->request->set('mock', array('foo' => '321'));
+
+        $this->helper->setMarkExceptionsAsFormErrors(true);
+        $this->request->setMethod('POST');
+        $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $errors = array();
+        $this->form->expects($this->once())->method('addError')->will($this->returnCallback(function ($e) use(&$errors) {
+            $errors[]= $e;
+        }));
+        $this->helper->handleForm($this->form, self::$container->get('request'), function() {
+            throw new \Exception("foo");
+        }, '');
+
+        $this->assertInstanceOf('Symfony\Component\Form\FormError', $errors[0]);
     }
 }
