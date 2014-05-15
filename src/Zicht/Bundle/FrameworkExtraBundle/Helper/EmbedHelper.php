@@ -30,7 +30,7 @@ class EmbedHelper
     /**
      * Whether or not to consider exceptions thrown by the handler as formerrors.
      *
-     * @var
+     * @var bool
      */
     protected $isMarkExceptionsAsFormErrors;
 
@@ -39,6 +39,7 @@ class EmbedHelper
      * Construct the helper with the service container.
      *
      * @param \Symfony\Component\DependencyInjection\Container $container
+     * @param bool $markExceptionsAsFormErrors
      */
     public function __construct(Container $container, $markExceptionsAsFormErrors = false)
     {
