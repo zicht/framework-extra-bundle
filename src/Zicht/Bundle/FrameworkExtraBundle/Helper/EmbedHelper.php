@@ -26,15 +26,23 @@ class EmbedHelper
      */
     protected $container;
 
+    /**
+     * Whether or not to consider exceptions thrown by the handler as formerrors.
+     *
+     * @var
+     */
+    protected $isMarkExceptionsAsFormErrors;
+
 
     /**
      * Construct the helper with the service container.
      *
      * @param \Symfony\Component\DependencyInjection\Container $container
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, $markExceptionsAsFormErrors = false)
     {
         $this->container = $container;
+        $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 
 
@@ -210,7 +218,20 @@ class EmbedHelper
         if (is_object($form->getData())) {
             return preg_replace('/\W/', '_', get_class($form->getData()));
         } else {
-            return $form->getName();
+            if ($form->getName()) {
+                return (string)$form->getName();
+            } else {
+                return preg_replace('/\W/', '_', get_class($form));
+            }
         }
+    }
+
+
+    /**
+     * @param $markExceptionsAsFormErrors
+     */
+    public function setMarkExceptionsAsFormErrors($markExceptionsAsFormErrors)
+    {
+        $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 }
