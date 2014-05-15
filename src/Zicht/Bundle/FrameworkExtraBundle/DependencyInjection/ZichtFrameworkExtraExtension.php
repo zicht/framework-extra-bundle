@@ -77,5 +77,14 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
             $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
         }
+        if (!empty($config['embed_helper'])) {
+            $container->getDefinition('zicht_embed_helper')
+                ->addMethodCall(
+                    'setMarkExceptionsAsFormErrors',
+                    array(
+                        $config['embed_helper']['mark_exceptions_as_errors']
+                    )
+                );
+        }
     }
 }
