@@ -1,8 +1,10 @@
 #TODO translate to xml.
 
+parameters:
+    zicht_framework_extra.embed_helper.class: Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
 services:
     zicht_embed_helper:
-        class: Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
+        class: %zicht_framework_extra.embed_helper.class%
         arguments:
             - @service_container
     zicht_twig_extension:
