@@ -120,8 +120,11 @@ class EmbedHelper
         }
         $formStatus = '';
 
-        // if the method is post, we may assume that the user has posted the form
-        if ($request->getMethod() == 'POST') {
+        // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
+        // This is useful for AJAX requests which need to modify the form based on submitted data.
+        if ($request->get('_submit_type') === 'bind') {
+            $form->bind($request);
+        } elseif ($request->getMethod() == 'POST') {
             $form->bind($request);
 
             $returnUrl     = $request->get('return_url');
