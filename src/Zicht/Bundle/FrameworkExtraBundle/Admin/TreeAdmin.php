@@ -100,14 +100,14 @@ class TreeAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         return $listMapper
-            ->addIdentifier('title', null, array('template' => 'ZichtFrameworkExtraBundle:CRUD:tree_title.html.twig'))
+            ->addIdentifier('title', null, array('template' => 'ZichtMenuBundle:CRUD:tree_title.html.twig'))
             ->add(
                 '_action',
                 'actions',
                 array(
                     'actions' => array(
                         'move'   => array(
-                            'template' => 'ZichtFrameworkExtraBundle:CRUD:actions/move.html.twig',
+                            'template' => 'ZichtMenuBundle:CRUD:actions/move.html.twig',
                         ),
                         'view'   => array(),
                         'edit'   => array(),
