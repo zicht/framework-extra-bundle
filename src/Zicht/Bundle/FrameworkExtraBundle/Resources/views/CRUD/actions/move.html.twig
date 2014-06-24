@@ -1,2 +1,4 @@
+{% if object.getParent() is not null %}
 <a href="{{ admin.generateObjectUrl('moveUp', object) }}" class="btn"><i class="icon-arrow-up"></i></a>
 <a href="{{ admin.generateObjectUrl('moveDown', object) }}" class="btn"><i class="icon-arrow-down"></i></a>
+{% endif %}
