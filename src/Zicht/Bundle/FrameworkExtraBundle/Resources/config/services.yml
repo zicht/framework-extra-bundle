@@ -15,6 +15,7 @@ services:
             - @zicht_embed_helper
             - @zicht_annotation_registry
             - @translator
+            - @security_context
 
     zicht_annotation_registry:
         class: Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry
