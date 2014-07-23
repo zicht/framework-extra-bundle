@@ -49,26 +49,27 @@ class Extension extends Twig_Extension
     function getFilters()
     {
         return array(
-            'dump'            => new \Twig_Filter_Method($this, 'dump', array('is_safe' => array('html'))),
-            'xml'             => new \Twig_Filter_Method($this, 'xml'),
-            'truncate'        => new \Twig_Filter_Method($this, 'truncate'),
-            'regex_replace'   => new \Twig_Filter_Method($this, 'regex_replace'),
-            're_replace'      => new \Twig_Filter_Method($this, 'regex_replace'),
-            'str_uscore'      => new \Twig_Filter_Method($this, 'str_uscore'),
-            'str_dash'        => new \Twig_Filter_Method($this, 'str_dash'),
-            'str_camel'       => new \Twig_Filter_Method($this, 'str_camel'),
-            'str_humanize'    => new \Twig_Filter_Method($this, 'str_humanize'),
-            'date_format'     => new \Twig_Filter_Method($this, 'date_format'),
-            'relative_date'   => new \Twig_Filter_Method($this, 'relative_date'),
-            'ga_trackevent'   => new \TWig_Filter_Method($this, 'ga_trackevent'),
+            new \Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('xml',            array($this, 'xml')),
+            new \Twig_SimpleFilter('truncate',       array($this, 'truncate')),
+            new \Twig_SimpleFilter('regex_replace',  array($this, 'regex_replace')),
+            new \Twig_SimpleFilter('re_replace',     array($this, 'regex_replace')),
+            new \Twig_SimpleFilter('str_uscore',     array($this, 'str_uscore')),
+            new \Twig_SimpleFilter('str_dash',       array($this, 'str_dash')),
+            new \Twig_SimpleFilter('str_camel',      array($this, 'str_camel')),
+            new \Twig_SimpleFilter('str_humanize',   array($this, 'str_humanize')),
+            new \Twig_SimpleFilter('date_format',    array($this, 'date_format')),
+            new \Twig_SimpleFilter('relative_date',  array($this, 'relative_date')),
+            new \Twig_SimpleFilter('ga_trackevent',  array($this, 'ga_trackevent')),
 
-            'with'            => new \Twig_Filter_Method($this, 'with'),
-            'without'         => new \Twig_Filter_Method($this, 'without'),
+            new \Twig_SimpleFilter('with',           array($this, 'with')),
+            new \Twig_SimpleFilter('without',        array($this, 'without')),
 
-            'round'           => new \Twig_Filter_Function('round'),
-            'ceil'            => new \Twig_Filter_Function('ceil'),
-            'floor'           => new \Twig_Filter_Function('floor'),
-            'groups'          => new \Twig_Filter_Method($this, 'groups')
+            new \Twig_SimpleFilter('round',         'round'),
+            new \Twig_SimpleFilter('ceil',          'ceil'),
+            new \Twig_SimpleFilter('floor',         'floor'),
+            new \Twig_SimpleFilter('groups',        array($this, 'groups')),
+            new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType'))
         );
     }
 
@@ -123,6 +124,55 @@ class Extension extends Twig_Extension
             htmlspecialchars(json_encode(array_values($values)))
         );
     }
+
+    public function sortByType($collection, $types)
+    {
+        if ($collection instanceof \Traversable) {
+            $collection = iterator_to_array($collection);
+        }
+
+        // store a map of the original sorting, so the usort can use this to keep the original sorting if the types are
+        // equal
+        $idToIndexMap = array();
+        foreach ($collection as $index => $item) {
+            $idToIndexMap[$item->getId()]= $index;
+        }
+
+        $numTypes = count($types);
+
+        usort($collection, function ($left, $right) use($types, $idToIndexMap, $numTypes) {
+            $localClassNameLeft = Str::classname(get_class($left));
+            $localClassNameRight = Str::classname(get_class($right));
+
+            // if same type, use original sorting
+            if ($localClassNameRight === $localClassNameLeft) {
+                $indexLeft = $idToIndexMap[$left->getId()];
+                $indexRight = $idToIndexMap[$right->getId()];
+            } else {
+                $indexLeft = array_search($localClassNameLeft, $types);
+                $indexRight = array_search($localClassNameRight, $types);
+
+                // assume that types that aren't defined, should come last.
+                if (false === $indexLeft) {
+                    $indexLeft = $numTypes + 1;
+                }
+                if (false === $indexRight) {
+                    $indexRight = $numTypes + 1;
+                }
+            }
+
+            if ($indexLeft < $indexRight) {
+                return -1;
+            }
+            if ($indexLeft > $indexRight) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return $collection;
+    }
+
 
 
     public function str_dash($str, $camelFirst = true)
