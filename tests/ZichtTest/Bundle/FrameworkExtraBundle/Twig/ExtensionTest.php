@@ -10,6 +10,9 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Twig;
  */
 class ExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Twig_Extension
+     */
     protected $extension;
 
     protected function setUp()
@@ -31,21 +34,20 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
      */
     function testAvailableFilters()
     {
-        $filters = $this->extension->getFilters();
-        $this->assertArrayHasKey('re_replace', $filters);
-        $this->assertArrayHasKey('dump', $filters);
-        $this->assertArrayHasKey('truncate', $filters);
-        $this->assertArrayHasKey('str_uscore', $filters);
-        $this->assertArrayHasKey('str_dash', $filters);
-        $this->assertArrayHasKey('str_camel', $filters);
-        $this->assertArrayHasKey('date_format', $filters);
-        $this->assertArrayHasKey('relative_date', $filters);
-        $this->assertArrayHasKey('ga_trackevent', $filters);
-        $this->assertArrayHasKey('with', $filters);
-        $this->assertArrayHasKey('without', $filters);
-        $this->assertArrayHasKey('round', $filters);
-        $this->assertArrayHasKey('ceil', $filters);
-        $this->assertArrayHasKey('floor', $filters);
+        $this->getFilter('re_replace');
+        $this->getFilter('dump');
+        $this->getFilter('truncate');
+        $this->getFilter('str_uscore');
+        $this->getFilter('str_dash');
+        $this->getFilter('str_camel');
+        $this->getFilter('date_format');
+        $this->getFilter('relative_date');
+        $this->getFilter('ga_trackevent');
+        $this->getFilter('with');
+        $this->getFilter('without');
+        $this->getFilter('round');
+        $this->getFilter('ceil');
+        $this->getFilter('floor');
     }
 
     /**
@@ -53,8 +55,20 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
      */
     function testFilters($filter, $args, $expect)
     {
-        $filters = $this->extension->getFilters();
-        $this->assertEquals($expect, call_user_func_array($filters[$filter]->getCallable(), $args));
+        $filter = $this->getFilter($filter);
+        $this->assertEquals($expect, call_user_func_array($filter->getCallable(), $args));
+    }
+
+
+
+    function getFilter($filterName)
+    {
+        foreach ($this->extension->getFilters() as $k => $filter) {
+            if ($filter->getName() == $filterName) {
+                return $filter;
+            }
+        }
+        throw new \OutOfBoundsException("{$filterName} not found");
     }
 
 
