@@ -26,6 +26,11 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('uglify')->end()
                 ->booleanNode('uglify_debug')->end()
+                ->arrayNode('embed_helper')
+                    ->children()
+                        ->booleanNode('mark_exceptions_as_errors')->defaultValue(false)->end()
+                    ->end()
+                ->end()
             ->end()
         ;
         return $treeBuilder;

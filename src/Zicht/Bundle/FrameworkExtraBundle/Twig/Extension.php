@@ -6,6 +6,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use \Symfony\Component\Translation\TranslatorInterface;
 
 use \Zicht\Util\Str as StrUtil;
@@ -27,11 +28,12 @@ class Extension extends Twig_Extension
     );
 
 
-    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null)
+    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null, SecurityContextInterface $context = null)
     {
         $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
         $this->translator         = $translator;
+        $this->context            = $context;
         $this->globals            = array();
     }
 
@@ -81,8 +83,33 @@ class Extension extends Twig_Extension
             'last'     => new \Twig_Function_Method($this, 'last'),
             'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
             'embed'    => new \Twig_Function_Method($this, 'embed'),
+            'is_granted'    => new \Twig_Function_Method($this, 'isGranted'),
         );
     }
+
+
+    /**
+     * The template may assume that the role will be denied when there is no security context, therefore we override
+     * the default behaviour here.
+     *
+     * @param string $role
+     * @param mixed $object
+     * @param mixed $field
+     * @return bool
+     */
+    public function isGranted($role, $object = null, $field = null)
+    {
+        if (null === $this->context || !$this->context->getToken()) {
+            return false;
+        }
+
+        if (null !== $field) {
+            $object = new FieldVote($object, $field);
+        }
+
+        return $this->context->isGranted($role, $object);
+    }
+
 
 
     function first($list)

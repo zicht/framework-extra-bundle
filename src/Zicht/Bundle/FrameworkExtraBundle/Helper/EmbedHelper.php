@@ -6,6 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
 use \Symfony\Component\DependencyInjection\Container;
+use \Symfony\Component\Form\FormError;
 use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,15 +27,24 @@ class EmbedHelper
      */
     protected $container;
 
+    /**
+     * Whether or not to consider exceptions thrown by the handler as formerrors.
+     *
+     * @var bool
+     */
+    protected $isMarkExceptionsAsFormErrors;
+
 
     /**
      * Construct the helper with the service container.
      *
      * @param \Symfony\Component\DependencyInjection\Container $container
+     * @param bool $markExceptionsAsFormErrors
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, $markExceptionsAsFormErrors = false)
     {
         $this->container = $container;
+        $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 
 
@@ -110,35 +120,54 @@ class EmbedHelper
         }
         $formStatus = '';
 
-        // if the method is post, we may assume that the user has posted the form
-        if ($request->getMethod() == 'POST') {
+        // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
+        // This is useful for AJAX requests which need to modify the form based on submitted data.
+        if ($request->get('_submit_type') === 'bind') {
+            $form->bind($request);
+        } elseif ($request->getMethod() == 'POST') {
             $form->bind($request);
 
             $returnUrl     = $request->get('return_url');
             $successUrl    = $request->get('success_url');
+
             $handlerResult = false;
 
             // if it is valid, we can use the callback to handle the actual handling
-            if (
-                $form->isValid()
-                && ($handlerResult = call_user_func($handlerCallback, $request, $form, $this->container))
-            ) {
-                // any lingering errors may be removed now.
-                unset($formState['has_errors']);
-                unset($formState['data']);
-                unset($formState['form_errors']);
-                $formStatus = 'ok';
-
-                if ($handlerResult && $handlerResult instanceof Response) {
-                    return $handlerResult;
-                } elseif (is_array($handlerResult)) {
-                    $extraViewVars = $handlerResult + $extraViewVars;
-                }
-                if ($successUrl) {
-                    $returnUrl = $successUrl;
-                    if ($request->isXmlHttpRequest()) {
-                        return new JsonResponse(array('success_url' => $successUrl));
+            if ($form->isValid()) {
+                try {
+                    $handlerResult = call_user_func($handlerCallback, $request, $form, $this->container);
+                } catch (\Exception $e) {
+                    if (!$this->isMarkExceptionsAsFormErrors) {
+                        throw $e;
+                    } else {
+                        $form->addError($this->convertExceptionToFormError($e));
                     }
+                }
+
+                if ($handlerResult) {
+                    // any lingering errors may be removed now.
+                    unset($formState['has_errors']);
+                    unset($formState['data']);
+                    unset($formState['form_errors']);
+                    $formStatus = 'ok';
+
+                    if ($handlerResult && $handlerResult instanceof Response) {
+                        return $handlerResult;
+                    } elseif (is_array($handlerResult)) {
+                        $extraViewVars = $handlerResult + $extraViewVars;
+                    }
+                    if ($successUrl) {
+                        $returnUrl = $successUrl;
+                        if ($request->isXmlHttpRequest()) {
+                            return new JsonResponse(array('success_url' => $successUrl));
+                        }
+                    }
+                } else {
+                    $formStatus = 'errors';
+
+                    $formState['has_errors']  = true;
+                    $formState['data']        = $request->request->get($form->getName());
+                    $formState['form_errors'] = $form->getErrors();
                 }
             } else {
                 $formStatus = 'errors';
@@ -210,12 +239,34 @@ class EmbedHelper
         if (is_object($form->getData())) {
             $ret = preg_replace('/\W/', '_', get_class($form->getData()));
         } else {
-            $ret = $form->getName();
-            if (!$ret) {
-                $ret = preg_replace('/\W/', '_', get_class($form));
+            if ($form->getName()) {
+                return (string)$form->getName();
+            } else {
+                return preg_replace('/\W/', '_', get_class($form));
             }
         }
         
         return $ret;
+    }
+
+
+    /**
+     * @param $markExceptionsAsFormErrors
+     */
+    public function setMarkExceptionsAsFormErrors($markExceptionsAsFormErrors)
+    {
+        $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
+    }
+
+
+    /**
+     * Provides a way of customizing error messages based on type of exception, etc.
+     *
+     * @param \Exception $exception
+     * @return FormError
+     */
+    protected function convertExceptionToFormError($exception)
+    {
+        return new FormError($exception->getMessage());
     }
 }
