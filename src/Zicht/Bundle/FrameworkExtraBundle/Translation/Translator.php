@@ -27,7 +27,7 @@ class Translator extends BaseTranslator
             if (empty($parameters)) {
                 return sprintf('{%s}', $id);
             } else {
-                return sprintf('{%s:%s}', $id, join(', ', array_keys($parameters)));
+                return sprintf('{{%s}:{%s}}', $id, join(', ', array_keys($parameters)));
             }
         } else {
             return parent::trans($id, $parameters, $domain, $locale);
@@ -45,9 +45,9 @@ class Translator extends BaseTranslator
 
         if ($locale == 'zz') {
             if (empty($parameters)) {
-                return sprintf('{%s:%d}', $id, $number);
+                return sprintf('{{%s}:{%d}}', $id, $number);
             } else {
-                return sprintf('{%s:%d:%s}', $id, $number, join(', ', array_keys($parameters)));
+                return sprintf('{{%s}:{%d}:{%s}}', $id, $number, join(', ', array_keys($parameters)));
             }
         } else {
             return parent::transChoice($id, $number, $parameters, $domain, $locale);
