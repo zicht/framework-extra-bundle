@@ -71,7 +71,8 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('ceil',          'ceil'),
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
-            new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType'))
+            new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
+            new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
         );
     }
 
@@ -410,5 +411,11 @@ class Extension extends Twig_Extension
         $dom->loadXml($data);
         $dom->formatOutput = true;
         return $dom->saveXML();
+    }
+
+
+    public function html2text($html)
+    {
+        return strip_tags($html);
     }
 }
