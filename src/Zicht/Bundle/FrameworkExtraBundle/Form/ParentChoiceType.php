@@ -89,6 +89,9 @@ class ParentChoiceType extends AbstractType
                 $data     = $e->getData();
                 $form     = $e->getForm();
                 $parentId = $data['parent'];
+                if (!$parentId) {
+                    return;
+                }
                 if ($form->has('parent')) {
                     $form->remove('parent');
                 }
