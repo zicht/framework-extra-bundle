@@ -58,6 +58,41 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_uglify', $global));
     }
 
+    /**
+     * Adds the requirejs configuration
+     *
+     * @param string $requirejsConfigFile
+     * @param boolean $isDebug
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @return void
+     *
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function addRequirejsConfiguration($requirejsConfigFile, $isDebug, ContainerBuilder $container)
+    {
+        if (!is_file($requirejsConfigFile)) {
+            throw new InvalidConfigurationException(
+                "zicht_framework_extra.requirejs setting '$requirejsConfigFile' is not a file"
+            );
+        }
+        $container->addResource(new FileResource($requirejsConfigFile));
+        try {
+            $requirejsConfig = Yaml::parse($requirejsConfigFile);
+        } catch (\Exception $e) {
+            throw new InvalidConfigurationException(
+                "zicht_framework_extra.requirejs setting '$requirejsConfigFile' could not be read",
+                0,
+                $e
+            );
+        }
+        $global = new Definition('Zicht\Bundle\FrameworkExtraBundle\Twig\RequirejsGlobal', array(
+            $requirejsConfig,
+            $isDebug
+        ));
+        $global->addTag('twig.global');
+        $global->addMethodCall('setDebug', array($isDebug));
+        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_requirejs', $global));
+    }
 
     /**
      * @{inheritDoc}
@@ -76,6 +111,13 @@ class ZichtFrameworkExtraExtension extends DIExtension
             }
 
             $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
+        }
+        if (!empty($config['requirejs'])) {
+            if (!isset($config['requirejs_debug'])) {
+                $config['requirejs_debug']= false;//$container->getParameter('kernel.debug');
+            }
+
+            $this->addRequirejsConfiguration($config['requirejs'], $config['requirejs_debug'], $container);
         }
         if (!empty($config['embed_helper'])) {
             $container->getDefinition('zicht_embed_helper')
