@@ -114,7 +114,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
         }
         if (!empty($config['requirejs'])) {
             if (!isset($config['requirejs_debug'])) {
-                $config['requirejs_debug']= false;//$container->getParameter('kernel.debug');
+                $config['requirejs_debug']= $container->getParameter('kernel.debug');
             }
 
             $this->addRequirejsConfiguration($config['requirejs'], $config['requirejs_debug'], $container);
