@@ -88,12 +88,13 @@ class ParentChoiceType extends AbstractType
             function ($e) use ($ff, $doctrine, $createParentChoice, $options) {
                 $data     = $e->getData();
                 $form     = $e->getForm();
-                $parentId = $data['parent'];
-                if ($form->has('parent')) {
-                    $form->remove('parent');
+                if ($parentId = $data['parent']) {
+                    if ($form->has('parent')) {
+                        $form->remove('parent');
+                    }
+                    $form->add($createParentChoice($parentId));
+                    $form->setData($doctrine->getRepository($options['class'])->find($parentId));
                 }
-                $form->add($createParentChoice($parentId));
-                $form->setData($doctrine->getRepository($options['class'])->find($parentId));
             }
         );
 
