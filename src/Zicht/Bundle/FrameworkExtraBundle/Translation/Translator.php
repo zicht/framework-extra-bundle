@@ -9,6 +9,12 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Translation;
 use \Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 
 /**
+ * Provides zz locale
+ *
+ * To enable this feature the default translator class must be replaced by adding the following to config.yml:
+ * > parameters:
+ * >     translator.class: 'Zicht\Bundle\FrameworkExtraBundle\Translation\Translator'
+ *
  * Class Translator
  * @package Zicht\Bundle\FrameworkExtraBundle\Translation
  */
