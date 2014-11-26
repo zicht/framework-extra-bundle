@@ -108,7 +108,7 @@ class EmbedHelper
      * @return array|\Symfony\Component\HttpFoundation\Response
      */
     public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
-                        $formTargetParams = array(), $extraViewVars = array())
+                        $formTargetParams = array(), $extraViewVars = array(), $errorCallback = null)
     {
 
         $formId = $this->getFormId($form);
@@ -143,31 +143,25 @@ class EmbedHelper
                         $form->addError($this->convertExceptionToFormError($e));
                     }
                 }
+            }
 
-                if ($handlerResult) {
-                    // any lingering errors may be removed now.
-                    unset($formState['has_errors']);
-                    unset($formState['data']);
-                    unset($formState['form_errors']);
-                    $formStatus = 'ok';
+            if ($handlerResult) {
+                // any lingering errors may be removed now.
+                unset($formState['has_errors']);
+                unset($formState['data']);
+                unset($formState['form_errors']);
+                $formStatus = 'ok';
 
-                    if ($handlerResult && $handlerResult instanceof Response) {
-                        return $handlerResult;
-                    } elseif (is_array($handlerResult)) {
-                        $extraViewVars = $handlerResult + $extraViewVars;
+                if ($handlerResult && $handlerResult instanceof Response) {
+                    return $handlerResult;
+                } elseif (is_array($handlerResult)) {
+                    $extraViewVars = $handlerResult + $extraViewVars;
+                }
+                if ($successUrl) {
+                    $returnUrl = $successUrl;
+                    if ($request->isXmlHttpRequest()) {
+                        return new JsonResponse(array('success_url' => $successUrl));
                     }
-                    if ($successUrl) {
-                        $returnUrl = $successUrl;
-                        if ($request->isXmlHttpRequest()) {
-                            return new JsonResponse(array('success_url' => $successUrl));
-                        }
-                    }
-                } else {
-                    $formStatus = 'errors';
-
-                    $formState['has_errors']  = true;
-                    $formState['data']        = $request->request->get($form->getName());
-                    $formState['form_errors'] = $form->getErrors();
                 }
             } else {
                 $formStatus = 'errors';
@@ -176,6 +170,7 @@ class EmbedHelper
                 $formState['data']        = $request->request->get($form->getName());
                 $formState['form_errors'] = $form->getErrors();
             }
+
             // redirect to the return url, if available
             if ($returnUrl && !$request->isXmlHttpRequest()) {
                 $response = new RedirectResponse($returnUrl);
@@ -204,6 +199,10 @@ class EmbedHelper
         }
 
         $viewVars = $extraViewVars;
+
+        if ($formStatus === 'errors' && !is_null($errorCallback)) {
+            call_user_func($errorCallback, $request, $form, $this->container);
+        }
 
         if (empty($response)) {
             if ($request->get('extension')) {
