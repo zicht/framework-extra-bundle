@@ -175,6 +175,10 @@ class EmbedHelper
             if ($returnUrl && !$request->isXmlHttpRequest()) {
                 $response = new RedirectResponse($returnUrl);
             }
+
+            if ($formStatus === 'errors' && !is_null($errorCallback)) {
+                call_user_func($errorCallback, $request, $form, $this->container);
+            }
         } elseif (!empty($formState['has_errors'])) {
             $formStatus = 'errors';
 
@@ -199,10 +203,6 @@ class EmbedHelper
         }
 
         $viewVars = $extraViewVars;
-
-        if ($formStatus === 'errors' && !is_null($errorCallback)) {
-            call_user_func($errorCallback, $request, $form, $this->container);
-        }
 
         if (empty($response)) {
             if ($request->get('extension')) {
