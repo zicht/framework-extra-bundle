@@ -67,7 +67,6 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('with',           array($this, 'with')),
             new \Twig_SimpleFilter('without',        array($this, 'without')),
 
-            new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
@@ -75,7 +74,6 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
         );
     }
-
 
     function getFunctions()
     {

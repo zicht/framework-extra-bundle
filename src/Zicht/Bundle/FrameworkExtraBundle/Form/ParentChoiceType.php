@@ -80,7 +80,7 @@ class ParentChoiceType extends AbstractType
                 'parent',
                 'choice',
                 $parentId,
-                array('choices' => $choices, 'property_path' => false)
+                array('choices' => $choices, 'mapped' => false, 'auto_initialize' => false)
             );
         };
         $builder->addEventListener(
