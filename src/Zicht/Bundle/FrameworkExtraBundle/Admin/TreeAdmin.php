@@ -109,7 +109,7 @@ class TreeAdmin extends Admin
                         'move'   => array(
                             'template' => 'ZichtAdminBundle:CRUD:actions/move.html.twig',
                         ),
-                        'view'   => array(),
+                        'show'   => array(),
                         'edit'   => array(),
                         'delete' => array(),
                     )
