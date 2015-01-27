@@ -13,6 +13,7 @@ use \Symfony\Component\HttpFoundation\RedirectResponse;
 use \Symfony\Component\Form\Form;
 use \Symfony\Component\Form\FormInterface;
 use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use \Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 
 /**
@@ -216,7 +217,7 @@ class EmbedHelper
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
             if ($request->hasPreviousSession()) {
-                $viewVars['flash']    = $request->getSession()->getFlash($form->getName());
+                $viewVars['flash']    = $request->getSession()->getBag('flashes')->get($form->getName());
             } else {
                 $viewVars['flash']    = '';
             }
