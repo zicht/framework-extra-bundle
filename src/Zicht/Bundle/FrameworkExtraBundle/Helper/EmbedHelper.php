@@ -124,9 +124,9 @@ class EmbedHelper
         // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
         // This is useful for AJAX requests which need to modify the form based on submitted data.
         if ($request->get('_submit_type') === 'bind') {
-            $form->bind($request);
+            $form->submit($request);
         } elseif ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
 
             $returnUrl     = $request->get('return_url');
             $successUrl    = $request->get('success_url');
