@@ -13,8 +13,9 @@ use \Symfony\Component\HttpFoundation\RedirectResponse;
 use \Symfony\Component\Form\Form;
 use \Symfony\Component\Form\FormInterface;
 use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use \Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use \Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
+use \Symfony\Component\Form\FormErrorIterator;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
@@ -115,7 +116,12 @@ class EmbedHelper
         $formId = $this->getFormId($form);
 
         if ($request->hasPreviousSession()) {
-            $formState  = $request->getSession()->get($formId);
+            // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
+            // therefore convert the errors iterator to array, on get from session convert to iterator
+            // see [1]
+            $formState = $request->getSession()->get($formId);
+            $formState['form_errors'] = is_array($formState['form_errors']) ? $formState['form_errors'] : array();
+            $formState['form_errors'] = new FormErrorIterator($form, $formState['form_errors']);
         } else {
             $formState = null;
         }
@@ -199,6 +205,8 @@ class EmbedHelper
             unset($formState['form_errors']);
         }
         if ($formState && !$request->isXmlHttpRequest()) {
+            // see [1] for explanation
+            $formState['form_errors'] = iterator_to_array($formState['form_errors']);
             $request->getSession()->set($formId, $formState);
         } elseif ($request->hasPreviousSession()) {
             $request->getSession()->remove($formId);
