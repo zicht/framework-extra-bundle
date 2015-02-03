@@ -304,7 +304,7 @@ class Extension extends Twig_Extension
         $result = '';
         foreach (preg_split('/\b/', $str) as $part) {
             if (strlen($result . $part) > $length) {
-                $result .= $ellipsis;
+                $result = rtrim($result) . $ellipsis;
                 break;
             } else {
                 $result .= $part;
