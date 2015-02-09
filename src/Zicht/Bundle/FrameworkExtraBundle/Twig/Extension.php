@@ -54,6 +54,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('xml',            array($this, 'xml')),
             new \Twig_SimpleFilter('truncate',       array($this, 'truncate')),
+            new \Twig_SimpleFilter('truncate_html',  array($this, 'truncateHtml')),
             new \Twig_SimpleFilter('regex_replace',  array($this, 'regex_replace')),
             new \Twig_SimpleFilter('re_replace',     array($this, 'regex_replace')),
             new \Twig_SimpleFilter('str_uscore',     array($this, 'str_uscore')),
@@ -301,10 +302,10 @@ class Extension extends Twig_Extension
      * @param string $ellipsis
      * @return string
      */
-    function truncate($str, $length, $ellipsis = '...')
+    public function truncate($str, $length, $ellipsis = '...')
     {
         $result = '';
-        foreach (preg_split('/\b/', $str) as $part) {
+        foreach (preg_split('/\b/U', $str) as $part) {
             if (strlen($result . $part) > $length) {
                 $result .= $ellipsis;
                 break;
@@ -316,6 +317,22 @@ class Extension extends Twig_Extension
         return $result;
     }
 
+    /**
+     * Truncates html as text
+     *
+     * @param string $html
+     * @param int $length
+     * @param string $ellipsis
+     * @return string
+     */
+    public function truncateHtml($html, $length, $ellipsis = '...')
+    {
+        return $this->truncate(html_entity_decode(strip_tags($html), null, 'UTF-8'), $length, $ellipsis);
+    }
+
+    /**
+     * @return array|\Twig_NodeVisitorInterface[]
+     */
     public function getNodeVisitors()
     {
         return array(
