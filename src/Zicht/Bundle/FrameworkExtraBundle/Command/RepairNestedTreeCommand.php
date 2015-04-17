@@ -27,6 +27,7 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
     {
         $this
             ->setName('zicht:repair:nested-tree')
+            ->setDescription('Repair a NestedTreeSet')
             ->addArgument('entity', InputArgument::REQUIRED, 'The entity to be repaired, must be of nested tree set. E.g. ZichtProjectSite:Term')
         ;
     }
