@@ -10,6 +10,7 @@ use \Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use \Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -28,7 +29,13 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
         $this
             ->setName('zicht:repair:nested-tree')
             ->setDescription('Repair a NestedTreeSet')
-            ->addArgument('entity', InputArgument::REQUIRED, 'The entity to be repaired, must be of nested tree set. E.g. ZichtProjectSite:Term')
+            ->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Do a dry run, i.e. only report the problems without doing any changes')
+            ->addArgument('entity', InputArgument::REQUIRED, 'The entity to be repaired, must be of nested tree set. E.g. ZichtMenuBundle:MenuItem')
+            ->setHelp(<<<EOF
+    This command will try to repair broken nested set.
+    Pass --dry-run to see if the nested set is broken (use --verbose to see which items are broken)
+EOF
+            )
         ;
     }
 
@@ -39,16 +46,24 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
     {
         $doctrine = $this->getContainer()->get('doctrine');
         $entity = $input->getArgument('entity');
-
-        $repository = $doctrine
-            ->getRepository($entity);
-        ;
+        $formatter = $this->getHelperSet()->get('formatter');
+        $repository = $doctrine->getRepository($entity);
 
         if ($repository instanceof NestedTreeRepository) {
-            if ($repository->verify() !== true) {
-                $output->writeln("Errors found in tree, calling recover");
-                $repository->recover();
-                $doctrine->getManager()->flush();
+            if (true !== ($issues = $repository->verify())) {
+                if ($output->getVerbosity() > 0) {
+                    $output->writeln("Errors found in tree:");
+                    $output->writeln($formatter->formatBlock($issues, 'comment', true));
+                } else {
+                    $output->writeln("Errors found in tree");
+                }
+                if ($input->getOption('dry-run')) {
+                    $output->writeln("Dry run, so no changes are made");
+                } else {
+                    $output->writeln("Recovering");
+                    $repository->recover();
+                    $doctrine->getManager()->flush();
+                }
             } else {
                 $output->writeln("No issues found");
             }
