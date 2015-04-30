@@ -22,12 +22,17 @@ use \Symfony\Component\Console\Output\OutputInterface;
 class RepairNestedTreeCommand extends ContainerAwareCommand
 {
     /**
+     * This is const because it's referred by the exception thrown when a validation error occurs
+     */
+    const COMMAND_NAME = 'zicht:repair:nested-tree';
+
+    /**
      * @{inheritDoc}
      */
     protected function configure()
     {
         $this
-            ->setName('zicht:repair:nested-tree')
+            ->setName(self::COMMAND_NAME)
             ->setDescription('Repair a NestedTreeSet')
             ->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Do a dry run, i.e. only report the problems without doing any changes')
             ->addArgument('entity', InputArgument::REQUIRED, 'The entity to be repaired, must be of nested tree set. E.g. ZichtMenuBundle:MenuItem')
