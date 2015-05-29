@@ -6,6 +6,10 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ExpressionBuilder;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use \Symfony\Component\Translation\TranslatorInterface;
 
@@ -68,6 +72,9 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('with',           array($this, 'with')),
             new \Twig_SimpleFilter('without',        array($this, 'without')),
 
+            new \Twig_SimpleFilter('where',          array($this, 'where')),
+            new \Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
+
             new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
             new \Twig_SimpleFilter('floor',         'floor'),
@@ -75,6 +82,53 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
         );
+    }
+
+
+    /**
+     * Filter a collection based on properties of the collection's items
+     *
+     * @param array|Collection $items
+     * @param array $keyValuePairs
+     * @param string $comparator
+     * @param string $booleanOperator
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function where($items, array $keyValuePairs, $comparator = 'eq', $booleanOperator = 'and')
+    {
+        if (is_array($items)) {
+            $items = new ArrayCollection($items);
+        }
+        $whereMethod = $booleanOperator . 'Where';
+
+        $eb = new ExpressionBuilder();
+        $criteria = new Criteria();
+        foreach ($keyValuePairs as $key => $value) {
+            if (is_array($value)) {
+                if ($comparator === 'eq') {
+                    $criteria->$whereMethod($eb->in($key, $value));
+                    continue;
+                } elseif ($comparator === 'neq') {
+                    $criteria->$whereMethod($eb->notIn($key, $value));
+                    continue;
+                }
+            }
+            $criteria->$whereMethod($eb->$comparator($key, $value));
+        }
+
+        return $items->matching($criteria);
+    }
+
+    /**
+     * Inverse of where, i.e. get all items that are NOT matching the criteria.
+     *
+     * @param $items
+     * @param $keyValuePairs
+     * @return Collection
+     */
+    public function notWhere($items, $keyValuePairs)
+    {
+        return $this->where($items, $keyValuePairs, 'neq');
     }
 
 
