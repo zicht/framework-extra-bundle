@@ -74,6 +74,7 @@ class Extension extends Twig_Extension
 
             new \Twig_SimpleFilter('where',          array($this, 'where')),
             new \Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
+            new \Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
 
             new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
@@ -122,13 +123,28 @@ class Extension extends Twig_Extension
     /**
      * Inverse of where, i.e. get all items that are NOT matching the criteria.
      *
-     * @param $items
-     * @param $keyValuePairs
+     * @param array|Collection $items
+     * @param array $keyValuePairs
      * @return Collection
      */
     public function notWhere($items, $keyValuePairs)
     {
         return $this->where($items, $keyValuePairs, 'neq');
+    }
+
+    /**
+     * Splits a list in two collections, one matching the criteria, and the rest
+     *
+     * @param array|Collection $items
+     * @param array $keyValuePairs
+     * @return Collection
+     */
+    public function whereSplit($items, $keyValuePairs)
+    {
+        return array(
+            $this->notWhere($items, $keyValuePairs),
+            $this->where($items, $keyValuePairs)
+        );
     }
 
 
