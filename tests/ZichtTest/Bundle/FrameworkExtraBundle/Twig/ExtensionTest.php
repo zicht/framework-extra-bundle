@@ -76,7 +76,8 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     function filterData() {
         return array(
             array('re_replace', array('ab', '/.b/', 'c'), 'c'),
-            array('truncate', array('abc def', 4), 'abc ...'),
+            array('truncate', array('abc def', 4), 'abc...'),
+            array('truncate', array('abc def', 4, ' ...'), 'abc ...'),
             array('str_uscore', array('abcDef'), \Zicht\Util\Str::uscore('abcDef')),
             array('str_uscore', array('abc def'), \Zicht\Util\Str::uscore('abc def')),
             array('str_dash', array('abcDef'), \Zicht\Util\Str::dash('abcDef')),
@@ -91,6 +92,27 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             array('ceil', array(1.8), 2),
             array('round', array(1.4), 1),
             array('round', array(1.6), 2),
+            array('url_to_form_params', array(''), array()),
+            array('url_to_form_params', array('/'), array()),
+            array('url_to_form_params', array('/?'), array()),
+            array('url_to_form_params', array('/?a'), array('a' => '')), //< --- this is intended behaviour
+            array('url_to_form_params', array('/?a=b'), array('a' => 'b')),
+            array('url_to_form_params', array('/?a[x][y]=b'), array('a[x][y]' => 'b')),
+            array('url_to_form_params', array('/?a[x][y]=b&c=1'), array('a[x][y]' => 'b', 'c' => '1')),
+            array('url_to_form_params', array('/?a[x][y]=b&a[x][z]=c'), array('a[x][y]' => 'b', 'a[x][z]' => 'c')),
+
+            array('url_strip_query', array(''), ''),
+            array('url_strip_query', array('/'), '/'),
+            array('url_strip_query', array('/?'), '/'),
+            array('url_strip_query', array('/?a'), '/'),
+            array('url_strip_query', array('/?a=b'), '/'),
+            array('url_strip_query', array('/?a[x][y]=b'), '/'),
+            array('url_strip_query', array('/?a[x][y]=b&c=1'), '/'),
+            array('url_strip_query', array('/?a[x][y]=b&a[x][z]=c'), '/'),
+            array('url_strip_query', array('http://www.example.org/some/path/with=values?a[x][y]=b&a[x][z]=c'), 'http://www.example.org/some/path/with=values'),
+            array('url_strip_query', array('https://www.example.org/some/path/with=values?a[x][y]=b&a[x][z]=c'), 'https://www.example.org/some/path/with=values'),
+            array('url_strip_query', array('https://www.example.com/some/path/with=values#note_that_the_hash_should_remain'), 'https://www.example.com/some/path/with=values#note_that_the_hash_should_remain'),
+            array('url_strip_query', array('https://www.example.com/some/path/with=values?a[x][y]=b&a[x][z]=c#note_that_the_hash_should_remain'), 'https://www.example.com/some/path/with=values#note_that_the_hash_should_remain'),
         );
     }
 }

@@ -75,6 +75,8 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('where',          array($this, 'where')),
             new \Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
             new \Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
+            new \Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
+            new \Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
 
             new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
@@ -148,6 +150,66 @@ class Extension extends Twig_Extension
     }
 
 
+    /**
+     * Removes the query string from a form.
+     *
+     * Used as follows in conjunction with url_parse_query()
+     *
+     * <form method="get" action="{{ url|url_strip_query }}">
+     *     {% for k, value in url|url_to_form_params %}
+     *          <input type="hidden" name="{{ k }}" value="{{ value }}">
+     *     {% endfor %}
+     * </form>
+     *
+     * @param string $url
+     * @return array
+     */
+    public function urlStripQuery($url)
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+        return str_replace('?' . $query, '', $url);
+    }
+
+
+    /**
+     *
+     * @param $url
+     * @return array
+     */
+    public function urlToFormParameters($url)
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+        $vars = array();
+        parse_str($query, $vars);
+        return $this->valuesToFormParameters($vars, null);
+    }
+
+    /**
+     * Prepares a nested array for use in form fields.
+     *
+     * @param mixed[] $values
+     * @param string $parent
+     * @return array
+     */
+    private function valuesToFormParameters($values, $parent)
+    {
+        $ret = array();
+        foreach ($values as $key => $value) {
+            if (null !== $parent) {
+                $keyName = sprintf('%s[%s]', $parent, $key);
+            } else {
+                $keyName = $key;
+            }
+            if (is_scalar($value)) {
+                $ret[$keyName]= $value;
+            } else {
+                $ret = array_merge($ret, $this->valuesToFormParameters($value, $keyName));
+            }
+        }
+        return $ret;
+    }
+
+
     function getFunctions()
     {
         return array(
@@ -181,7 +243,6 @@ class Extension extends Twig_Extension
 
         return $this->context->isGranted($role, $object);
     }
-
 
 
     function first($list)
