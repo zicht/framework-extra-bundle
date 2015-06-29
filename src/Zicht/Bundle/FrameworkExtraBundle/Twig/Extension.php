@@ -79,7 +79,6 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
             new \Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
 
-            new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
