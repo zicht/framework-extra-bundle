@@ -363,4 +363,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
         }
         return $ret;
     }
+
+    public function getCurrentPageIndex()
+    {
+        return $this->currentPage;
+    }
 }

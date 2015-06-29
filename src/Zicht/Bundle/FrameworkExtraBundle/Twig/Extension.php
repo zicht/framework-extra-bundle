@@ -6,7 +6,12 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use \Doctrine\Common\Collections\ArrayCollection;
+use \Doctrine\Common\Collections\Collection;
+use \Doctrine\Common\Collections\Criteria;
+use \Doctrine\Common\Collections\ExpressionBuilder;
+use \Doctrine\ORM\PersistentCollection;
+use \Symfony\Component\Security\Core\SecurityContextInterface;
 use \Symfony\Component\Translation\TranslatorInterface;
 
 use \Zicht\Util\Str as StrUtil;
@@ -68,6 +73,13 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('with',           array($this, 'with')),
             new \Twig_SimpleFilter('without',        array($this, 'without')),
 
+            new \Twig_SimpleFilter('where',          array($this, 'where')),
+            new \Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
+            new \Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
+            new \Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
+            new \Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
+
+            new \Twig_SimpleFilter('round',         'round'),
             new \Twig_SimpleFilter('ceil',          'ceil'),
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
@@ -75,6 +87,132 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
         );
     }
+
+    /**
+     * Filter a collection based on properties of the collection's items
+     *
+     * @param array|Collection $items
+     * @param array $keyValuePairs
+     * @param string $comparator
+     * @param string $booleanOperator
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function where($items, array $keyValuePairs, $comparator = 'eq', $booleanOperator = 'and')
+    {
+        if (is_array($items)) {
+            $items = new ArrayCollection($items);
+        }
+        if ($items instanceof PersistentCollection && !$items->isInitialized()) {
+            $items->initialize();
+        }
+
+        $whereMethod = $booleanOperator . 'Where';
+
+        $eb = new ExpressionBuilder();
+        $criteria = new Criteria();
+        foreach ($keyValuePairs as $key => $value) {
+            if (is_array($value)) {
+                if ($comparator === 'eq') {
+                    $criteria->$whereMethod($eb->in($key, $value));
+                    continue;
+                } elseif ($comparator === 'neq') {
+                    $criteria->$whereMethod($eb->notIn($key, $value));
+                    continue;
+                }
+            }
+            $criteria->$whereMethod($eb->$comparator($key, $value));
+        }
+
+        return $items->matching($criteria);
+    }
+
+    /**
+     * Inverse of where, i.e. get all items that are NOT matching the criteria.
+     *
+     * @param array|Collection $items
+     * @param array $keyValuePairs
+     * @return Collection
+     */
+    public function notWhere($items, $keyValuePairs)
+    {
+        return $this->where($items, $keyValuePairs, 'neq');
+    }
+
+    /**
+     * Splits a list in two collections, one matching the criteria, and the rest
+     *
+     * @param array|Collection $items
+     * @param array $keyValuePairs
+     * @return Collection
+     */
+    public function whereSplit($items, $keyValuePairs)
+    {
+        return array(
+            $this->notWhere($items, $keyValuePairs),
+            $this->where($items, $keyValuePairs)
+        );
+    }
+
+
+    /**
+     * Removes the query string from a form.
+     *
+     * Used as follows in conjunction with url_parse_query()
+     *
+     * <form method="get" action="{{ url|url_strip_query }}">
+     *     {% for k, value in url|url_to_form_params %}
+     *          <input type="hidden" name="{{ k }}" value="{{ value }}">
+     *     {% endfor %}
+     * </form>
+     *
+     * @param string $url
+     * @return array
+     */
+    public function urlStripQuery($url)
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+        return str_replace('?' . $query, '', $url);
+    }
+
+
+    /**
+     *
+     * @param $url
+     * @return array
+     */
+    public function urlToFormParameters($url)
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+        $vars = array();
+        parse_str($query, $vars);
+        return $this->valuesToFormParameters($vars, null);
+    }
+
+    /**
+     * Prepares a nested array for use in form fields.
+     *
+     * @param mixed[] $values
+     * @param string $parent
+     * @return array
+     */
+    private function valuesToFormParameters($values, $parent)
+    {
+        $ret = array();
+        foreach ($values as $key => $value) {
+            if (null !== $parent) {
+                $keyName = sprintf('%s[%s]', $parent, $key);
+            } else {
+                $keyName = $key;
+            }
+            if (is_scalar($value)) {
+                $ret[$keyName]= $value;
+            } else {
+                $ret = array_merge($ret, $this->valuesToFormParameters($value, $keyName));
+            }
+        }
+        return $ret;
+    }
+
 
     function getFunctions()
     {
@@ -109,7 +247,6 @@ class Extension extends Twig_Extension
 
         return $this->context->isGranted($role, $object);
     }
-
 
 
     function first($list)
