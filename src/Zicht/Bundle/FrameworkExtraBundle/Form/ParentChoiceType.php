@@ -84,7 +84,7 @@ class ParentChoiceType extends AbstractType
             );
         };
         $builder->addEventListener(
-            FormEvents::PRE_BIND,
+            FormEvents::PRE_SUBMIT,
             function ($e) use ($ff, $doctrine, $createParentChoice, $options) {
                 $data     = $e->getData();
                 $form     = $e->getForm();
