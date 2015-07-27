@@ -83,7 +83,8 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
             new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
-            new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
+            new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
+            new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
         );
     }
 
