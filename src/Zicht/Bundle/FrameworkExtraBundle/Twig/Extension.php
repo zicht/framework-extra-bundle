@@ -6,19 +6,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use \Doctrine\Common\Collections\ArrayCollection;
-use \Doctrine\Common\Collections\Collection;
-use \Doctrine\Common\Collections\Criteria;
-use \Doctrine\Common\Collections\ExpressionBuilder;
-use \Doctrine\ORM\PersistentCollection;
-use \Symfony\Component\Security\Core\SecurityContextInterface;
-use \Symfony\Component\Translation\TranslatorInterface;
-
-use \Zicht\Util\Str as StrUtil;
-use \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
-use \Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
-use \Twig_Extension;
-use \Twig_Filter_Function;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ExpressionBuilder;
+use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use Zicht\Util\Str as StrUtil;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
+use Zicht\Itertools as iter;
+use Twig_Extension;
 
 class Extension extends Twig_Extension
 {
@@ -579,22 +578,22 @@ class Extension extends Twig_Extension
     public function sum($iterable, $default = 0)
     {
         $result = $default;
-        foreach (\iter\accumulate($iterable) as $result) {};
+        foreach (iter\accumulate($iterable) as $result) {};
         return $result;
     }
 
     public function groupby($iterable, $keyStrategy)
     {
-        return \iter\groupby($keyStrategy, $iterable);
+        return iter\groupby($keyStrategy, $iterable);
     }
 
     public function sorted($iterable, $keyStrategy, $reverse = false)
     {
-        return \iter\sorted($keyStrategy, $iterable, $reverse);
+        return iter\sorted($keyStrategy, $iterable, $reverse);
     }
 
     public function map($iterable, $keyStrategy)
     {
-        return \iter\map($keyStrategy, $iterable);
+        return iter\map($keyStrategy, $iterable);
     }
 }
