@@ -88,7 +88,8 @@ class Extension extends Twig_Extension
 
             new \Twig_SimpleFilter('sum', array($this, 'sum')),
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
-            new \Twig_SimpleFilter('map1', array($this, 'map1')),
+            new \Twig_SimpleFilter('sorted', array($this, 'sorted')),
+            new \Twig_SimpleFilter('map', array($this, 'map')),
         );
     }
 
@@ -587,7 +588,12 @@ class Extension extends Twig_Extension
         return \iter\groupby($keyStrategy, $iterable);
     }
 
-    public function map1($iterable, $keyStrategy)
+    public function sorted($iterable, $keyStrategy, $reverse = false)
+    {
+        return \iter\sorted($keyStrategy, $iterable, $reverse);
+    }
+
+    public function map($iterable, $keyStrategy)
     {
         return \iter\map($keyStrategy, $iterable);
     }
