@@ -85,6 +85,10 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
+
+            new \Twig_SimpleFilter('sum', array($this, 'sum')),
+            new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
+            new \Twig_SimpleFilter('map1', array($this, 'map1')),
         );
     }
 
@@ -569,5 +573,22 @@ class Extension extends Twig_Extension
     public function html2text($html)
     {
         return strip_tags($html);
+    }
+
+    public function sum($iterable, $default = 0)
+    {
+        $result = $default;
+        foreach (\iter\accumulate($iterable) as $result) {};
+        return $result;
+    }
+
+    public function groupby($iterable, $keyStrategy)
+    {
+        return \iter\groupby($keyStrategy, $iterable);
+    }
+
+    public function map1($iterable, $keyStrategy)
+    {
+        return \iter\map($keyStrategy, $iterable);
     }
 }
