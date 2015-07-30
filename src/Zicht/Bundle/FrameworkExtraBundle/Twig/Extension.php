@@ -89,6 +89,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
             new \Twig_SimpleFilter('sorted', array($this, 'sorted')),
             new \Twig_SimpleFilter('map', array($this, 'map')),
+            new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
         );
     }
 
