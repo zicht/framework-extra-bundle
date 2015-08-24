@@ -33,7 +33,6 @@ class Translator extends BaseTranslator
             if (null === $domain) {
                 $domain = 'messages';
             }
-
             $parts = array(
                 sprintf('{%s', $id),
                 sprintf('@%s', $domain),
@@ -58,11 +57,19 @@ class Translator extends BaseTranslator
         }
 
         if ($locale == 'zz') {
-            if (empty($parameters)) {
-                return sprintf('{{%s}:{%d}}', $id, $number);
-            } else {
-                return sprintf('{{%s}:{%d}:{%s}}', $id, $number, join(', ', array_keys($parameters)));
+            if (null === $domain) {
+                $domain = 'messages';
             }
+            $parts = array(
+                sprintf('{%s', $id),
+                sprintf('#%s', $number),
+                sprintf('@%s', $domain),
+            );
+            if (!empty($parameters)) {
+                $parts [] = sprintf('[%s]', join(', ', array_keys($parameters)));
+            }
+            $parts [] = '}';
+            return join('', $parts);
         } else {
             return parent::transChoice($id, $number, $parameters, $domain, $locale);
         }
