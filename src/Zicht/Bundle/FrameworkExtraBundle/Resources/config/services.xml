@@ -24,5 +24,10 @@
             <argument type="service" id="doctrine"/>
             <tag name="form.type" alias="zicht_parent_choice"/>
         </service>
+
+        <service id="zicht_framework_extra.admin.event_propagation_builder" class="Zicht\Bundle\FrameworkExtraBundle\AdminMenu\EventPropagationBuilder">
+            <argument type="service" id="zicht_page.page_url_provider"/>
+            <tag name="zicht_admin.event_propagation" event="zicht_page.view"/>
+        </service>
     </services>
 </container>
