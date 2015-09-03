@@ -38,7 +38,7 @@ class Translator extends BaseTranslator
                 sprintf('@%s', $domain),
             );
             if (!empty($parameters)) {
-                $parts [] = sprintf('[%s]', join(', ', array_keys($parameters)));
+                $parts [] = json_encode($parameters);
             }
             $parts [] = '}';
             return join('', $parts);
