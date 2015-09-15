@@ -211,6 +211,15 @@ class SortedSetMap
         ksort($this->values);
     }
 
+    /**
+     * Returns the number of values in the set.
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return count($this->values);
+    }
 
     /**
      * Implements the __clone magic method to clone internal SortedSets
