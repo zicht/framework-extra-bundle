@@ -48,10 +48,13 @@ class EventPropagationBuilder implements PropagationInterface
         }
         /** @var \Zicht\Bundle\PageBundle\Event\PageViewEvent $e */
 
+        $zzPage = clone $e->getPage();
+        $zzPage->setLanguage('zz');
+
         $e->getDispatcher()->dispatch(
             AdminEvents::MENU_EVENT,
             new MenuEvent(
-                $this->pageUrlProvider->url($e->getPage(), array('_locale' => 'zz')),
+                $this->pageUrlProvider->url($zzPage),
                 'Vertalingen'
             )
         );
