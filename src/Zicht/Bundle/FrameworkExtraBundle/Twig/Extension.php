@@ -84,10 +84,26 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('floor',         'floor'),
             new \Twig_SimpleFilter('groups',        array($this, 'groups')),
             new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
-            new \Twig_SimpleFilter('html2text',     array($this, 'html2text'))
+            new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
+
+            new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
         );
     }
 
+    /**
+     * Call the php json_decode
+     *
+     * @param $string
+     * @param bool $assoc
+     * @return mixed|null
+     */
+    public function json_decode($string, $assoc = false)
+    {
+        if (is_string($string)) {
+            return json_decode($string, $assoc);
+        }
+        return null;
+    }
 
     /**
      * Filter a collection based on properties of the collection's items
