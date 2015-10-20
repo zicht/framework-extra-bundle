@@ -84,6 +84,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
+            new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
 
             new \Twig_SimpleFilter('sum', array($this, 'sum')),
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
@@ -92,6 +93,21 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
             new \Twig_SimpleFilter('chain', '\Zicht\Itertools\chain'),
         );
+    }
+
+    /**
+     * Call the php json_decode
+     *
+     * @param $string
+     * @param bool $assoc
+     * @return mixed|null
+     */
+    public function json_decode($string, $assoc = false)
+    {
+        if (is_string($string)) {
+            return json_decode($string, $assoc);
+        }
+        return null;
     }
 
     /**

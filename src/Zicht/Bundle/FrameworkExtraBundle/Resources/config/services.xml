@@ -29,5 +29,10 @@
             <argument type="service" id="zicht_page.page_url_provider"/>
             <tag name="zicht_admin.event_propagation" event="zicht_page.view"/>
         </service>
+
+        <service id="artez_site.imagine.match_filter_loader" class="Zicht\Bundle\FrameworkExtraBundle\LiipImagine\MatchFilterLoader">
+            <argument type="service" id="liip_imagine.filter.manager"/>
+            <tag name="liip_imagine.filter.loader" loader="match" />
+        </service>
     </services>
 </container>
