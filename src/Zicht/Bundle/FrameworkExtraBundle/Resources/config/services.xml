@@ -25,11 +25,6 @@
             <tag name="form.type" alias="zicht_parent_choice"/>
         </service>
 
-        <service id="zicht_framework_extra.admin.event_propagation_builder" class="Zicht\Bundle\FrameworkExtraBundle\AdminMenu\EventPropagationBuilder">
-            <argument type="service" id="zicht_page.page_url_provider"/>
-            <tag name="zicht_admin.event_propagation" event="zicht_page.view"/>
-        </service>
-
         <service id="artez_site.imagine.match_filter_loader" class="Zicht\Bundle\FrameworkExtraBundle\LiipImagine\MatchFilterLoader">
             <argument type="service" id="liip_imagine.filter.manager"/>
             <tag name="liip_imagine.filter.loader" loader="match" />
