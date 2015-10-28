@@ -100,6 +100,10 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
+        if ($container->hasDefinition('liip_imagine.filter.manager')) {
+            $loader->load('imagine.xml');
+        }
+
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
 

@@ -42,8 +42,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * match: {ratio: {comparator: >, value: 1.0}, filters: some_filter}
  * match: {ratio: {comparator: <, value: 1.0}, filters: some_filter}
  * match: {ratio: {comparator: =, value: 1.0}, filters: some_filter}
- *
- * @package Zicht\Bundle\ArtezSiteBundle\Imagine
  */
 class MatchFilterLoader implements LoaderInterface
 {
