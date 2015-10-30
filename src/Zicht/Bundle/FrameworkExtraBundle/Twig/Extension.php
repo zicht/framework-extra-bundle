@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Zicht\Util\Str as StrUtil;
@@ -92,8 +93,48 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('map', array($this, 'map')),
             new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
             new \Twig_SimpleFilter('chain', '\Zicht\Itertools\chain'),
+
+            new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
+            new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
         );
     }
+
+    /**
+     * Returns the root of the form
+     *
+     * @param FormView $formView
+     * @return FormView
+     */
+    public function form_root(FormView $formView)
+    {
+        $parent = $formView;
+        while ($parent->parent) {
+            $parent = $parent->parent;
+        }
+        return $parent;
+    }
+
+
+    /**
+     * Returns true when the form, or any of its children, has one or more errors.
+     *
+     * @param $form
+     */
+    public function form_has_errors(FormView $form)
+    {
+        if ($form->vars['errors']->count()) {
+            return true;
+        }
+
+        foreach ($form->children as $child) {
+            if ($this->form_has_errors($child)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /**
      * Call the php json_decode
