@@ -206,7 +206,7 @@ class EmbedHelper
         }
         if ($formState && !$request->isXmlHttpRequest()) {
             // see [1] for explanation
-            $formState['form_errors'] = iterator_to_array($formState['form_errors']);
+            $formState['form_errors'] = array_key_exists('form_errors', $formState) ? iterator_to_array($formState['form_errors']) : [];
             $request->getSession()->set($formId, $formState);
         } elseif ($request->hasPreviousSession()) {
             $request->getSession()->remove($formId);
