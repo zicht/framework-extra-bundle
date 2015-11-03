@@ -280,6 +280,7 @@ class Extension extends Twig_Extension
     function getFunctions()
     {
         return array(
+            'embed_params' => new \Twig_Function_Method($this, 'getEmbedParams'),
             'first'    => new \Twig_Function_Method($this, 'first'),
             'last'     => new \Twig_Function_Method($this, 'last'),
             'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
@@ -575,6 +576,12 @@ class Extension extends Twig_Extension
         } else {
             throw new \InvalidArgumentException("Only supports arrays or strings");
         }
+    }
+
+
+    function getEmbedParams()
+    {
+        return array_filter($this->embedHelper->getEmbedParams());
     }
 
     function getName()
