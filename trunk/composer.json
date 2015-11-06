@@ -1,0 +1,25 @@
+{
+    "name": "zicht/framework-extra-bundle",
+    "description": "Utilities for Symfony",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Zicht online",
+            "email": "info@zicht.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "zicht/util": "~1.1"
+    },
+    "require-dev": {
+        "symfony/symfony": ">=2.1",
+        "sonata-project/admin-bundle": "*",
+        "twig/twig": "*",
+        "doctrine/orm": "*"
+    },
+    "autoload": {
+        "psr-0": { "": ["src/", "tests/"] }
+    },
+    "minimum-stability": "dev"
+}
