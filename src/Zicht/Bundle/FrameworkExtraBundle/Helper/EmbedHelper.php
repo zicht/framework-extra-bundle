@@ -16,6 +16,7 @@ use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use \Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use \Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 use \Symfony\Component\Form\FormErrorIterator;
+use Zicht\Bundle\UrlBundle\Url\Params\Params;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
@@ -112,6 +113,7 @@ class EmbedHelper
     public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
                         $formTargetParams = array(), $extraViewVars = array())
     {
+        $session = $this->container->get('session');
 
         $formId = $this->getFormId($form);
 
@@ -165,10 +167,13 @@ class EmbedHelper
                     }
                     if ($successUrl) {
                         $returnUrl = $successUrl;
+
                         if ($request->isXmlHttpRequest()) {
                             return new JsonResponse(array('success_url' => $successUrl));
                         }
                     }
+                    $session->getFlashBag()->set($formId, 'confirmed');
+
                 } else {
                     $formStatus = 'errors';
 
@@ -224,11 +229,11 @@ class EmbedHelper
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
-            if ($request->hasPreviousSession()) {
-                $viewVars['flash']    = $request->getSession()->getBag('flashes')->get($form->getName());
-            } else {
-                $viewVars['flash']    = '';
+
+            if ($messages = $this->container->get('session')->getFlashBag()->get($formId)) {
+                $viewVars['messages'] = $messages;
             }
+
 
             return $viewVars;
         }
