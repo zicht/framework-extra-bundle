@@ -232,6 +232,7 @@ class EmbedHelper
 
             if ($messages = $this->container->get('session')->getFlashBag()->get($formId)) {
                 $viewVars['messages'] = $messages;
+                $viewVars['messagesPrefix'] = strtolower($formId);
             }
 
 
