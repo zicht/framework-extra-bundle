@@ -113,8 +113,6 @@ class EmbedHelper
     public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
                         $formTargetParams = array(), $extraViewVars = array())
     {
-        $session = $this->container->get('session');
-
         $formId = $this->getFormId($form);
 
         if ($request->hasPreviousSession()) {
@@ -172,8 +170,8 @@ class EmbedHelper
                             return new JsonResponse(array('success_url' => $successUrl));
                         }
                     }
-                    $session->getFlashBag()->set($formId, 'confirmed');
 
+                    $this->setFlashMessage($form, 'confirmed');
                 } else {
                     $formStatus = 'errors';
 
@@ -283,5 +281,24 @@ class EmbedHelper
     protected function convertExceptionToFormError($exception)
     {
         return new FormError($exception->getMessage());
+    }
+
+    /**
+     * A generic way to set flash messages.
+     *
+     * When using this make sure you set the following parameter in your parameters.yml to avoid stacking of messages
+     * when they are not shown or rendered in templates
+     *
+     *     session.flashbag.class: Symfony\Component\HttpFoundation\Session\Flash\AutoExpireFlashBag
+     *
+     * Messages will be pushed to a viewVars called 'messages' see $this->handleForm
+     *
+     * @param Form $form
+     * @param string $message
+     */
+    public function setFlashMessage(Form $form, $message)
+    {
+        $session = $this->container->get('session');
+        $session->getFlashBag()->set($this->getFormId($form), $message);
     }
 }
