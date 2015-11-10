@@ -42,7 +42,6 @@ class Extension extends Twig_Extension
         $this->globals            = array();
     }
 
-
     function setGlobal($name, $value)
     {
         $this->globals[$name] = $value;
@@ -107,11 +106,7 @@ class Extension extends Twig_Extension
      */
     public function form_root(FormView $formView)
     {
-        $parent = $formView;
-        while ($parent->parent) {
-            $parent = $parent->parent;
-        }
-        return $parent;
+        return EmbedHelper::getFormRoot($formView);
     }
 
 

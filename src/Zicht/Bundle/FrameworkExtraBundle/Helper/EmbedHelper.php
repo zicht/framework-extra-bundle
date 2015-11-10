@@ -5,18 +5,17 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
-use \Symfony\Component\DependencyInjection\Container;
-use \Symfony\Component\Form\FormError;
-use \Symfony\Component\HttpFoundation\Response;
-use \Symfony\Component\HttpFoundation\Request;
-use \Symfony\Component\HttpFoundation\RedirectResponse;
-use \Symfony\Component\Form\Form;
-use \Symfony\Component\Form\FormInterface;
-use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use \Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use \Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
-use \Symfony\Component\Form\FormErrorIterator;
-use Zicht\Bundle\UrlBundle\Url\Params\Params;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormErrorIterator;
+
+use Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
@@ -48,6 +47,21 @@ class EmbedHelper
     {
         $this->container = $container;
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
+    }
+
+    /**
+     * Get the top most (root) element of the form view
+     *
+     * @param FormView $formView
+     * @return mixed
+     */
+    public static function getFormRoot($formView)
+    {
+        $parent = $formView;
+        while ($parent->parent) {
+            $parent = $parent->parent;
+        }
+        return $parent;
     }
 
 
@@ -169,9 +183,11 @@ class EmbedHelper
                         if ($request->isXmlHttpRequest()) {
                             return new JsonResponse(array('success_url' => $successUrl));
                         }
+                    } else {
+                        // we set a convenience flash message if there was no success url, because
+                        // we will probably return to the return url re-displaying the form.
+                        $this->setFlashMessage($form, 'confirmed');
                     }
-
-                    $this->setFlashMessage($form, 'confirmed');
                 } else {
                     $formStatus = 'errors';
 
@@ -227,10 +243,13 @@ class EmbedHelper
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
+            $prefix = sprintf('form_messages.%s.', strtolower(self::getFormRoot($viewVars['form'])->vars['name']));
 
             if ($messages = $this->container->get('session')->getFlashBag()->get($formId)) {
-                $viewVars['messages'] = $messages;
-                $viewVars['messagesPrefix'] = strtolower($formId);
+                $viewVars['messages'] = [];
+                foreach ($messages as $value) {
+                    $viewVars['messages'][] = $prefix . $value;
+                }
             }
 
 
