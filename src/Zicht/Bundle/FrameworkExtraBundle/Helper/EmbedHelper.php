@@ -243,10 +243,11 @@ class EmbedHelper
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
+
             $prefix = sprintf('form_messages.%s.', strtolower(self::getFormRoot($viewVars['form'])->vars['name']));
 
+            $viewVars['messages'] = [];
             if ($messages = $this->container->get('session')->getFlashBag()->get($formId)) {
-                $viewVars['messages'] = [];
                 foreach ($messages as $value) {
                     $viewVars['messages'][] = $prefix . $value;
                 }
