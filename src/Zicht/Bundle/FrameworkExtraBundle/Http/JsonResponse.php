@@ -6,13 +6,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Http;
 
-use \Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
-class JsonResponse extends Response {
+/**
+ * Class JsonResponse
+ * @package Zicht\Bundle\FrameworkExtraBundle\Http
+ *
+ * @deprecated use Symfony's one instead
+ */
+class JsonResponse extends BaseJsonResponse
+{
+    /**
+     * @deprecated
+     */
     const CONTENT_TYPE = 'application/json';
-
-    function __construct($json, $responseCode = 200, $headers = array()) {
-        $headers['Content-Type'] = self::CONTENT_TYPE;
-        parent::__construct(json_encode($json), $responseCode, $headers);
-    }
 }
