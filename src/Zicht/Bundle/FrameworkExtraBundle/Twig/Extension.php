@@ -86,6 +86,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
             new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
+            new \Twig_SimpleFilter('sha1', array($this, 'sha1')),
 
             new \Twig_SimpleFilter('sum', array($this, 'sum')),
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
@@ -149,6 +150,20 @@ class Extension extends Twig_Extension
             return json_decode($string, $assoc);
         }
         return null;
+    }
+
+    /**
+     * Returns a 40 byte string representing the sha1 digest of the input string.
+     *
+     * @param $string
+     * @return string
+     */
+    public function sha1($string)
+    {
+        if (is_string($string)) {
+            return sha1($string);
+        }
+        return '';
     }
 
     /**
