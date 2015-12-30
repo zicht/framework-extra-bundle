@@ -247,7 +247,7 @@ class EmbedHelper
             $prefix = sprintf('form_messages.%s.', strtolower(self::getFormRoot($viewVars['form'])->vars['name']));
 
             $viewVars['messages'] = [];
-            if ($messages = $this->container->get('session')->getFlashBag()->get($formId)) {
+            if ($request->hasPreviousSession() && ($messages = $this->container->get('session')->getFlashBag()->get($formId))) {
                 foreach ($messages as $value) {
                     $viewVars['messages'][] = $prefix . $value;
                 }
