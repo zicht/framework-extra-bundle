@@ -24,5 +24,9 @@
             <argument type="service" id="doctrine"/>
             <tag name="form.type" alias="zicht_parent_choice"/>
         </service>
+
+        <service id="zicht_framework_extra.form.zicht_markup_type" class="Zicht\Bundle\FrameworkExtraBundle\Form\MarkupType">
+            <tag name="form.type" alias="zicht_markup_type"/>
+        </service>
     </services>
 </container>
