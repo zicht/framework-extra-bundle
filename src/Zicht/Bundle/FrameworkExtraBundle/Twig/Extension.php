@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -302,6 +303,7 @@ class Extension extends Twig_Extension
     function getFunctions()
     {
         return array(
+            'trans_form_errors' => new \Twig_Function_Method($this, 'transFormErrors'),
             'embed_params' => new \Twig_Function_Method($this, 'getEmbedParams'),
             'first'    => new \Twig_Function_Method($this, 'first'),
             'last'     => new \Twig_Function_Method($this, 'last'),
@@ -683,5 +685,19 @@ class Extension extends Twig_Extension
     public function map($iterable, $keyStrategy)
     {
         return iter\map($keyStrategy, $iterable);
+    }
+
+    /**
+     * @param FormError[] $formErrorList
+     * @param $translationDomain
+     * @return array
+     */
+    public function transFormErrors($formErrorList, $translationDomain)
+    {
+        $ret = [];
+        foreach ($formErrorList as $k => $formError) {
+            $ret[$k] = $this->translator->trans($formError->getMessage(), $formError->getMessageParameters(), $translationDomain);
+        }
+        return $ret;
     }
 }
