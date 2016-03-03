@@ -6,6 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputOption;
 use \Symfony\Component\Console\Output\OutputInterface;
 use \Symfony\Component\Console\Input\InputInterface;
@@ -23,28 +24,51 @@ class ValidateEntityCommand extends ContainerAwareCommand
     {
         $this
             ->setName('zicht:entity:validate')
-            ->addArgument('entity')
+            ->addArgument('entity', InputArgument::IS_ARRAY|InputArgument::OPTIONAL)
             ->setHelp('This command validates all entities in a repository, useful to test the database for irregularities')
             ->addOption('group', 'g', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, "Optional validation group(s)")
         ;
     }
+
+
 
     /**
      * @{inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $groups = $input->getOption('group');
-        $repo = $this->getContainer()->get('doctrine')->getRepository($input->getArgument('entity'));
+        $entities = $input->getArgument('entity') ?: $this->getAllEntities();
 
-        foreach ($repo->findAll() as $entity) {
-            $violations = $this->getContainer()->get('validator')->validate($entity, $groups ? $groups : null);
+        foreach($entities as $entity) {
+            $groups = $input->getOption('group');
+            $repo = $this->getContainer()->get('doctrine')->getRepository($entity);
 
-            if (count($violations)) {
-                $output->writeln(get_class($entity) . "::" . $entity->getId());
-                foreach ($violations as $error) {
-                    $output->writeln(" -> {$error}");
+            foreach ($repo->findAll() as $entity) {
+                $violations = $this->getContainer()->get('validator')->validate($entity, $groups ? $groups : null);
+
+                if (count($violations)) {
+                    $output->writeln(get_class($entity) . "::" . $entity->getId());
+                    foreach ($violations as $error) {
+                        $output->writeln(" -> {$error}");
+                    }
                 }
+            }
+        }
+    }
+
+    protected function getAllEntities()
+    {
+        $allMeta = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getMetadataFactory()
+            ->getAllMetadata();
+
+        /** @var \Doctrine\ORM\Mapping\ClassMetadata $meta */
+        foreach ($allMeta as $meta) {
+            if (!$meta->isMappedSuperclass && empty($meta->subClasses)) {
+                yield $meta->getName();
             }
         }
     }
