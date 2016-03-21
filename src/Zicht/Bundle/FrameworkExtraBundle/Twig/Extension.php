@@ -683,8 +683,12 @@ class Extension extends Twig_Extension
     /**
      * Reduce an iterable to a single value
      *
+     * Simple examples:
      * {{ [1,2,3]|reduce }} --> 6
      * {{ [1,2,3]|reduce('max') }} --> 3
+     *
+     * Sro example to get the prices for all items in the basket:
+     * {{ transaction_snapshot.Basket.Items|map('TotalPrice.Amount')|reduce }}
      */
     public function reduce($iterable, $operation = 'sum', $default = 0)
     {
