@@ -90,6 +90,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('unique', array($this, 'unique')),
 
             new \Twig_SimpleFilter('sum', array($this, 'sum')),
+            new \Twig_SimpleFilter('reduce', '\Zicht\Itertools\reduce'),
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
             new \Twig_SimpleFilter('sorted', array($this, 'sorted')),
             new \Twig_SimpleFilter('map', array($this, 'map')),
@@ -666,11 +667,28 @@ class Extension extends Twig_Extension
         return strip_tags($html);
     }
 
+    /**
+     * @deprecated Use reduce instead!
+     * @param $iterable
+     * @param int $default
+     * @return int
+     */
     public function sum($iterable, $default = 0)
     {
         $result = $default;
         foreach (iter\accumulate($iterable) as $result) {};
         return $result;
+    }
+
+    /**
+     * Reduce an iterable to a single value
+     *
+     * {{ [1,2,3]|reduce }} --> 6
+     * {{ [1,2,3]|reduce('max') }} --> 3
+     */
+    public function reduce($iterable, $operation = 'sum', $default = 0)
+    {
+        return iter\reduce($iterable, $operation, $default);
     }
 
     public function groupby($iterable, $keyStrategy)
