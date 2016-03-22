@@ -571,6 +571,7 @@ class Extension extends Twig_Extension
         return array(
             'zicht_with'             => new ControlStructures\WithTokenParser(),
             'zicht_switch'           => new ControlStructures\SwitchTokenParser(),
+            'zicht_strict'           => new ControlStructures\StrictTokenParser(),
             'zicht_meta_annotate'    => new Meta\AnnotateTokenParser(),
             'zicht_meta_annotations' => new Meta\AnnotationsTokenParser()
         );
