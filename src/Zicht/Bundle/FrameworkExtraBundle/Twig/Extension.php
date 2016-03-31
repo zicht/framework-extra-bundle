@@ -100,6 +100,7 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
             new \Twig_SimpleFilter('chain', '\Zicht\Itertools\chain'),
             new \Twig_SimpleFilter('filter', '\Zicht\Itertools\filter'),
+            new \Twig_SimpleFilter('filterby', array($this, 'filterby')),
 
             new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
             new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
@@ -334,6 +335,8 @@ class Extension extends Twig_Extension
             'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
             'embed'    => new \Twig_Function_Method($this, 'embed'),
             'is_granted'    => new \Twig_Function_Method($this, 'isGranted'),
+
+            new \Twig_SimpleFunction('chain', '\Zicht\Itertools\chain'),
         );
     }
 
@@ -731,6 +734,11 @@ class Extension extends Twig_Extension
     public function map($iterable, $keyStrategy)
     {
         return iter\map($keyStrategy, $iterable);
+    }
+
+    public function filterby($iterable, $keyStrategy)
+    {
+        return iter\filterBy($keyStrategy, $iterable);
     }
 
     /**
