@@ -70,6 +70,9 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('relative_date',  array($this, 'relative_date')),
             new \Twig_SimpleFilter('ga_trackevent',  array($this, 'ga_trackevent')),
 
+            new \Twig_SimpleFilter('prefix_multiple', array($this, 'prefix_multiple')),
+            new \Twig_SimpleFilter('trans_multiple', array($this, 'trans_multiple')),
+
             new \Twig_SimpleFilter('with',           array($this, 'with')),
             new \Twig_SimpleFilter('without',        array($this, 'without')),
 
@@ -101,6 +104,25 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
             new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
         );
+    }
+
+    public function prefix_multiple($values, $prefix)
+    {
+        return iter\map(
+            function ($value) use ($prefix) {
+                return sprintf('%s%s', $prefix, $value);
+            },
+            $values);
+    }
+
+    public function trans_multiple($messages, $parameters = [], $domain = null, $locale = null)
+    {
+        $translator = $this->translator;
+        return iter\map(
+            function ($message) use ($translator, $parameters, $domain, $locale) {
+                return $this->translator->trans($message, $parameters, $domain, $locale);
+            },
+            $messages);
     }
 
     /**
