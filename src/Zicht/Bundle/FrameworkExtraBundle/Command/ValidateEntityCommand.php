@@ -65,11 +65,10 @@ class ValidateEntityCommand extends ContainerAwareCommand
             ->getMetadataFactory()
             ->getAllMetadata();
 
-        /** @var \Doctrine\ORM\Mapping\ClassMetadata $meta */
-        foreach ($allMeta as $meta) {
-            if (!$meta->isMappedSuperclass && empty($meta->subClasses)) {
-                yield $meta->getName();
-            }
-        }
+        $isAcceptable = function ($meta) {
+            return !$meta->isMappedSuperclass && empty($meta->subClasses);
+        };
+
+        return \Zicht\Itertools\filter($isAcceptable, $allMeta);
     }
 }
