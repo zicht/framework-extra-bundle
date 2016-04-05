@@ -97,10 +97,13 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
             new \Twig_SimpleFilter('sorted', array($this, 'sorted')),
             new \Twig_SimpleFilter('map', array($this, 'map')),
+            new \Twig_SimpleFilter('mapby', array($this, 'mapby')),
             new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
             new \Twig_SimpleFilter('chain', '\Zicht\Itertools\chain'),
             new \Twig_SimpleFilter('filter', '\Zicht\Itertools\filter'),
             new \Twig_SimpleFilter('filterby', array($this, 'filterby')),
+            new \Twig_SimpleFilter('any', '\Zicht\Itertools\any'),
+            new \Twig_SimpleFilter('all', '\Zicht\Itertools\all'),
 
             new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
             new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
@@ -734,6 +737,11 @@ class Extension extends Twig_Extension
     public function map($iterable, $keyStrategy)
     {
         return iter\map($keyStrategy, $iterable);
+    }
+
+    public function mapby($iterable, $keyStrategy)
+    {
+        return iter\mapby($keyStrategy, $iterable);
     }
 
     public function filterby($iterable, $keyStrategy)
