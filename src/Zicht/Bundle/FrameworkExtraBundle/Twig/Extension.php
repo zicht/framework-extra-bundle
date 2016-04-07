@@ -58,8 +58,6 @@ class Extension extends Twig_Extension
         return array(
             new \Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('xml',            array($this, 'xml')),
-            new \Twig_SimpleFilter('truncate',       array($this, 'truncate')),
-            new \Twig_SimpleFilter('truncate_html',  array($this, 'truncateHtml')),
             new \Twig_SimpleFilter('regex_replace',  array($this, 'regex_replace')),
             new \Twig_SimpleFilter('re_replace',     array($this, 'regex_replace')),
             new \Twig_SimpleFilter('str_uscore',     array($this, 'str_uscore')),
