@@ -122,13 +122,13 @@ class EmbedHelper
      * @param string $formTargetRoute
      * @param array $formTargetParams
      * @param array $extraViewVars
-     * @return array|\Symfony\Component\HttpFoundation\Response
+     * @return array|Response
+     * @throws \Exception
      */
     public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
                         $formTargetParams = array(), $extraViewVars = array())
     {
         $formId = $this->getFormId($form);
-
         if ($request->hasPreviousSession()) {
             // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
             // therefore convert the errors iterator to array, on get from session convert to iterator
@@ -136,10 +136,12 @@ class EmbedHelper
             $formState = $request->getSession()->get($formId);
             $formState['form_errors'] = is_array($formState['form_errors']) ? $formState['form_errors'] : array();
             $formState['form_errors'] = new FormErrorIterator($form, $formState['form_errors']);
+
         } else {
             $formState = null;
         }
         $formStatus = '';
+
 
         // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
         // This is useful for AJAX requests which need to modify the form based on submitted data.
@@ -152,6 +154,7 @@ class EmbedHelper
             $successUrl    = $request->get('success_url');
 
             $handlerResult = false;
+
 
             // if it is valid, we can use the callback to handle the actual handling
             if ($form->isValid()) {
@@ -211,7 +214,7 @@ class EmbedHelper
 
             // see if there were any errors left in the session from a previous post, so we show them
             if (!empty($formState['data']) && is_array($formState['data'])) {
-                $form->bind($formState['data']);
+                $form->submit($formState['data']);
                 unset($formState['data']);
             }
             if (!empty($formState['form_errors'])) {
