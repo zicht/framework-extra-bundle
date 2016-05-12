@@ -729,8 +729,13 @@ class Extension extends Twig_Extension
         return iter\groupby($keyStrategy, $iterable);
     }
 
-    public function sorted($iterable, $keyStrategy, $reverse = false)
+    public function sorted($iterable, $keyStrategy = null, $reverse = false)
     {
+        if (null === $keyStrategy) {
+            $keyStrategy = function ($value) {
+                return $value;
+            };
+        }
         return iter\sorted($keyStrategy, $iterable, $reverse);
     }
 
