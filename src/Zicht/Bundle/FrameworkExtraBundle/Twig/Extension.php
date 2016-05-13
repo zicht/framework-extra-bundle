@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\PersistentCollection;
+use Iterator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -90,8 +91,9 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
             new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
             new \Twig_SimpleFilter('sha1', array($this, 'sha1')),
-            new \Twig_SimpleFilter('unique', array($this, 'unique')),
 
+            new \Twig_SimpleFilter('unique', array($this, 'unique')),
+            new \Twig_SimpleFilter('uniqueby', array($this, 'uniqueby')),
             new \Twig_SimpleFilter('sum', array($this, 'sum')),
             new \Twig_SimpleFilter('reduce', '\Zicht\Itertools\reduce'),
             new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
@@ -192,14 +194,27 @@ class Extension extends Twig_Extension
     }
 
     /**
-     * Takes an array or iterator and returns an array where all items occur only once.
+     * Takes an iterable and returns another iterable that is unique.
      *
-     * @param array|\Traversable
+     * @param array|string|Iterator $iterable
+     * @param mixed $keyStrategy
      * @return array
      */
-    public function unique($items)
+    public function unique($items, $keyStrategy = null)
     {
-        return array_unique($items instanceof \Traversable ? iterator_to_array($items) : $items, SORT_REGULAR);
+        return iter\uniqueBy($keyStrategy, $items);
+    }
+
+    /**
+     * Takes an iterable and returns another iterable that is unique.
+     *
+     * @param array|string|Iterator $iterable
+     * @param mixed $keyStrategy
+     * @return array
+     */
+    public function uniqueby($items, $keyStrategy)
+    {
+        return iter\uniqueBy($keyStrategy, $items);
     }
 
     /**
