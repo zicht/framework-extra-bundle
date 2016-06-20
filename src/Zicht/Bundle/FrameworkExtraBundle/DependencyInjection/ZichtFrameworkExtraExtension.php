@@ -100,9 +100,10 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        if ($container->hasDefinition('doctrine')) {
+// todo: to our surprise hasDefinition('doctrine') always returns false, even if doctrine is available.  disabling for now.
+//        if ($container->hasDefinition('doctrine')) {
             $loader->load('doctrine.xml');
-        }
+//        }
 
         if ($container->hasDefinition('liip_imagine.filter.manager')) {
             $loader->load('imagine.xml');
