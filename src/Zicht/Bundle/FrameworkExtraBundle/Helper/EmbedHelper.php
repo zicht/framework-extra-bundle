@@ -226,10 +226,27 @@ class EmbedHelper
             unset($formState['has_errors']);
             unset($formState['form_errors']);
         }
+
         if ($formState && !$request->isXmlHttpRequest()) {
+            if (!empty($formState['form_errors'])) {
+
+                // 1. You cannot serialize or un-serialize PDO instances
+                // 2. We do not want to store cause and origin in the session since these can become quite large
+                foreach ($formState['form_errors'] as $key => $error) {
+                    $refObject = new \ReflectionObject($error);
+                    $refCauseProperty = $refObject->getProperty('cause');
+                    $refCauseProperty->setAccessible(true);
+                    $refCauseProperty->setValue($error, null);
+                    $refOriginProperty = $refObject->getProperty('origin');
+                    $refOriginProperty->setAccessible(true);
+                    $refOriginProperty->setValue($error, null);
+                }
+            }
+
             // see [1] for explanation
             $formState['form_errors'] = array_key_exists('form_errors', $formState) ? iterator_to_array($formState['form_errors']) : [];
             $request->getSession()->set($formId, $formState);
+
         } elseif ($request->hasPreviousSession()) {
             $request->getSession()->remove($formId);
         }
