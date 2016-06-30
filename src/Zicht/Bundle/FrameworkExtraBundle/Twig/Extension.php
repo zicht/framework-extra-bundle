@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\PersistentCollection;
-use Iterator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -89,21 +88,6 @@ class Extension extends Twig_Extension
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
             new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
             new \Twig_SimpleFilter('sha1', array($this, 'sha1')),
-
-            new \Twig_SimpleFilter('unique', array($this, 'unique')),
-            new \Twig_SimpleFilter('uniqueby', array($this, 'uniqueby')),
-            new \Twig_SimpleFilter('sum', array($this, 'sum')),
-            new \Twig_SimpleFilter('reduce', '\Zicht\Itertools\reduce'),
-            new \Twig_SimpleFilter('groupby', array($this, 'groupby')),
-            new \Twig_SimpleFilter('sorted', array($this, 'sorted')),
-            new \Twig_SimpleFilter('map', array($this, 'map')),
-            new \Twig_SimpleFilter('mapby', array($this, 'mapby')),
-            new \Twig_SimpleFilter('zip', '\Zicht\Itertools\zip'),
-            new \Twig_SimpleFilter('chain', '\Zicht\Itertools\chain'),
-            new \Twig_SimpleFilter('filter', '\Zicht\Itertools\filter'),
-            new \Twig_SimpleFilter('filterby', array($this, 'filterby')),
-            new \Twig_SimpleFilter('any', '\Zicht\Itertools\any'),
-            new \Twig_SimpleFilter('all', '\Zicht\Itertools\all'),
 
             new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
             new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
@@ -189,30 +173,6 @@ class Extension extends Twig_Extension
             return sha1($string);
         }
         return '';
-    }
-
-    /**
-     * Takes an iterable and returns another iterable that is unique.
-     *
-     * @param array|string|Iterator $iterable
-     * @param mixed $keyStrategy
-     * @return array
-     */
-    public function unique($items, $keyStrategy = null)
-    {
-        return iter\uniqueBy($keyStrategy, $items);
-    }
-
-    /**
-     * Takes an iterable and returns another iterable that is unique.
-     *
-     * @param array|string|Iterator $iterable
-     * @param mixed $keyStrategy
-     * @return array
-     */
-    public function uniqueby($items, $keyStrategy)
-    {
-        return iter\uniqueBy($keyStrategy, $items);
     }
 
     /**
@@ -346,13 +306,9 @@ class Extension extends Twig_Extension
         return array(
             'trans_form_errors' => new \Twig_Function_Method($this, 'transFormErrors'),
             'embed_params' => new \Twig_Function_Method($this, 'getEmbedParams'),
-            'first'    => new \Twig_Function_Method($this, 'first'),
-            'last'     => new \Twig_Function_Method($this, 'last'),
             'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
             'embed'    => new \Twig_Function_Method($this, 'embed'),
             'is_granted'    => new \Twig_Function_Method($this, 'isGranted'),
-
-            new \Twig_SimpleFunction('chain', '\Zicht\Itertools\chain'),
         );
     }
 
@@ -378,17 +334,6 @@ class Extension extends Twig_Extension
 
         return $this->context->isGranted($role, $object);
     }
-
-
-    function first($list)
-    {
-        foreach ($list as $item) {
-            return $item;
-        }
-
-        return null;
-    }
-
 
     function groups($list, $numGroups)
     {
@@ -707,64 +652,6 @@ class Extension extends Twig_Extension
     public function html2text($html)
     {
         return strip_tags($html);
-    }
-
-    /**
-     * @deprecated Use reduce instead!
-     * @param $iterable
-     * @param int $default
-     * @return int
-     */
-    public function sum($iterable, $default = 0)
-    {
-        $result = $default;
-        foreach (iter\accumulate($iterable) as $result) {};
-        return $result;
-    }
-
-    /**
-     * Reduce an iterable to a single value
-     *
-     * Simple examples:
-     * {{ [1,2,3]|reduce }} --> 6
-     * {{ [1,2,3]|reduce('max') }} --> 3
-     *
-     * Sro example to get the prices for all items in the basket:
-     * {{ transaction_snapshot.Basket.Items|map('TotalPrice.Amount')|reduce }}
-     */
-    public function reduce($iterable, $operation = 'sum', $default = 0)
-    {
-        return iter\reduce($iterable, $operation, $default);
-    }
-
-    public function groupby($iterable, $keyStrategy)
-    {
-        return iter\groupby($keyStrategy, $iterable);
-    }
-
-    public function sorted($iterable, $keyStrategy = null, $reverse = false)
-    {
-        if (null === $keyStrategy) {
-            $keyStrategy = function ($value) {
-                return $value;
-            };
-        }
-        return iter\sorted($keyStrategy, $iterable, $reverse);
-    }
-
-    public function map($iterable, $keyStrategy)
-    {
-        return iter\map($keyStrategy, $iterable);
-    }
-
-    public function mapby($iterable, $keyStrategy)
-    {
-        return iter\mapby($keyStrategy, $iterable);
-    }
-
-    public function filterby($iterable, $keyStrategy)
-    {
-        return iter\filterBy($keyStrategy, $iterable);
     }
 
     /**
