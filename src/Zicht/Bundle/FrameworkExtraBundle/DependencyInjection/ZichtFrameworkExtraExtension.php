@@ -97,20 +97,8 @@ class ZichtFrameworkExtraExtension extends DIExtension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.xml');
-
-// todo: to our surprise hasDefinition('doctrine') always returns false, even if doctrine is available.  disabling for now.
-//        if ($container->hasDefinition('doctrine')) {
-            $loader->load('doctrine.xml');
-//        }
-
-        if ($container->hasDefinition('liip_imagine.filter.manager')) {
-            $loader->load('imagine.xml');
-        }
-
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         if (!empty($config['uglify'])) {
             if (!isset($config['uglify_debug'])) {
@@ -119,6 +107,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
             $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
         }
+        
         if (!empty($config['requirejs'])) {
             if (!isset($config['requirejs_debug'])) {
                 $config['requirejs_debug']= $container->getParameter('kernel.debug');
@@ -126,13 +115,12 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
             $this->addRequirejsConfiguration($config['requirejs'], $config['requirejs_debug'], $container);
         }
+        
         if (!empty($config['embed_helper'])) {
             $container->getDefinition('zicht_embed_helper')
                 ->addMethodCall(
                     'setMarkExceptionsAsFormErrors',
-                    array(
-                        $config['embed_helper']['mark_exceptions_as_errors']
-                    )
+                    [$config['embed_helper']['mark_exceptions_as_errors']]
                 );
         }
     }
