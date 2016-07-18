@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.6",
         "zicht/util": "~1.1",
         "zicht/itertools": ">=1.8"
     },
     "require-dev": {
-        "symfony/symfony": ">=2.1",
+        "symfony/symfony": ">=2.3",
         "sonata-project/admin-bundle": "*",
         "twig/twig": "*",
         "doctrine/orm": "*"
