@@ -27,7 +27,6 @@ class Pass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
-        $loader->load('services.xml');
 
         if ($container->hasDefinition('doctrine')) {
             $loader->load('doctrine.xml');
