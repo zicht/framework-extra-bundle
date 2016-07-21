@@ -11,10 +11,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\PersistentCollection;
+use DOMDocument;
+use SimpleXMLElement;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Traversable;
+use Twig_SimpleFunction;
 use Zicht\Util\Str as StrUtil;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
@@ -33,9 +37,12 @@ class Extension extends Twig_Extension
         's' => array('second', 'seconds')
     );
 
-
-    function __construct(EmbedHelper $embedHelper, AnnotationRegistry $registry, TranslatorInterface $translator = null, SecurityContextInterface $context = null)
-    {
+    function __construct(
+        EmbedHelper $embedHelper,
+        AnnotationRegistry $registry,
+        TranslatorInterface $translator = null,
+        SecurityContextInterface $context = null
+    ) {
         $this->embedHelper        = $embedHelper;
         $this->annotationRegistry = $registry;
         $this->translator         = $translator;
@@ -304,11 +311,11 @@ class Extension extends Twig_Extension
     function getFunctions()
     {
         return array(
-            'trans_form_errors' => new \Twig_Function_Method($this, 'transFormErrors'),
-            'embed_params' => new \Twig_Function_Method($this, 'getEmbedParams'),
-            'defaults' => new \Twig_Function_Method($this, 'getDefaultOf'),
-            'embed'    => new \Twig_Function_Method($this, 'embed'),
-            'is_granted'    => new \Twig_Function_Method($this, 'isGranted'),
+            'trans_form_errors' => new Twig_SimpleFunction('transFormErrors', [$this, 'transFormErrors']),
+            'embed_params' => new Twig_SimpleFunction('getEmbedParams', [$this, 'getEmbedParams']),
+            'defaults' => new Twig_SimpleFunction('getDefaultOf', [$this, 'getDefaultOf']),
+            'embed'    => new Twig_SimpleFunction('embed', [$this, 'embed']),
+            'is_granted'    => new Twig_SimpleFunction('isGranted', [$this, 'isGranted']),
         );
     }
 
@@ -337,7 +344,7 @@ class Extension extends Twig_Extension
 
     function groups($list, $numGroups)
     {
-        $items = ($list instanceof \Traversable ? iterator_to_array($list) : $list);
+        $items = ($list instanceof Traversable ? iterator_to_array($list) : $list);
 
         $groups = array();
         $i = 0;
@@ -367,7 +374,7 @@ class Extension extends Twig_Extension
 
     public function sortByType($collection, $types)
     {
-        if ($collection instanceof \Traversable) {
+        if ($collection instanceof Traversable) {
             $collection = iterator_to_array($collection);
         }
 
@@ -639,10 +646,10 @@ class Extension extends Twig_Extension
 
     public function xml($data)
     {
-        if ($data instanceof \SimpleXMLElement) {
+        if ($data instanceof SimpleXMLElement) {
             $data = $data->saveXML();
         }
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadXml($data);
         $dom->formatOutput = true;
         return $dom->saveXML();
