@@ -215,6 +215,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @return array
      */
     private function itemAt($i) {
+
         return array(
             'index' => $i,
             'title' => $i + 1,
@@ -223,7 +224,6 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
             'is_next' => $i == ($this->currentPage + 1)
         );
     }
-
 
     /**
      * Iterator::current() implementation
@@ -346,6 +346,34 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
 
     public function withGaps($surround = 2)
     {
+        //*/
+        $ret = [];
+
+        for ($i = 0; $i < $surround; $i++) {
+            $ret[] = $this->itemAt($i);
+        }
+
+        if (count($ret)) {
+            $ret[] = null;
+        }
+
+        for ($k = $this->currentPage - $surround; $k < $this->currentPage + $surround; $k++) {
+            $ret[] = $this->itemAt($k);
+        }
+
+        if (count($ret)) {
+            $ret[] = null;
+        }
+
+        for ($j = $surround; $j > 0; $j--) {
+            $ret[] = $this->itemAt($this->getLast() - $j);
+        }
+
+        return $ret;
+
+        /**/
+
+        /*/
         $ret = array();
         $isPreviousGap = false;
         foreach ($this as $i => $page) {
@@ -362,6 +390,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
             }
         }
         return $ret;
+        /**/
     }
 
     public function getCurrentPageIndex()
