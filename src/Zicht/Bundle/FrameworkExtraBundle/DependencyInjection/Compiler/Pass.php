@@ -26,14 +26,12 @@ class Pass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
-
-        if ($container->hasDefinition('doctrine')) {
-            $loader->load('doctrine.xml');
+        if (!$container->hasExtension('doctrine')) {
+            $container->removeDefinition('zicht_framework_extra.form.zicht_parent_choice_type');
         }
 
-        if ($container->hasDefinition('liip_imagine.filter.manager')) {
-            $loader->load('imagine.xml');
+        if (!$container->hasExtension('liip_imagine')) {
+            $container->removeDefinition('zicht_framework_extra.imagine.match_filter_loader');
         }
     }
 }
