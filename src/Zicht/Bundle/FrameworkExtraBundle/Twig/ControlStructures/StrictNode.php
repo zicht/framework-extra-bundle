@@ -3,7 +3,10 @@
  * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
+
+use Twig_Compiler;
 
 /**
  * A 'strict' node wraps the contents within a 'true' or 'false' setting for the strict_variables option.
@@ -15,23 +18,27 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
  */
 class StrictNode extends \Twig_Node
 {
-    public function compile(\Twig_Compiler $compiler)
+    /**
+     * Compile
+     *
+     * @param Twig_Compiler $compiler
+     */
+    public function compile(Twig_Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)
             ->write('$restoreStrict = $this->env->isStrictVariables();' . PHP_EOL)
             ->write('$setStrict = (bool)')
             ->subcompile($this->nodes['expr'])
-            ->write(';')
-        ;
+            ->write(';');
 
         $compiler
             ->write('if ($setStrict) { ' . PHP_EOL)
             ->write('    $this->env->enableStrictVariables();' . PHP_EOL)
             ->write('} else {' . PHP_EOL)
             ->write('    $this->env->disableStrictVariables();' . PHP_EOL)
-            ->write('}')
-        ;
+            ->write('}');
+
         $compiler->subcompile($this->nodes['body']);
 
         $compiler
@@ -39,7 +46,6 @@ class StrictNode extends \Twig_Node
             ->write('    $this->env->enableStrictVariables();' . PHP_EOL)
             ->write('} else {' . PHP_EOL)
             ->write('    $this->env->disableStrictVariables();' . PHP_EOL)
-            ->write('}')
-        ;
+            ->write('}');
     }
 }

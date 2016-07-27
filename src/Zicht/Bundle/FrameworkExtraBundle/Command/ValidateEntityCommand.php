@@ -5,14 +5,18 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
-use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use \Symfony\Component\Console\Input\InputOption;
-use \Symfony\Component\Console\Output\OutputInterface;
-use \Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
+/* @codingStandardsIgnoreStart*/
+use function Zicht\Itertools\filter;
+/* @codingStandardsIgnoreEnd */
 
 /**
  * Class ValidateEntityCommand
+ *
  * @package Zicht\Bundle\FrameworkExtraBundle\Command
  */
 class ValidateEntityCommand extends ContainerAwareCommand
@@ -25,12 +29,17 @@ class ValidateEntityCommand extends ContainerAwareCommand
         $this
             ->setName('zicht:entity:validate')
             ->addArgument('entity', InputArgument::IS_ARRAY|InputArgument::OPTIONAL)
-            ->setHelp('This command validates all entities in a repository, useful to test the database for irregularities')
-            ->addOption('group', 'g', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, "Optional validation group(s)")
-        ;
+            ->setHelp(
+                'This command validates all entities in a repository, 
+                useful to test the database for irregularities'
+            )
+            ->addOption(
+                'group',
+                'g',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                "Optional validation group(s)"
+            );
     }
-
-
 
     /**
      * @{inheritDoc}
@@ -39,7 +48,7 @@ class ValidateEntityCommand extends ContainerAwareCommand
     {
         $entities = $input->getArgument('entity') ?: $this->getAllEntities();
 
-        foreach($entities as $entity) {
+        foreach ($entities as $entity) {
             $groups = $input->getOption('group');
             $repo = $this->getContainer()->get('doctrine')->getRepository($entity);
 
@@ -56,6 +65,11 @@ class ValidateEntityCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * get all entities
+     *
+     * @return \Zicht\Itertools\lib\FilterIterator
+     */
     protected function getAllEntities()
     {
         $allMeta = $this
@@ -69,6 +83,6 @@ class ValidateEntityCommand extends ContainerAwareCommand
             return !$meta->isMappedSuperclass && empty($meta->subClasses);
         };
 
-        return \Zicht\Itertools\filter($isAcceptable, $allMeta);
+        return filter($isAcceptable, $allMeta);
     }
 }

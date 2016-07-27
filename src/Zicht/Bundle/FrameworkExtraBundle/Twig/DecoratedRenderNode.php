@@ -17,13 +17,22 @@ use Symfony\Bundle\TwigBundle\Node\RenderNode as BaseRenderNode;
  */
 class DecoratedRenderNode extends \Twig_Node
 {
+    /**
+     * DecoratedRenderNode constructor.
+     *
+     * @param BaseRenderNode $wrappedNode
+     */
     public function __construct(BaseRenderNode $wrappedNode)
     {
         parent::__construct();
         $this->wrapped = $wrappedNode;
     }
 
-
+    /**
+     * Compile
+     *
+     * @param Twig_Compiler $compiler
+     */
     public function compile(Twig_Compiler $compiler)
     {
         $compiler
@@ -36,7 +45,6 @@ class DecoratedRenderNode extends \Twig_Node
             ->raw(')')
             ->raw(', ')
             ->subcompile($this->wrapped->getNode('options'))
-            ->raw(");\n")
-        ;
+            ->raw(");\n");
     }
 }

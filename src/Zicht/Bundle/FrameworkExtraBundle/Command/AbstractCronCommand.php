@@ -5,16 +5,16 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
-use \Exception;
+use Exception;
 
-use \Monolog\Logger;
-use \Monolog\Handler\StreamHandler;
-use \Monolog\Processor\MemoryUsageProcessor;
-use \Monolog\Processor\MemoryPeakUsageProcessor;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Processor\MemoryUsageProcessor;
+use Monolog\Processor\MemoryPeakUsageProcessor;
 
-use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use \Symfony\Component\Console\Output\OutputInterface;
-use \Symfony\Component\Console\Input\InputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 use Zicht\Util\Mutex;
 use Zicht\Util\Str;
 
@@ -162,9 +162,12 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
 
             $mutex = new Mutex($mutexFile, false);
             $isLockAcquired = false;
-            $mutex->run(function() use($self, $input, $output, &$result) {
-                return $self->doParentRun($input, $output);
-            }, $isLockAcquired);
+            $mutex->run(
+                function () use ($self, $input, $output, &$result) {
+                    return $self->doParentRun($input, $output);
+                },
+                $isLockAcquired
+            );
             if (!$isLockAcquired && $this->logger) {
                 $this->logger->addWarning("Mutex failed in " . get_class($this) . ", job was not run");
             }

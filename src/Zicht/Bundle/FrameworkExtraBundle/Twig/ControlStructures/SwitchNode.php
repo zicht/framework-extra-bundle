@@ -5,9 +5,9 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use \Twig_Node;
-use \Twig_NodeInterface;
-use \Twig_Compiler;
+use Twig_Node;
+use Twig_NodeInterface;
+use Twig_Compiler;
 
 /**
  * Represents a 'switch' statement

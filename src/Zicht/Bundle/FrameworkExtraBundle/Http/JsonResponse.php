@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
 /**
  * Class JsonResponse
+ *
  * @package Zicht\Bundle\FrameworkExtraBundle\Http
  *
  * @deprecated use Symfony's one instead

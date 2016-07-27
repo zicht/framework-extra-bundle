@@ -6,9 +6,9 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
-use \Doctrine\Common\EventSubscriber;
-use \Doctrine\ORM\Event\PostFlushEventArgs;
-use \Zicht\Bundle\FrameworkExtraBundle\Command\RepairNestedTreeCommand;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\PostFlushEventArgs;
+use Zicht\Bundle\FrameworkExtraBundle\Command\RepairNestedTreeCommand;
 
 /**
  * This is a utility observer which validates the given repository's tree after every flush.
@@ -29,6 +29,11 @@ use \Zicht\Bundle\FrameworkExtraBundle\Command\RepairNestedTreeCommand;
  */
 class NestedTreeValidationSubscriber implements EventSubscriber
 {
+    /**
+     * @var string
+     */
+    protected $entityName;
+
     /**
      * @{inheritDoc}
      */

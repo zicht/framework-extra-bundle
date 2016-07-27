@@ -6,8 +6,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle;
 
-use \Symfony\Component\DependencyInjection\ContainerBuilder;
-use \Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Zicht\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\Pass;
 
 /**
@@ -16,13 +16,14 @@ use Zicht\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\Pass;
 class ZichtFrameworkExtraBundle extends Bundle
 {
     /**
-     * @inheritdoc
+     * Build
+     *
+     * @param ContainerBuilder $container
      */
     public function build(ContainerBuilder $container)
     {
-        parent::build($container); 
+        parent::build($container);
         
         $container->addCompilerPass(new Pass());
     }
-
 }

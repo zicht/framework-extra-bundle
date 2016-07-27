@@ -38,6 +38,13 @@ class MarkupType extends AbstractType
         $resolver->setDefaults(['markup' => false, 'virtual' => true]);
     }
 
+    /**
+     * Finish view
+     *
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         parent::finishView($view, $form, $options);

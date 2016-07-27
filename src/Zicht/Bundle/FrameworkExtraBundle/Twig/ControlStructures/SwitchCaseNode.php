@@ -5,7 +5,7 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use \Twig_Node;
+use Twig_Node;
 
 /**
  * Represents a 'case' or a 'default' inside a switch

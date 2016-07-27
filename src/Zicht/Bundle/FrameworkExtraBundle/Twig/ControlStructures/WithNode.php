@@ -6,7 +6,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use \Twig_Compiler;
+use Twig_Compiler;
 
 /**
  * Represents a 'with' node.
@@ -76,13 +76,15 @@ class WithNode extends \Twig_Node
         $compiler->raw("\n")->outdent()->write(");\n");
 
         if (!$this->hasOption('always')) {
-            $compiler->write('if (count(array_filter($values, function($o) {
-                if ($o instanceof \Countable) {
-                    return count($o) > 0;
-                } else {
-                    return !empty($o);
-                }
-            }))) {');
+            $compiler->write(
+                'if (count(array_filter($values, function($o) {
+                    if ($o instanceof \Countable) {
+                        return count($o) > 0;
+                    } else {
+                        return !empty($o);
+                    }
+                }))) {'
+            );
         }
 
         if ($this->hasOption('merged')) {
@@ -93,8 +95,8 @@ class WithNode extends \Twig_Node
 
         $compiler
             ->write('$context = $values;')
-            ->subcompile($this->getNode('body'))
-        ;
+            ->subcompile($this->getNode('body'));
+
         if (!$this->hasOption('always')) {
             $compiler->write('}');
         }

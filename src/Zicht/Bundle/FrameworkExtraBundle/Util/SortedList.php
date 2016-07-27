@@ -6,7 +6,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Util;
 
-use \IteratorAggregate;
+use IteratorAggregate;
 
 /**
  * List maintaining sort order.
@@ -37,9 +37,12 @@ class SortedList implements IteratorAggregate
      */
     public function sort()
     {
-        usort($this->items, function($a, $b) {
-            return $a[0] > $b[0] ? 1 : $a[0] === $b[0] ? 0 : -1;
-        });
+        usort(
+            $this->items,
+            function ($a, $b) {
+                return $a[0] > $b[0] ? 1 : $a[0] === $b[0] ? 0 : -1;
+            }
+        );
     }
 
     /**
@@ -47,11 +50,13 @@ class SortedList implements IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_map(
-            function($item) {
-                return $item[1];
-            },
-            $this->items
-        ));
+        return new \ArrayIterator(
+            array_map(
+                function ($item) {
+                    return $item[1];
+                },
+                $this->items
+            )
+        );
     }
 }

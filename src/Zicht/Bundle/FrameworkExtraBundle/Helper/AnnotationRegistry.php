@@ -41,8 +41,8 @@ class AnnotationRegistry
     {
         $annotation = $this->getAnnotation($name);
         $new_annotation = array('name' => $name, 'value' => $value, 'priority' => $priority);
-        if(!empty($annotation)){
-            if($priority > $annotation['value']['priority']){
+        if (!empty($annotation)) {
+            if ($priority > $annotation['value']['priority']) {
                 $this->setAnnotation($annotation['key'], $new_annotation);
             }
         } else {
@@ -50,12 +50,17 @@ class AnnotationRegistry
         }
     }
 
+    /**
+     * Get annotation
+     *
+     * @param string $name
+     * @return array
+     */
     public function getAnnotation($name)
     {
         $match = array();
-        foreach($this->getAnnotations() as $key => $annotation){
-            if($annotation['name'] == $name)
-            {
+        foreach ($this->getAnnotations() as $key => $annotation) {
+            if ($annotation['name'] == $name) {
                 $match['key'] = $key;
                 $match['value'] = $annotation;
             }
@@ -63,10 +68,15 @@ class AnnotationRegistry
         return $match;
     }
 
+    /**
+     * Set annotation
+     *
+     * @param string $key
+     * @param string $annotation
+     */
     public function setAnnotation($key, $annotation)
     {
-        if(array_key_exists($key, $this->annotations))
-        {
+        if (array_key_exists($key, $this->annotations)) {
             $this->annotations[$key] = $annotation;
         }
     }

@@ -50,7 +50,12 @@ class MatchFilterLoader implements LoaderInterface
      */
     protected $filterManager;
 
-    function __construct(FilterManager $filterManager)
+    /**
+     * MatchFilterLoader constructor.
+     *
+     * @param FilterManager $filterManager
+     */
+    public function __construct(FilterManager $filterManager)
     {
         $this->filterManager = $filterManager;
     }
@@ -79,7 +84,7 @@ class MatchFilterLoader implements LoaderInterface
      * Returns true when the image ratio matches the configured parameters
      *
      * @param ImageInterface $image
-     * @param $options
+     * @param array $options
      * @return bool
      */
     private function isRatioMatch(ImageInterface $image, $options)

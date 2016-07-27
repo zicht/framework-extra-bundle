@@ -4,25 +4,26 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Pager;
-use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
+
 /**
  * Pager implementation to handle paging over a countable set of elements
  */
-class Pager implements \Iterator, \ArrayAccess, \Countable {
-    private $currentPage = -1;
-    private $total = null;
-    private $numPages = -1;
-    private $offset = -1;
-    private $lengthOfRange = -1;
-    private $itemsPerPage = -1;
-    private $results = null;
+class Pager implements \Iterator, \ArrayAccess, \Countable
+{
+    private $currentPage;
+    private $total;
+    private $numPages;
+    private $offset;
+    private $lengthOfRange;
+    private $itemsPerPage;
+    private $results;
 
     /**
      * Used for iterator implementation
      *
      * @var null
      */
-    private $_ptr = null;
+    private $ptr = null;
 
     /**
      * Constructs the pager with the given set of elements to page over, and the given amount of items per page.
@@ -30,7 +31,16 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param \Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable $pagable
      * @param int                                               $itemsPerPage
      */
-    function __construct(Pageable $pagable, $itemsPerPage) {
+    public function __construct(Pageable $pagable, $itemsPerPage)
+    {
+        $this->currentPage = -1;
+        $this->total = null;
+        $this->numPages = -1;
+        $this->offset = -1;
+        $this->lengthOfRange = -1;
+        $this->itemsPerPage = -1;
+        $this->results = null;
+
         $this->results = $pagable;
         $this->setItemsPerPage($itemsPerPage);
     }
@@ -43,7 +53,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @return void
      * @throws \InvalidArgumentException if the number of items is not a valid non-negative integer
      */
-    function setItemsPerPage($itemsPerPage) {
+    public function setItemsPerPage($itemsPerPage)
+    {
         if ($itemsPerPage <= 0) {
             throw new \InvalidArgumentException("Number of items per page must be positive integer");
         }
@@ -64,7 +75,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @throws \InvalidArgumentException
      */
-    function setCurrentPage($page) {
+    public function setCurrentPage($page)
+    {
         if (is_null($this->total)) {
             $this->total = (int)$this->results->getTotal();
         }
@@ -92,7 +104,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return int
      */
-    function getFirst() {
+    public function getFirst()
+    {
         return 0;
     }
 
@@ -102,7 +115,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return int
      */
-    function getLast() {
+    public function getLast()
+    {
         return $this->numPages - 1;
     }
 
@@ -111,7 +125,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return int
      */
-    function getRangeStart() {
+    public function getRangeStart()
+    {
         return $this->offset + 1;
     }
 
@@ -121,7 +136,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return int
      */
-    function getRangeEnd() {
+    public function getRangeEnd()
+    {
         return $this->offset + $this->lengthOfRange;
     }
 
@@ -131,7 +147,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return array
      */
-    function getRange() {
+    public function getRange()
+    {
         return array($this->getRangeStart(), $this->getRangeEnd());
     }
 
@@ -141,7 +158,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return null
      */
-    function getItemTotal() {
+    public function getItemTotal()
+    {
         return $this->total;
     }
 
@@ -151,7 +169,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return bool
      */
-    function hasPrevious() {
+    public function hasPrevious()
+    {
         return $this->currentPage > $this->getFirst();
     }
 
@@ -161,7 +180,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return bool
      */
-    function hasNext() {
+    public function hasNext()
+    {
         return $this->offsetExists($this->currentPage + 1);
     }
 
@@ -172,7 +192,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return array
      */
-    function getCurrent() {
+    public function getCurrent()
+    {
         return $this->itemAt($this->currentPage);
     }
 
@@ -182,7 +203,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return array|null
      */
-    function getNext() {
+    public function getNext()
+    {
         if ($this->hasNext()) {
             return $this->itemAt($this->currentPage + 1);
         }
@@ -195,7 +217,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return array|null
      */
-    function getPrevious() {
+    public function getPrevious()
+    {
         if ($this->hasPrevious()) {
             return $this->itemAt($this->currentPage - 1);
         }
@@ -214,8 +237,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param int $i
      * @return array
      */
-    private function itemAt($i) {
-
+    private function itemAt($i)
+    {
         return array(
             'index' => $i,
             'title' => $i + 1,
@@ -231,8 +254,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return array
      */
-    public function current() {
-        return $this->itemAt($this->_ptr);
+    public function current()
+    {
+        return $this->itemAt($this->ptr);
     }
 
 
@@ -241,8 +265,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return void
      */
-    public function next() {
-        $this->_ptr++;
+    public function next()
+    {
+        $this->ptr++;
     }
 
 
@@ -251,8 +276,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return int
      */
-    public function key() {
-        return $this->_ptr;
+    public function key()
+    {
+        return $this->ptr;
     }
 
 
@@ -261,8 +287,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return bool
      */
-    public function valid() {
-        return $this->offsetExists($this->_ptr);
+    public function valid()
+    {
+        return $this->offsetExists($this->ptr);
     }
 
 
@@ -271,8 +298,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @return void
      */
-    public function rewind() {
-        $this->_ptr = $this->getFirst();
+    public function rewind()
+    {
+        $this->ptr = $this->getFirst();
     }
 
 
@@ -282,7 +310,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param int $offset
      * @return bool
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         return is_int($offset) && $offset >= $this->getFirst() && $offset <= $this->getLast();
     }
 
@@ -294,7 +323,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * @param int $offset
      * @return array
      */
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         if ($this->offsetExists($offset)) {
             return $this->itemAt($offset);
         }
@@ -311,7 +341,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @throws \BadMethodCallException
      */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
@@ -324,7 +355,8 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      *
      * @throws \BadMethodCallException
      */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
@@ -334,23 +366,31 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
      * 
      * @return int
      */
-    public function count() {
+    public function count()
+    {
         return $this->numPages;
     }
 
-
-    public function getItemsPerPage() {
+    /**
+     * @return int
+     */
+    public function getItemsPerPage()
+    {
         return $this->itemsPerPage;
     }
 
-
+    /**
+     * With gaps
+     *
+     * @param int $surround
+     * @return array
+     */
     public function withGaps($surround = 2)
     {
         $ret = [];
         $isPreviousGap = false;
         for ($i = 0; $i < $this->numPages; $i++) {
-            if (
-                ($i >= $this->currentPage - $surround && $i <= $this->currentPage + $surround)
+            if (($i >= $this->currentPage - $surround && $i <= $this->currentPage + $surround)
                 || ($i < $this->getFirst() + $surround)
                 || ($i > $this->getLast() - $surround)
             ) {
@@ -365,6 +405,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable {
         return $ret;
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentPageIndex()
     {
         return $this->currentPage;

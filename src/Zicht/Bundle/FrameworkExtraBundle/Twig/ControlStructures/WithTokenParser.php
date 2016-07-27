@@ -6,9 +6,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use \Twig_Token;
-use \Twig_TokenParser;
-use \Twig_NodeInterface;
+use Twig_Token;
+use Twig_NodeInterface;
 
 /**
  * The 'with' tag allows a scope-shift into a defined array. The format is as follows:

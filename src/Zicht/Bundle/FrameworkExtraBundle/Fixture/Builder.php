@@ -18,7 +18,7 @@ class Builder
      * @param string $namespaces
      * @return Builder
      */
-    static function create($namespaces)
+    public static function create($namespaces)
     {
         return new self($namespaces);
     }
@@ -126,7 +126,7 @@ class Builder
     /**
      * Pushes an object onto the stack
      *
-     * @param $entity
+     * @param object $entity
      */
     protected function push($entity)
     {
@@ -171,7 +171,7 @@ class Builder
 
             $parentClassNames = array_merge(class_parents($parentClassName), array($parentClassName));
 
-            foreach(array_reverse($parentClassNames) as $lParentClassName) {
+            foreach (array_reverse($parentClassNames) as $lParentClassName) {
                 $lParentClass = Str::classname($lParentClassName);
                 $parentSetter = 'set' . $lParentClass;
                 if ($lParentClassName == get_class($current)) {

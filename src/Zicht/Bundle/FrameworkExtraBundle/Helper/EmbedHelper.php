@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormErrorIterator;
-
 use Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 
 /**
@@ -125,9 +124,14 @@ class EmbedHelper
      * @return array|Response
      * @throws \Exception
      */
-    public function handleForm(Form $form, Request $request, $handlerCallback, $formTargetRoute,
-                        $formTargetParams = array(), $extraViewVars = array())
-    {
+    public function handleForm(
+        Form $form,
+        Request $request,
+        $handlerCallback,
+        $formTargetRoute,
+        $formTargetParams = array(),
+        $extraViewVars = array()
+    ) {
         $formId = $this->getFormId($form);
         if ($request->hasPreviousSession()) {
             // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
@@ -136,7 +140,6 @@ class EmbedHelper
             $formState = $request->getSession()->get($formId);
             $formState['form_errors'] = is_array($formState['form_errors']) ? $formState['form_errors'] : array();
             $formState['form_errors'] = new FormErrorIterator($form, $formState['form_errors']);
-
         } else {
             $formState = null;
         }
@@ -246,7 +249,6 @@ class EmbedHelper
             // see [1] for explanation
             $formState['form_errors'] = array_key_exists('form_errors', $formState) ? iterator_to_array($formState['form_errors']) : [];
             $request->getSession()->set($formId, $formState);
-
         } elseif ($request->hasPreviousSession()) {
             $request->getSession()->remove($formId);
         }
@@ -304,7 +306,7 @@ class EmbedHelper
 
 
     /**
-     * @param $markExceptionsAsFormErrors
+     * @param bool $markExceptionsAsFormErrors
      */
     public function setMarkExceptionsAsFormErrors($markExceptionsAsFormErrors)
     {

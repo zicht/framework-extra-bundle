@@ -8,9 +8,9 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Admin;
 use Zicht\Bundle\AdminBundle\Admin\TreeAdmin as BaseTreeAdmin;
 
 /**
- * @deprecated
+ * TreeAdmin
  *
- * Use Zicht\Bundle\AdminBundle\Admin\TreeAdmin in stead.
+ * @deprecated Use Zicht\Bundle\AdminBundle\Admin\TreeAdmin in stead.
  */
 class TreeAdmin extends BaseTreeAdmin
 {

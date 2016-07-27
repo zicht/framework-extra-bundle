@@ -8,8 +8,18 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 use Twig_Node;
 use Twig_Compiler;
 
+/**
+ * Class AnnotationsNode
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
+ */
 class AnnotationsNode extends Twig_Node
 {
+    /**
+     * Compile
+     *
+     * @param Twig_Compiler $compiler
+     */
     public function compile(Twig_Compiler $compiler)
     {
         $compiler->addDebugInfo($this);

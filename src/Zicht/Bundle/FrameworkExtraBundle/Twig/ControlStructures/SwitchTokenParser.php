@@ -5,10 +5,15 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use \Twig_TokenParser;
-use \Twig_Token;
-use \Twig_Node;
+use Twig_TokenParser;
+use Twig_Token;
+use Twig_Node;
 
+/**
+ * Class SwitchTokenParser
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures
+ */
 class SwitchTokenParser extends Twig_TokenParser
 {
     /**

@@ -5,9 +5,13 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
-use Twig_TokenParser;
 use Twig_Token;
 
+/**
+ * Class AnnotationsTokenParser
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
+ */
 class AnnotationsTokenParser extends \Twig_TokenParser
 {
     /**
@@ -15,7 +19,7 @@ class AnnotationsTokenParser extends \Twig_TokenParser
      *
      * @param Twig_Token $token A Twig_Token instance
      *
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @return AnnotationsNode A Twig_NodeInterface instance
      */
     public function parse(Twig_Token $token)
     {
@@ -39,7 +43,12 @@ class AnnotationsTokenParser extends \Twig_TokenParser
         return 'annotations';
     }
 
-
+    /**
+     * Decide end annotations
+     *
+     * @param string $token
+     * @return mixed
+     */
     public function decideEndAnnotations($token)
     {
         return $token->test('endannotations');

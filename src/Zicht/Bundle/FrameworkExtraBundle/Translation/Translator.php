@@ -6,7 +6,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Translation;
 
-use \Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 
 /**
  * Provides zz locale
@@ -16,6 +16,7 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
  * >     translator.class: 'Zicht\Bundle\FrameworkExtraBundle\Translation\Translator'
  *
  * Class Translator
+ *
  * @package Zicht\Bundle\FrameworkExtraBundle\Translation
  */
 class Translator extends BaseTranslator

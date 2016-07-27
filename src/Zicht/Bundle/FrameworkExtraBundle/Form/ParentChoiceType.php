@@ -5,16 +5,16 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 
-use \Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
-use \Symfony\Component\Form\AbstractType;
-use \Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\Form\FormEvent;
-use \Symfony\Component\Form\FormEvents;
-use \Symfony\Component\Form\FormView;
-use \Symfony\Component\Form\FormInterface;
-use \Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use \Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Provides a choice type for "parent" (tree) entities.
@@ -22,9 +22,14 @@ use \Symfony\Component\OptionsResolver\Options;
 class ParentChoiceType extends AbstractType
 {
     /**
+     * @var Registry
+     */
+    protected $doctrine;
+
+    /**
      * Constructs the type.
      *
-     * @param \Doctrine\Bundle\DoctrineBundle\Registry $doctrine
+     * @param Registry $doctrine
      */
     public function __construct(Registry $doctrine)
     {
@@ -61,8 +66,7 @@ class ParentChoiceType extends AbstractType
         $doctrine = $this->doctrine;
 
         // TODO implement a subscriber for this
-        $createParentChoice = function ($parentId) use($ff, $doctrine, $options)
-        {
+        $createParentChoice = function ($parentId) use ($ff, $doctrine, $options) {
             $repo = $doctrine->getRepository($options['class']);
             $choices = array();
             if (!$parentId) {
@@ -83,6 +87,7 @@ class ParentChoiceType extends AbstractType
                 array('choices' => $choices, 'mapped' => false, 'auto_initialize' => false)
             );
         };
+
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function ($e) use ($ff, $doctrine, $createParentChoice, $options) {

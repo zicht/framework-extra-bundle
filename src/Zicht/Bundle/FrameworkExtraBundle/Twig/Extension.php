@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
+use Doctrine\Common\Util\Debug as DoctrineUtilDebug;
 use Doctrine\ORM\PersistentCollection;
 use DOMDocument;
 use SimpleXMLElement;
@@ -18,13 +19,20 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Traversable;
+use Twig_SimpleFilter;
 use Twig_SimpleFunction;
+use Zicht\Util\Debug;
 use Zicht\Util\Str as StrUtil;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Zicht\Itertools as iter;
 use Twig_Extension;
 
+/**
+ * Class Extension
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig
+ */
 class Extension extends Twig_Extension
 {
     public static $RELATIVE_DATE_PART_MAP = array(
@@ -37,7 +45,15 @@ class Extension extends Twig_Extension
         's' => array('second', 'seconds')
     );
 
-    function __construct(
+    /**
+     * Extension constructor.
+     *
+     * @param EmbedHelper $embedHelper
+     * @param AnnotationRegistry $registry
+     * @param TranslatorInterface|null $translator
+     * @param SecurityContextInterface|null $context
+     */
+    public function __construct(
         EmbedHelper $embedHelper,
         AnnotationRegistry $registry,
         TranslatorInterface $translator = null,
@@ -50,74 +66,104 @@ class Extension extends Twig_Extension
         $this->globals            = array();
     }
 
-    function setGlobal($name, $value)
+    /**
+     * Set global
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setGlobal($name, $value)
     {
         $this->globals[$name] = $value;
     }
 
+    /**
+     * @return array
+     */
     public function getGlobals()
     {
         return $this->globals;
     }
 
-    function getFilters()
+    /**
+     * @return array
+     */
+    public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('xml',            array($this, 'xml')),
-            new \Twig_SimpleFilter('regex_replace',  array($this, 'regex_replace')),
-            new \Twig_SimpleFilter('re_replace',     array($this, 'regex_replace')),
-            new \Twig_SimpleFilter('str_uscore',     array($this, 'str_uscore')),
-            new \Twig_SimpleFilter('str_dash',       array($this, 'str_dash')),
-            new \Twig_SimpleFilter('str_camel',      array($this, 'str_camel')),
-            new \Twig_SimpleFilter('str_humanize',   array($this, 'str_humanize')),
-            new \Twig_SimpleFilter('date_format',    array($this, 'date_format')),
-            new \Twig_SimpleFilter('relative_date',  array($this, 'relative_date')),
-            new \Twig_SimpleFilter('ga_trackevent',  array($this, 'ga_trackevent')),
+            new Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
+            new Twig_SimpleFilter('xml',            array($this, 'xml')),
+            new Twig_SimpleFilter('regex_replace',  array($this, 'regex_replace')),
+            new Twig_SimpleFilter('re_replace',     array($this, 'regex_replace')),
+            new Twig_SimpleFilter('str_uscore',     array($this, 'strUscore')),
+            new Twig_SimpleFilter('str_dash',       array($this, 'strDash')),
+            new Twig_SimpleFilter('str_camel',      array($this, 'strCamel')),
+            new Twig_SimpleFilter('str_humanize',   array($this, 'strHumanize')),
+            new Twig_SimpleFilter('date_format',    array($this, 'dateFormat')),
+            new Twig_SimpleFilter('relative_date',  array($this, 'relativeDate')),
+            new Twig_SimpleFilter('ga_trackevent',  array($this, 'gaTrackEvent')),
 
-            new \Twig_SimpleFilter('prefix_multiple', array($this, 'prefix_multiple')),
-            new \Twig_SimpleFilter('trans_multiple', array($this, 'trans_multiple')),
+            new Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
+            new Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
 
-            new \Twig_SimpleFilter('with',           array($this, 'with')),
-            new \Twig_SimpleFilter('without',        array($this, 'without')),
+            new Twig_SimpleFilter('with',           array($this, 'with')),
+            new Twig_SimpleFilter('without',        array($this, 'without')),
 
-            new \Twig_SimpleFilter('where',          array($this, 'where')),
-            new \Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
-            new \Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
-            new \Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
-            new \Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
+            new Twig_SimpleFilter('where',          array($this, 'where')),
+            new Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
+            new Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
+            new Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
+            new Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
 
-            new \Twig_SimpleFilter('ceil',          'ceil'),
-            new \Twig_SimpleFilter('floor',         'floor'),
-            new \Twig_SimpleFilter('groups',        array($this, 'groups')),
-            new \Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
-            new \Twig_SimpleFilter('html2text',     array($this, 'html2text')),
-            new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
-            new \Twig_SimpleFilter('json_decode',     array($this, 'json_decode')),
-            new \Twig_SimpleFilter('sha1', array($this, 'sha1')),
+            new Twig_SimpleFilter('ceil',          'ceil'),
+            new Twig_SimpleFilter('floor',         'floor'),
+            new Twig_SimpleFilter('groups',        array($this, 'groups')),
+            new Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
+            new Twig_SimpleFilter('html2text',     array($this, 'htmlToText')),
+            new Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
+            new Twig_SimpleFilter('json_decode',     array($this, 'jsonDecode')),
+            new Twig_SimpleFilter('sha1', array($this, 'shaOne')),
 
-            new \Twig_SimpleFilter('form_root', array($this, 'form_root')),
-            new \Twig_SimpleFilter('form_has_errors', array($this, 'form_has_errors')),
+            new Twig_SimpleFilter('form_root', array($this, 'formRoot')),
+            new Twig_SimpleFilter('form_has_errors', array($this, 'formHasErrors')),
         );
     }
 
-    public function prefix_multiple($values, $prefix)
+    /**
+     * Prefix multiple
+     *
+     * @param array $values
+     * @param string $prefix
+     * @return iter\lib\MapIterator
+     */
+    public function prefixMultiple($values, $prefix)
     {
         return iter\map(
             function ($value) use ($prefix) {
                 return sprintf('%s%s', $prefix, $value);
             },
-            $values);
+            $values
+        );
     }
 
-    public function trans_multiple($messages, $parameters = [], $domain = null, $locale = null)
+    /**
+     * Translate multiple strings
+     *
+     * @param array $messages
+     * @param array $parameters
+     * @param null $domain
+     * @param null $locale
+     * @return iter\lib\MapIterator
+     */
+    public function transMultiple($messages, $parameters = [], $domain = null, $locale = null)
     {
         $translator = $this->translator;
         return iter\map(
             function ($message) use ($translator, $parameters, $domain, $locale) {
                 return $this->translator->trans($message, $parameters, $domain, $locale);
             },
-            $messages);
+            $messages
+        );
     }
 
     /**
@@ -126,7 +172,7 @@ class Extension extends Twig_Extension
      * @param FormView $formView
      * @return FormView
      */
-    public function form_root(FormView $formView)
+    public function formRoot(FormView $formView)
     {
         return EmbedHelper::getFormRoot($formView);
     }
@@ -135,16 +181,18 @@ class Extension extends Twig_Extension
     /**
      * Returns true when the form, or any of its children, has one or more errors.
      *
-     * @param $form
+     * @param FormView $form
+     *
+     * @return bool
      */
-    public function form_has_errors(FormView $form)
+    public function formHasErrors(FormView $form)
     {
         if ($form->vars['errors']->count()) {
             return true;
         }
 
         foreach ($form->children as $child) {
-            if ($this->form_has_errors($child)) {
+            if ($this->formHasErrors($child)) {
                 return true;
             }
         }
@@ -156,11 +204,11 @@ class Extension extends Twig_Extension
     /**
      * Call the php json_decode
      *
-     * @param $string
+     * @param string $string
      * @param bool $assoc
      * @return mixed|null
      */
-    public function json_decode($string, $assoc = false)
+    public function jsonDecode($string, $assoc = false)
     {
         if (is_string($string)) {
             return json_decode($string, $assoc);
@@ -171,10 +219,10 @@ class Extension extends Twig_Extension
     /**
      * Returns a 40 byte string representing the sha1 digest of the input string.
      *
-     * @param $string
+     * @param string $string
      * @return string
      */
-    public function sha1($string)
+    public function shaOne($string)
     {
         if (is_string($string)) {
             return sha1($string);
@@ -237,7 +285,7 @@ class Extension extends Twig_Extension
      *
      * @param array|Collection $items
      * @param array $keyValuePairs
-     * @return Collection
+     * @return array
      */
     public function whereSplit($items, $keyValuePairs)
     {
@@ -268,10 +316,10 @@ class Extension extends Twig_Extension
         return str_replace('?' . $query, '', $url);
     }
 
-
     /**
+     * Url to form parameters
      *
-     * @param $url
+     * @param string $url
      * @return array
      */
     public function urlToFormParameters($url)
@@ -307,8 +355,10 @@ class Extension extends Twig_Extension
         return $ret;
     }
 
-
-    function getFunctions()
+    /**
+     * @return array
+     */
+    public function getFunctions()
     {
         return array(
             'trans_form_errors' => new Twig_SimpleFunction('transFormErrors', [$this, 'transFormErrors']),
@@ -318,7 +368,6 @@ class Extension extends Twig_Extension
             'is_granted'    => new Twig_SimpleFunction('isGranted', [$this, 'isGranted']),
         );
     }
-
 
     /**
      * The template may assume that the role will be denied when there is no security context, therefore we override
@@ -342,7 +391,14 @@ class Extension extends Twig_Extension
         return $this->context->isGranted($role, $object);
     }
 
-    function groups($list, $numGroups)
+    /**
+     * Groups
+     *
+     * @param array|object $list
+     * @param int $numGroups
+     * @return array
+     */
+    public function groups($list, $numGroups)
     {
         $items = ($list instanceof Traversable ? iterator_to_array($list) : $list);
 
@@ -354,14 +410,13 @@ class Extension extends Twig_Extension
         return $groups;
     }
 
-
     /**
      * Formats some values as an 'onclick' attribute for Google Analytics
      *
      * @param null $values
      * @return string
      */
-    public function ga_trackevent($values = null)
+    public function gaTrackEvent($values = null)
     {
         $values = func_get_args();
         array_unshift($values, '_trackEvent');
@@ -372,6 +427,13 @@ class Extension extends Twig_Extension
         );
     }
 
+    /**
+     * Sort by type
+     *
+     * @param array|object $collection
+     * @param array $types
+     * @return array
+     */
     public function sortByType($collection, $types)
     {
         if ($collection instanceof Traversable) {
@@ -382,47 +444,55 @@ class Extension extends Twig_Extension
         // equal
         $idToIndexMap = array();
         foreach ($collection as $index => $item) {
-            $idToIndexMap[$item->getId()]= $index;
+            $idToIndexMap[$item->getId()] = $index;
         }
 
         $numTypes = count($types);
 
-        usort($collection, function ($left, $right) use($types, $idToIndexMap, $numTypes) {
-            $localClassNameLeft = Str::classname(get_class($left));
-            $localClassNameRight = Str::classname(get_class($right));
+        usort(
+            $collection,
+            function ($left, $right) use ($types, $idToIndexMap, $numTypes) {
+                $localClassNameLeft = Str::classname(get_class($left));
+                $localClassNameRight = Str::classname(get_class($right));
 
-            // if same type, use original sorting
-            if ($localClassNameRight === $localClassNameLeft) {
-                $indexLeft = $idToIndexMap[$left->getId()];
-                $indexRight = $idToIndexMap[$right->getId()];
-            } else {
-                $indexLeft = array_search($localClassNameLeft, $types);
-                $indexRight = array_search($localClassNameRight, $types);
+                // if same type, use original sorting
+                if ($localClassNameRight === $localClassNameLeft) {
+                    $indexLeft = $idToIndexMap[$left->getId()];
+                    $indexRight = $idToIndexMap[$right->getId()];
+                } else {
+                    $indexLeft = array_search($localClassNameLeft, $types);
+                    $indexRight = array_search($localClassNameRight, $types);
 
-                // assume that types that aren't defined, should come last.
-                if (false === $indexLeft) {
-                    $indexLeft = $numTypes + 1;
+                    // assume that types that aren't defined, should come last.
+                    if (false === $indexLeft) {
+                        $indexLeft = $numTypes + 1;
+                    }
+                    if (false === $indexRight) {
+                        $indexRight = $numTypes + 1;
+                    }
                 }
-                if (false === $indexRight) {
-                    $indexRight = $numTypes + 1;
-                }
-            }
 
-            if ($indexLeft < $indexRight) {
-                return -1;
+                if ($indexLeft < $indexRight) {
+                    return -1;
+                }
+                if ($indexLeft > $indexRight) {
+                    return 1;
+                }
+                return 0;
             }
-            if ($indexLeft > $indexRight) {
-                return 1;
-            }
-            return 0;
-        });
+        );
 
         return $collection;
     }
 
-
-
-    public function str_dash($str, $camelFirst = true)
+    /**
+     * Dash to CamelCase
+     *
+     * @param string $str
+     * @param bool $camelFirst
+     * @return string
+     */
+    public function strDash($str, $camelFirst = true)
     {
         if ($camelFirst) {
             $str = StrUtil::camel($str);
@@ -430,7 +500,14 @@ class Extension extends Twig_Extension
         return StrUtil::dash($str);
     }
 
-    public function str_uscore($str, $camelFirst = true)
+    /**
+     * CamelCased to under_score
+     *
+     * @param string $str
+     * @param bool $camelFirst
+     * @return string
+     */
+    public function strUscore($str, $camelFirst = true)
     {
         if ($camelFirst) {
             $str = StrUtil::camel($str);
@@ -438,18 +515,36 @@ class Extension extends Twig_Extension
         return StrUtil::uscore($str);
     }
 
-    public function str_camel($str)
+    /**
+     * Camelcase
+     *
+     * @param String $str
+     * @return string
+     */
+    public function strCamel($str)
     {
         return StrUtil::camel($str);
     }
 
-
-    public function str_humanize($str)
+    /**
+     * Humanize
+     *
+     * @param string $str
+     * @return string
+     */
+    public function strHumanize($str)
     {
         return StrUtil::humanize($str);
     }
 
-    public function date_format($date, $format = '%e %b %Y')
+    /**
+     * Format Date
+     *
+     * @param string|object|int $date
+     * @param string $format
+     * @return string
+     */
+    public function dateFormat($date, $format = '%e %b %Y')
     {
         if ($date instanceof \DateTime) {
             $ts = $date->getTimestamp();
@@ -466,8 +561,13 @@ class Extension extends Twig_Extension
         return strftime($format, $ts);
     }
 
-
-    public function relative_date($date)
+    /**
+     * Relative date
+     *
+     * @param string|object $date
+     * @return string
+     */
+    public function relativeDate($date)
     {
         $now  = new \DateTime();
         $diff = $date->diff($now);
@@ -507,7 +607,7 @@ class Extension extends Twig_Extension
      * @param string $replacement
      * @return string
      */
-    public function regex_replace($subject, $pattern, $replacement)
+    public function regexReplace($subject, $pattern, $replacement)
     {
         return preg_replace($pattern, $replacement, $subject);
     }
@@ -558,7 +658,9 @@ class Extension extends Twig_Extension
         );
     }
 
-
+    /**
+     * @return array
+     */
     public function getTokenParsers()
     {
         return array(
@@ -570,14 +672,21 @@ class Extension extends Twig_Extension
         );
     }
 
-
+    /**
+     * @return AnnotationRegistry
+     */
     public function getAnnotationRegistry()
     {
         return $this->annotationRegistry;
     }
 
-
-    function embed($urlOrArray)
+    /**
+     * Embed
+     *
+     * @param array|string $urlOrArray
+     * @return array|mixed|string
+     */
+    public function embed($urlOrArray)
     {
         $embedParams = array_filter($this->embedHelper->getEmbedParams());
         if (!$embedParams) {
@@ -598,18 +707,25 @@ class Extension extends Twig_Extension
         }
     }
 
-
-    function getEmbedParams()
+    /**
+     * @return array
+     */
+    public function getEmbedParams()
     {
         return array_filter($this->embedHelper->getEmbedParams());
     }
 
-    function getName()
+    /**
+     * @return string
+     */
+    public function getName()
     {
         return 'zicht_framework_extra';
     }
 
-
+    /**
+     * @return mixed|null
+     */
     public function getDefaultOf()
     {
         $items = func_get_args();
@@ -622,18 +738,20 @@ class Extension extends Twig_Extension
     }
 
     /**
-     * @param $var
-     * @param string $parameters
+     * Dumps given variable in styled format
+     *
+     * @param mixed $var
+     * @param string $mode
      * @return mixed
      */
     public function dump($var, $mode = null)
     {
         if (null === $mode && class_exists('Zicht\Util\Debug')) {
-            return htmlspecialchars(\Zicht\Util\Debug::dump($var));
+            return htmlspecialchars(Debug::dump($var));
         } else {
             switch ($mode) {
                 case 'export':
-                    \Doctrine\Common\Util\Debug::dump($var, 5);
+                    DoctrineUtilDebug::dump($var, 5);
                     break;
                 default:
                     var_dump($var);
@@ -643,7 +761,12 @@ class Extension extends Twig_Extension
         return null;
     }
 
-
+    /**
+     * XML
+     *
+     * @param object $data
+     * @return string
+     */
     public function xml($data)
     {
         if ($data instanceof SimpleXMLElement) {
@@ -655,15 +778,22 @@ class Extension extends Twig_Extension
         return $dom->saveXML();
     }
 
-
-    public function html2text($html)
+    /**
+     * Strips tags
+     *
+     * @param string $html
+     * @return string
+     */
+    public function htmlToText($html)
     {
         return strip_tags($html);
     }
 
     /**
+     * Transforms errors
+     *
      * @param FormError[] $formErrorList
-     * @param $translationDomain
+     * @param string $translationDomain
      * @return array
      */
     public function transFormErrors($formErrorList, $translationDomain)

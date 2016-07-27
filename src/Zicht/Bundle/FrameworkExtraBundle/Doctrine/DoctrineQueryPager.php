@@ -5,14 +5,34 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
-use \Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
-use \Doctrine\ORM\QueryBuilder;
+use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Pageable for doctrine DQL queries
  */
 class DoctrineQueryPager implements Pageable
 {
+    /**
+     * @var QueryBuilder
+     */
+    protected $qb;
+
+    /**
+     * @var string
+     */
+    protected $alias;
+
+    /**
+     * @var string
+     */
+    protected $countAlias;
+
+    /**
+     * @var null
+     */
+    protected $countQuery;
+
     /**
      * Constructor.
      *

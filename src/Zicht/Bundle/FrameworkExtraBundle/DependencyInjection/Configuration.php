@@ -6,8 +6,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection;
 
-use \Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use \Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Page bundle configuration
@@ -32,8 +32,8 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('mark_exceptions_as_errors')->defaultValue(false)->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
+
         return $treeBuilder;
     }
 }

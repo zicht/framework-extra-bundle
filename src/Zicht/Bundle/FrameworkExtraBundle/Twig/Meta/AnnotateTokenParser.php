@@ -6,7 +6,12 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Token;
- 
+
+/**
+ * Class AnnotateTokenParser
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
+ */
 class AnnotateTokenParser extends \Twig_TokenParser
 {
     /**
@@ -14,7 +19,7 @@ class AnnotateTokenParser extends \Twig_TokenParser
      *
      * @param Twig_Token $token A Twig_Token instance
      *
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @return AnnotateNode A Twig_NodeInterface instance
      */
     public function parse(Twig_Token $token)
     {
@@ -28,14 +33,14 @@ class AnnotateTokenParser extends \Twig_TokenParser
         } else {
             $info['name']= $first;
             $info['expr']= $this->parser->getExpressionParser()->parseExpression();
-            if (!$stream->test(Twig_Token::BLOCK_END_TYPE))
-            {
+            if (!$stream->test(Twig_Token::BLOCK_END_TYPE)) {
                 $info['prio']= $this->parser->getExpressionParser()->parseExpression();
             }
         }
 
         $node = new AnnotateNode($info);
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+
         return $node;
     }
 

@@ -37,7 +37,9 @@ class ZichtFrameworkExtraExtension extends DIExtension
                 "zicht_framework_extra.uglify setting '$uglifyConfigFile' is not a file"
             );
         }
+
         $container->addResource(new FileResource($uglifyConfigFile));
+
         try {
             $uglifyConfig = Yaml::parse($uglifyConfigFile);
         } catch (\Exception $e) {
@@ -47,10 +49,15 @@ class ZichtFrameworkExtraExtension extends DIExtension
                 $e
             );
         }
-        $global = new Definition('Zicht\Bundle\FrameworkExtraBundle\Twig\UglifyGlobal', array(
-            $uglifyConfig,
-            $isDebug
-        ));
+
+        $global = new Definition(
+            'Zicht\Bundle\FrameworkExtraBundle\Twig\UglifyGlobal',
+            array(
+                $uglifyConfig,
+                $isDebug
+            )
+        );
+
         $global->addTag('twig.global');
         $global->addMethodCall('setDebug', array($isDebug));
         $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_uglify', $global));
@@ -83,10 +90,15 @@ class ZichtFrameworkExtraExtension extends DIExtension
                 $e
             );
         }
-        $global = new Definition('Zicht\Bundle\FrameworkExtraBundle\Twig\RequirejsGlobal', array(
-            $requirejsConfig,
-            $isDebug
-        ));
+
+        $global = new Definition(
+            'Zicht\Bundle\FrameworkExtraBundle\Twig\RequirejsGlobal',
+            array(
+                $requirejsConfig,
+                $isDebug
+            )
+        );
+
         $global->addTag('twig.global');
         $global->addMethodCall('setDebug', array($isDebug));
         $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_requirejs', $global));

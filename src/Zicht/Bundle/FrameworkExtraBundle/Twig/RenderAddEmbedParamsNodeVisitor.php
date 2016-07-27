@@ -9,7 +9,12 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 use Twig_NodeVisitorInterface;
 use Twig_NodeInterface;
 use Twig_Environment;
- 
+
+/**
+ * Class RenderAddEmbedParamsNodeVisitor
+ *
+ * @package Zicht\Bundle\FrameworkExtraBundle\Twig
+ */
 class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
 {
     /**
@@ -20,7 +25,8 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
      *
      * @return \Twig_NodeInterface The modified node
      */
-    function enterNode(Twig_NodeInterface $node, Twig_Environment $env) {
+    public function enterNode(Twig_NodeInterface $node, Twig_Environment $env)
+    {
         return $node;
     }
 
@@ -32,7 +38,8 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
      *
      * @return \Twig_NodeInterface The modified node
      */
-    function leaveNode(Twig_NodeInterface $node, Twig_Environment $env) {
+    public function leaveNode(Twig_NodeInterface $node, Twig_Environment $env)
+    {
         if ($node instanceof \Twig_Node_Expression_Function) {
             if ($node->getAttribute('name') === 'controller') {
                 $args = $node->getNode('arguments');
@@ -59,7 +66,8 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
      *
      * @return integer The priority level
      */
-    function getPriority() {
+    public function getPriority()
+    {
         return 0;
     }
 }
