@@ -361,11 +361,11 @@ class Extension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'trans_form_errors' => new Twig_SimpleFunction('transFormErrors', [$this, 'transFormErrors']),
-            'embed_params' => new Twig_SimpleFunction('getEmbedParams', [$this, 'getEmbedParams']),
-            'defaults' => new Twig_SimpleFunction('getDefaultOf', [$this, 'getDefaultOf']),
+            'trans_form_errors' => new Twig_SimpleFunction('trans_form_errors', [$this, 'transFormErrors']),
+            'embed_params' => new Twig_SimpleFunction('embed_params', [$this, 'getEmbedParams']),
+            'defaults' => new Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
             'embed'    => new Twig_SimpleFunction('embed', [$this, 'embed']),
-            'is_granted'    => new Twig_SimpleFunction('isGranted', [$this, 'isGranted']),
+            'is_granted'    => new Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
         );
     }
 
