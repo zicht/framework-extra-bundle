@@ -5,6 +5,7 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
+use Twig_Error_Syntax;
 use Twig_TokenParser;
 use Twig_Token;
 use Twig_Node;
@@ -42,7 +43,7 @@ class SwitchTokenParser extends Twig_TokenParser
         while ($stream->test(Twig_Token::TEXT_TYPE)) {
             if (trim($stream->getCurrent()->getValue()) != '') {
                 $content = $stream->getCurrent()->getValue();
-                throw new Twig_SyntaxError("Can not render content '$content' directly after switch", $stream->getCurrent()->getLine());
+                throw new Twig_Error_Syntax("Can not render content '$content' directly after switch", $stream->getCurrent()->getLine());
             }
             $stream->next();
         }
