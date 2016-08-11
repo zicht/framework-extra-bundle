@@ -1,6 +1,7 @@
 <?php
 /**
  * @author Muhammed Akbulut <muhammed@zicht.nl>
+ * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://www.zicht.nl>
  */
 
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @package Zicht\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler
  */
-class Pass implements CompilerPassInterface
+class RemoveExtensionsPass implements CompilerPassInterface
 {
     /**
      * Adds extra configurations
