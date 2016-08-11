@@ -1,3 +1,2 @@
-# 4.2.0 #
-
+# 4.1.10 #
 * Adds a compiler pass looking for FilesystemCache instances for doctrine, and forces their umask to be the system umask()
