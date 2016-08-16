@@ -134,6 +134,11 @@ class ParentChoiceType extends AbstractType
                 $view->vars['parents'][]= $parent;
             }
             while ($parent = $parent->getParent()) {
+                // Circular reference break
+                if (in_array($parent, $view->vars['parents'])) {
+                    break;
+                }
+
                 if ($parent->getId()) {
                     array_unshift($view->vars['parents'], $parent);
                 } else {
