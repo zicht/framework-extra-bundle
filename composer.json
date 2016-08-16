@@ -14,7 +14,7 @@
         "zicht/itertools": ">=1.8"
     },
     "require-dev": {
-        "symfony/symfony": ">=2.3",
+        "symfony/symfony": "^2.7",
         "sonata-project/admin-bundle": "*",
         "twig/twig": "*",
         "doctrine/orm": "*"
