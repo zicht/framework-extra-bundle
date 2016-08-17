@@ -105,6 +105,7 @@ class Extension extends Twig_Extension
 
             new Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
             new Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
+            new Twig_SimpleFilter('truncate_html',   array($this, 'truncateHtml')),
 
             new Twig_SimpleFilter('with',           array($this, 'with')),
             new Twig_SimpleFilter('without',        array($this, 'without')),
