@@ -4,3 +4,4 @@
 
 # 4.2.0 #
 * Add a parent validator for self-referencing relations
+* Restored support for `truncate_html` filter
