@@ -26,7 +26,7 @@ class ListUserImagesCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('zicht:list:user_images')
+            ->setName('zicht:content:list-images')
             ->addArgument('entity', InputArgument::REQUIRED, 'The entity to query. Example: ZichtWebsiteBundle:Page:ContentPage ')
             ->addArgument('fields', InputArgument::REQUIRED, 'The fields to check for images, comma seperated. Example: body,teaser')
             ->addOption('concat', 'c', InputOption::VALUE_OPTIONAL, 'Optional concatenation string. Example: -c "CONCAT(\'http://www.krollermuller.nl/\', p.language, \'/\', p.id)" ')

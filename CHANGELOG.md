@@ -5,3 +5,6 @@
 # 4.2.0 #
 * Add a parent validator for self-referencing relations
 * Restored support for `truncate_html` filter
+
+# 4.3.0 #
+* Add a new utility command `zicht:content:list-images` which searches for `<img ...>` and lists all files with their file size
