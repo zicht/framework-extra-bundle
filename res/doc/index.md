@@ -2,6 +2,7 @@
 
 Bundle with utility classes.
 
-* [EmbedHelper](embed-helper.html) - Embed helper for forms
-* [Twig extensions](twig.html)
-* [Doctrine extensions](doctrine.html)
+* [EmbedHelper](embed-helper.md) - Embed helper for forms
+* [Twig extensions](twig.md)
+* [Doctrine extensions](doctrine.md)
+* [Schema Update Listener](schemaupdate.md)

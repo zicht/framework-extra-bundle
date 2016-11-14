@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('mark_exceptions_as_errors')->defaultValue(false)->end()
                     ->end()
                 ->end()
+                ->booleanNode('disable_schema-update')->defaultTrue()
             ->end();
 
         return $treeBuilder;

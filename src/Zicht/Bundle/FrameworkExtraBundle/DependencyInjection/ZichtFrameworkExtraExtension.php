@@ -141,5 +141,9 @@ class ZichtFrameworkExtraExtension extends DIExtension
                     [$config['embed_helper']['mark_exceptions_as_errors']]
                 );
         }
+
+        if (false === $config['disable_schema-update']) {
+            $container->removeDefinition('zicht_framework_extra.event_listener.update_schema_doctrine_command_listener');
+        }
     }
 }

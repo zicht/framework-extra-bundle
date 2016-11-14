@@ -8,3 +8,6 @@
 
 # 4.3.0 #
 * Add a new utility command `zicht:content:list-images` which searches for `<img ...>` and lists all files with their file size
+
+# 5.0.0 #
+* UpdateSchema command-listener enabled by default.
