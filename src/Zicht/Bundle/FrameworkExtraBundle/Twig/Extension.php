@@ -367,7 +367,27 @@ class Extension extends Twig_Extension
             'defaults' => new Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
             'embed'    => new Twig_SimpleFunction('embed', [$this, 'embed']),
             'is_granted'    => new Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
+            'embedded_image' => new Twig_SimpleFunction('embedded_image', [$this, 'embeddedImage']),
         );
+    }
+
+    /**
+     * Given an existing file, returns an embedded data stream, or null when the file does not exist
+     *
+     * For example
+     * {{ embedded_image('foo.jpg') }}
+     *  --> "data:image/jpg;base64,BLABLABLA"
+     *
+     * @param string $filename
+     * @return null|string
+     */
+    public function embeddedImage($filename)
+    {
+        if (is_file($filename) && preg_match('/[.](?P<extension>[a-zA-Z0-9]+)$/', $filename, $matches)) {
+            return sprintf('data:image/%s;base64,%s', $matches['extension'], base64_encode(file_get_contents($filename)));
+        }
+
+        return null;
     }
 
     /**
