@@ -92,8 +92,8 @@ class EmbedHelper
         if ($returnUrl = $this->container->get('request')->get('return_url')) {
             $params['return_url'] = $returnUrl;
         }
-        if ($returnUrl = $this->container->get('request')->get('success_url')) {
-            $params['success_url'] = $returnUrl;
+        if ($successUrl = $this->container->get('request')->get('success_url')) {
+            $params['success_url'] = $successUrl;
         }
         // eg: do=change
         if ($doAction = $this->container->get('request')->get('do')) {
