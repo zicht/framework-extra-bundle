@@ -11,3 +11,6 @@
 
 # 5.0.0 #
 * UpdateSchema command-listener enabled by default.
+
+# 5.1.0 #
+* Adds a translation route which can service translations to the front-end based on message id.
