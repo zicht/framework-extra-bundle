@@ -7,6 +7,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,21 +22,44 @@ class TranslationController extends ContainerAware
     /**
      * Wrapper for the translator-service
      *
+     * Id's should be passed in the query-parameters, ie:
+     *  /translate/nl/messages?id=eticket.can_not_be_rendered_no_barcode
+     *  /translate/nl/messages?id[]=eticket.can_not_be_rendered_no_barcode&id[]=eticket.col1&id[]=eticket.copy_warning&id[]=form_label.form.email
+     *
+     * @param Request $request
      * @param string $locale
      * @param string $domain
-     * @param string $id
-     * @return string
+     * @return JsonResponse
      *
-     * @Route("/translate/{locale}/{domain}/{id}")
+     * @Route("/translate/{locale}/{domain}")
      */
-    public function translateAction($locale, $domain, $id) {
+    public function translateAction(Request $request, $locale, $domain)
+    {
+        $response = [
+            'locale' => $locale,
+            'domain' => $domain,
+        ];
+
+        $queryIds = $request->query->get('id');
+
+        if (!is_array($queryIds)) {
+            $queryIds = [$queryIds];
+        }
+
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        $translations = [];
+        foreach ($queryIds as $id) {
+            $translation = [];
+            $translation['id'] = $id;
+            $translation['translation'] = $translator->trans($id, [], $domain, $locale);
+
+            $translations[] = $translation;
+        }
+
         return new JsonResponse(
-            [
-                'locale' => $locale,
-                'domain' => $domain,
-                'id' => $id,
-                'translation' => $this->container->get('translator')->trans($id, [], $domain, $locale),
-            ]
+            $response + ['translations' => $translations]
         );
     }
 }
