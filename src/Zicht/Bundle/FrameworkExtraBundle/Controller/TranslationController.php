@@ -22,8 +22,13 @@ class TranslationController extends ContainerAware
     /**
      * Wrapper for the translator-service
      *
-     * Id's should be passed in the query-parameters, ie:
+     * The id's and domain are optional. When withheld the controller will return all the translations for the locale and (optional) the domain
+     * If id's are passed, they should be passed in the query-parameters, ie:
+     *
+     *  One id:
      *  /translate/nl/messages?id=eticket.can_not_be_rendered_no_barcode
+     *
+     *  Multiple id's:
      *  /translate/nl/messages?id[]=eticket.can_not_be_rendered_no_barcode&id[]=eticket.col1&id[]=eticket.copy_warning&id[]=form_label.form.email
      *
      * @param Request $request
@@ -32,34 +37,88 @@ class TranslationController extends ContainerAware
      * @return JsonResponse
      *
      * @Route("/translate/{locale}/{domain}")
+     * @Route("/translate/{locale}")
      */
-    public function translateAction(Request $request, $locale, $domain)
+    public function translateAction(Request $request, $locale, $domain = null)
     {
-        $response = [
-            'locale' => $locale,
-            'domain' => $domain,
-        ];
+        $response = ['locale' => $locale];
+
+        if (!empty($domain)) {
+            $response['domain'] = $domain;
+        }
 
         $queryIds = $request->query->get('id');
 
-        if (!is_array($queryIds)) {
-            $queryIds = [$queryIds];
-        }
+        if ($domain) {
+            if ($queryIds) {
+                if (!is_array($queryIds)) {
+                    $queryIds = [$queryIds];
+                }
 
-        /** @var Translator $translator */
-        $translator = $this->container->get('translator');
-
-        $translations = [];
-        foreach ($queryIds as $id) {
-            $translation = [];
-            $translation['id'] = $id;
-            $translation['translation'] = $translator->trans($id, [], $domain, $locale);
-
-            $translations[] = $translation;
+                $translations = $this->getTranslationsForDomainAndIds($locale, $domain, $queryIds);
+            } else {
+                $translations = $this->getTranslationsForDomain($locale, $domain);
+            }
+        } else {
+            $translations = $this->getTranslationsForLocale($locale);
         }
 
         return new JsonResponse(
             $response + ['translations' => $translations]
         );
+    }
+
+    /**
+     * Retrieve all translations for the provided ids (within the provided locale and domain)
+     *
+     * @param string $locale
+     * @param string $domain
+     * @param array $ids
+     * @return array
+     */
+    private function getTranslationsForDomainAndIds($locale, $domain, $ids)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        $translations = [];
+        foreach ($ids as $id) {
+            $translations[$id] = $translator->trans($id, [], $domain, $locale);
+        }
+
+        return $translations;
+    }
+
+    /**
+     * Retrieve all translations for the provided locale and domain
+     *
+     * @param string $locale
+     * @param string $domain
+     * @return array
+     * @throws \Exception
+     */
+    private function getTranslationsForDomain($locale, $domain)
+    {
+        $allMessages = $this->getTranslationsForLocale($locale);
+
+        if (!array_key_exists($domain, $allMessages)) {
+            throw new \Exception('Domain ' . $domain . ' not found in the translations for locale ' . $locale);
+        }
+
+        return $allMessages[$domain];
+    }
+
+    /**
+     * Retrieve all translations for the provided locale
+     *
+     * @param string $locale
+     * @return array
+     */
+    private function getTranslationsForLocale($locale)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        return $translator->getMessages($locale);
     }
 }
