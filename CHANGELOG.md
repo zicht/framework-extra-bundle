@@ -19,10 +19,7 @@
 ## Features
 * Adds a translation route which can service translations to the front-end based on message id.
 
-# 6.0.0 #
-## Breaking changes
- * the format of the translations are simpler, but different than the format introduced in 5.1.0
-   
+# 5.2.0 #
 ## Changes:
  * Add more options to retrieve translations:
     `/translate/{locale}` -> returns all translations for that locale
