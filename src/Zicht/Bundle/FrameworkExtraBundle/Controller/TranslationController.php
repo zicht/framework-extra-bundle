@@ -41,12 +41,6 @@ class TranslationController extends ContainerAware
      */
     public function translateAction(Request $request, $locale, $domain = null)
     {
-        $response = ['locale' => $locale];
-
-        if (!empty($domain)) {
-            $response['domain'] = $domain;
-        }
-
         $queryIds = $request->query->get('id');
 
         if ($domain) {
@@ -64,7 +58,7 @@ class TranslationController extends ContainerAware
         }
 
         return new JsonResponse(
-            $response + ['translations' => $translations]
+            $translations
         );
     }
 
