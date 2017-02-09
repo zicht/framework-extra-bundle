@@ -11,6 +11,9 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
  */
 class SortedSetMap
 {
+    /**
+     * @var array|null
+     */
     private $values = null;
 
     /**
@@ -44,7 +47,7 @@ class SortedSetMap
      * Add a value to the given map key.
      *
      * @param string $key
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return void
      */
     public function add($key, $value)
@@ -92,7 +95,7 @@ class SortedSetMap
      * Checks if a value is associated with the given key.
      *
      * @param string $key
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return bool
      */
     public function contains($key, $value)
@@ -121,7 +124,7 @@ class SortedSetMap
      * Removes the given value from the map associated with the given key.
      *
      * @param string $key
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return void
      */
     public function remove($key, $value)
@@ -152,7 +155,7 @@ class SortedSetMap
      * Merges a set of values into the given key's set.
      *
      * @param string $key
-     * @param Traversable $values
+     * @param \Traversable $values
      * @return void
      */
     public function merge($key, $values)

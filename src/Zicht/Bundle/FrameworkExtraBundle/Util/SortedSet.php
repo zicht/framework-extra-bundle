@@ -36,7 +36,7 @@ class SortedSet implements \Countable
     /**
      * Remove all current values and replace them with the values.
      *
-     * @param \Traversable $values
+     * @param array $values
      * @return void
      */
     public function setValues($values)
@@ -61,7 +61,7 @@ class SortedSet implements \Countable
      * Add all values in the given array.
      * Values already in the set are ignored, and the set is sorted after adding.
      *
-     * @param \Traversable $values
+     * @param array $values
      * @return void
      */
     public function addValues($values)
@@ -75,7 +75,7 @@ class SortedSet implements \Countable
     /**
      * Checks if the set contains the value
      *
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return array
      */
     public function contains($value)
@@ -88,7 +88,7 @@ class SortedSet implements \Countable
      * Adds a value to the set.
      * If the value is already present, it is ignored
      *
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return void
      */
     public function add($value)
@@ -101,7 +101,7 @@ class SortedSet implements \Countable
     /**
      * Removes a value from the set, if present
      *
-     * @param scalar $value
+     * @param int|float|string|bool $value
      * @return void
      */
     public function remove($value)
@@ -119,7 +119,7 @@ class SortedSet implements \Countable
     /**
      * Returns the number of items in the set
      *
-     * @return int|void
+     * @return int
      */
     public function count()
     {
