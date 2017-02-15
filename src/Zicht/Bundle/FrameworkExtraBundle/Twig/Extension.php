@@ -59,11 +59,11 @@ class Extension extends Twig_Extension
         TranslatorInterface $translator = null,
         SecurityContextInterface $context = null
     ) {
-        $this->embedHelper        = $embedHelper;
+        $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $registry;
-        $this->translator         = $translator;
-        $this->context            = $context;
-        $this->globals            = array();
+        $this->translator = $translator;
+        $this->context = $context;
+        $this->globals = array();
     }
 
     /**
@@ -91,38 +91,38 @@ class Extension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter('dump',           array($this, 'dump'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('xml',            array($this, 'xml')),
-            new Twig_SimpleFilter('regex_replace',  array($this, 'regexReplace')),
-            new Twig_SimpleFilter('re_replace',     array($this, 'regexReplace')),
-            new Twig_SimpleFilter('str_uscore',     array($this, 'strUscore')),
-            new Twig_SimpleFilter('str_dash',       array($this, 'strDash')),
-            new Twig_SimpleFilter('str_camel',      array($this, 'strCamel')),
-            new Twig_SimpleFilter('str_humanize',   array($this, 'strHumanize')),
-            new Twig_SimpleFilter('date_format',    array($this, 'dateFormat')),
-            new Twig_SimpleFilter('relative_date',  array($this, 'relativeDate')),
-            new Twig_SimpleFilter('ga_trackevent',  array($this, 'gaTrackEvent')),
+            new Twig_SimpleFilter('dump', array($this, 'dump'), array('is_safe' => array('html'))),
+            new Twig_SimpleFilter('xml', array($this, 'xml')),
+            new Twig_SimpleFilter('regex_replace', array($this, 'regexReplace')),
+            new Twig_SimpleFilter('re_replace', array($this, 'regexReplace')),
+            new Twig_SimpleFilter('str_uscore', array($this, 'strUscore')),
+            new Twig_SimpleFilter('str_dash', array($this, 'strDash')),
+            new Twig_SimpleFilter('str_camel', array($this, 'strCamel')),
+            new Twig_SimpleFilter('str_humanize', array($this, 'strHumanize')),
+            new Twig_SimpleFilter('date_format', array($this, 'dateFormat')),
+            new Twig_SimpleFilter('relative_date', array($this, 'relativeDate')),
+            new Twig_SimpleFilter('ga_trackevent', array($this, 'gaTrackEvent')),
 
             new Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
             new Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
-            new Twig_SimpleFilter('truncate_html',   array($this, 'truncateHtml')),
+            new Twig_SimpleFilter('truncate_html', array($this, 'truncateHtml')),
 
-            new Twig_SimpleFilter('with',           array($this, 'with')),
-            new Twig_SimpleFilter('without',        array($this, 'without')),
+            new Twig_SimpleFilter('with', array($this, 'with')),
+            new Twig_SimpleFilter('without', array($this, 'without')),
 
-            new Twig_SimpleFilter('where',          array($this, 'where')),
-            new Twig_SimpleFilter('not_where',      array($this, 'notWhere')),
-            new Twig_SimpleFilter('where_split',    array($this, 'whereSplit')),
-            new Twig_SimpleFilter('url_to_form_params',    array($this, 'urlToFormParameters')),
-            new Twig_SimpleFilter('url_strip_query',       array($this, 'urlStripQuery')),
+            new Twig_SimpleFilter('where', array($this, 'where')),
+            new Twig_SimpleFilter('not_where', array($this, 'notWhere')),
+            new Twig_SimpleFilter('where_split', array($this, 'whereSplit')),
+            new Twig_SimpleFilter('url_to_form_params', array($this, 'urlToFormParameters')),
+            new Twig_SimpleFilter('url_strip_query', array($this, 'urlStripQuery')),
 
-            new Twig_SimpleFilter('ceil',          'ceil'),
-            new Twig_SimpleFilter('floor',         'floor'),
-            new Twig_SimpleFilter('groups',        array($this, 'groups')),
-            new Twig_SimpleFilter('sort_by_type',  array($this, 'sortByType')),
-            new Twig_SimpleFilter('html2text',     array($this, 'htmlToText')),
+            new Twig_SimpleFilter('ceil', 'ceil'),
+            new Twig_SimpleFilter('floor', 'floor'),
+            new Twig_SimpleFilter('groups', array($this, 'groups')),
+            new Twig_SimpleFilter('sort_by_type', array($this, 'sortByType')),
+            new Twig_SimpleFilter('html2text', array($this, 'htmlToText')),
             new Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
-            new Twig_SimpleFilter('json_decode',     array($this, 'jsonDecode')),
+            new Twig_SimpleFilter('json_decode', array($this, 'jsonDecode')),
             new Twig_SimpleFilter('sha1', array($this, 'shaOne')),
 
             new Twig_SimpleFilter('form_root', array($this, 'formRoot')),
@@ -178,7 +178,6 @@ class Extension extends Twig_Extension
         return EmbedHelper::getFormRoot($formView);
     }
 
-
     /**
      * Returns true when the form, or any of its children, has one or more errors.
      *
@@ -200,7 +199,6 @@ class Extension extends Twig_Extension
 
         return false;
     }
-
 
     /**
      * Call the php json_decode
@@ -296,7 +294,6 @@ class Extension extends Twig_Extension
         );
     }
 
-
     /**
      * Removes the query string from a form.
      *
@@ -348,7 +345,7 @@ class Extension extends Twig_Extension
                 $keyName = $key;
             }
             if (is_scalar($value)) {
-                $ret[$keyName]= $value;
+                $ret[$keyName] = $value;
             } else {
                 $ret = array_merge($ret, $this->valuesToFormParameters($value, $keyName));
             }
@@ -365,9 +362,29 @@ class Extension extends Twig_Extension
             'trans_form_errors' => new Twig_SimpleFunction('trans_form_errors', [$this, 'transFormErrors']),
             'embed_params' => new Twig_SimpleFunction('embed_params', [$this, 'getEmbedParams']),
             'defaults' => new Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
-            'embed'    => new Twig_SimpleFunction('embed', [$this, 'embed']),
-            'is_granted'    => new Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
+            'embed' => new Twig_SimpleFunction('embed', [$this, 'embed']),
+            'is_granted' => new Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
+            'embedded_image' => new Twig_SimpleFunction('embedded_image', [$this, 'embeddedImage']),
         );
+    }
+
+    /**
+     * Given an existing file, returns an embedded data stream, or null when the file does not exist
+     *
+     * For example
+     * {{ embedded_image('foo.jpg') }}
+     *  --> "data:image/jpg;base64,BLABLABLA"
+     *
+     * @param string $filename
+     * @return null|string
+     */
+    public function embeddedImage($filename)
+    {
+        if (is_file($filename) && preg_match('/[.](?P<extension>[a-zA-Z0-9]+)$/', $filename, $matches)) {
+            return sprintf('data:image/%s;base64,%s', $matches['extension'], base64_encode(file_get_contents($filename)));
+        }
+
+        return null;
     }
 
     /**
@@ -406,7 +423,7 @@ class Extension extends Twig_Extension
         $groups = array();
         $i = 0;
         foreach ($items as $item) {
-            $groups[$i++ % $numGroups][]= $item;
+            $groups[$i++ % $numGroups][] = $item;
         }
         return $groups;
     }
@@ -570,7 +587,7 @@ class Extension extends Twig_Extension
      */
     public function relativeDate($date)
     {
-        $now  = new \DateTime();
+        $now = new \DateTime();
         $diff = $date->diff($now);
         // natively, diff doesn't contain 'weeks'.
         $diff->w = round($diff->d / 7);
@@ -598,7 +615,6 @@ class Extension extends Twig_Extension
 
         return $message;
     }
-
 
     /**
      * Filter implementation for regular expression replacement
@@ -665,9 +681,9 @@ class Extension extends Twig_Extension
     public function getTokenParsers()
     {
         return array(
-            'zicht_switch'           => new ControlStructures\SwitchTokenParser(),
-            'zicht_strict'           => new ControlStructures\StrictTokenParser(),
-            'zicht_meta_annotate'    => new Meta\AnnotateTokenParser(),
+            'zicht_switch' => new ControlStructures\SwitchTokenParser(),
+            'zicht_strict' => new ControlStructures\StrictTokenParser(),
+            'zicht_meta_annotate' => new Meta\AnnotateTokenParser(),
             'zicht_meta_annotations' => new Meta\AnnotationsTokenParser()
         );
     }
@@ -695,8 +711,8 @@ class Extension extends Twig_Extension
         if (is_array($urlOrArray)) {
             return $urlOrArray + $embedParams;
         } elseif (is_string($urlOrArray)) {
-            $query         = parse_url($urlOrArray, PHP_URL_QUERY);
-            $urlOrArray    = str_replace($query, '', $urlOrArray);
+            $query = parse_url($urlOrArray, PHP_URL_QUERY);
+            $urlOrArray = str_replace($query, '', $urlOrArray);
             $currentParams = array();
             parse_str($query, $currentParams);
             $currentParams += $embedParams;
