@@ -20,7 +20,13 @@
         "doctrine/orm": "*"
     },
     "autoload": {
-        "psr-0": { "": ["src/", "tests/"] }
+        "psr-0": {
+            "": [
+                "src/",
+                "tests/"
+            ]
+        }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "license": "MIT"
 }
