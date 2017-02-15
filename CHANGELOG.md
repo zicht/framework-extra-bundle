@@ -25,3 +25,9 @@
     `/translate/{locale}` -> returns all translations for that locale
     `/translate/{locale}/{domain}` -> returns all translations for that locale and domain
     `/translate/{locale}/{domain}?id[]=abc&id[]=xyz` -> returns translations for only the provided ids (within the locale and domain)
+    
+# 5.3.0 #
+## Changes:
+ * Adds the twig function `embedded_image`.  This function takes a
+   filename and will return an embed string with the file's contents.
+   Used for, i.e. images in e-tickets.
