@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
 
 /**
@@ -57,7 +58,7 @@ class EmbedHelper
     public static function getFormRoot($formView)
     {
         $parent = $formView;
-        while ($parent->parent) {
+        while (isset($parent->parent)) {
             $parent = $parent->parent;
         }
         return $parent;
@@ -192,7 +193,7 @@ class EmbedHelper
                     } else {
                         // we set a convenience flash message if there was no success url, because
                         // we will probably return to the return url re-displaying the form.
-                        $this->setFlashMessage($form, 'confirmed');
+                        $this->setFlashMessage($form, 'confirmed', $request->getSession());
                     }
                 } else {
                     $formStatus = 'errors';
@@ -247,7 +248,12 @@ class EmbedHelper
             }
 
             // see [1] for explanation
-            $formState['form_errors'] = array_key_exists('form_errors', $formState) ? iterator_to_array($formState['form_errors']) : [];
+            if (!isset($formState['form_errors'])) {
+                $formState['form_errors'] = [];
+            } elseif ($formState['form_errors'] instanceof \Traversable) {
+                $formState['form_errors'] = iterator_to_array($formState['form_errors']);
+            }
+
             $request->getSession()->set($formId, $formState);
         } elseif ($request->hasPreviousSession()) {
             $request->getSession()->remove($formId);
@@ -266,7 +272,10 @@ class EmbedHelper
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
             $viewVars['form']     = $form->createView();
 
-            $prefix = sprintf('form_messages.%s.', strtolower(self::getFormRoot($viewVars['form'])->vars['name']));
+            $prefix = '';
+            if ($root = self::getFormRoot($viewVars['form'])) {
+                $prefix = sprintf('form_messages.%s.', strtolower($root->vars['name']));
+            }
 
             $viewVars['messages'] = [];
             if ($request->hasPreviousSession() && ($messages = $this->container->get('session')->getFlashBag()->get($formId))) {
@@ -338,9 +347,15 @@ class EmbedHelper
      * @param Form $form
      * @param string $message
      */
-    public function setFlashMessage(Form $form, $message)
+    public function setFlashMessage(Form $form, $message, SessionInterface $session = null)
     {
-        $session = $this->container->get('session');
+        if (null === $session) {
+            trigger_error(
+                "Please do not rely on the container's instance of the session, but fetch it from the Request",
+                E_USER_DEPRECATED
+            );
+            $session = $this->container->get('session');
+        }
         $session->getFlashBag()->set($this->getFormId($form), $message);
     }
 }

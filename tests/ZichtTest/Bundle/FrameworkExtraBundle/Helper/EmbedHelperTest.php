@@ -6,12 +6,15 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
-use Symfony\Component\Form\FormFactory;
-
+use Symfony\Component\Form;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
 use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
 
-class MockType extends \Symfony\Component\Form\AbstractType {
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
+class MockType extends Form\AbstractType
+{
+    public function buildForm(Form\FormBuilderInterface $builder, array $options)
+    {
         $builder->add('foo', 'text');
     }
 
@@ -21,17 +24,19 @@ class MockType extends \Symfony\Component\Form\AbstractType {
     }
 }
 
-class MockData {
+class MockData
+{
     public $foo = '123';
 }
 
-class EmbedHelperTest extends AbstractIntegrationTestCase {
+class EmbedHelperTest extends AbstractIntegrationTestCase
+{
     /**
      * @var \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
      */
     protected $helper;
     /**
-     * @var \Symfony\Component\HttpFoundation\Session
+     * @var SessionInterface
      */
     protected $session;
 
@@ -40,7 +45,8 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
      */
     protected $request;
 
-    function setUp() {
+    function setUp()
+    {
         $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper(self::$container);
         $this->session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
         $this->request = new \Symfony\Component\HttpFoundation\Request();
@@ -57,7 +63,8 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::getEmbedParams
      * @return void
      */
-    function testGetEmbedParams() {
+    function testGetEmbedParams()
+    {
         $this->request->query->set('return_url', 'test 123');
         $this->request->query->set('success_url', 'test 321');
         $this->assertEquals(
@@ -75,7 +82,8 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::getEmbedParams
      * @return void
      */
-    function testGetEmbedParamsWithoutEmbedParams() {
+    function testGetEmbedParamsWithoutEmbedParams()
+    {
         $this->assertEquals(
             array(
                 'return_url' => null,
@@ -87,13 +95,13 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
     }
 
 
-
     /**
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGeneration() {
-        $router = $this->getMock('RouterInterface', array('generate'));
+    function testUrlGeneration()
+    {
+        $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array());
         self::$container->set('router', $router);
         $this->helper->url('test', array());
@@ -103,8 +111,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGenerationWillInheritEmbedParams() {
-        $router = $this->getMock('RouterInterface', array('generate'));
+    function testUrlGenerationWillInheritEmbedParams()
+    {
+        $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'test 123', 'success_url' => 'test 321'));
         self::$container->set('router', $router);
         $this->request->query->set('return_url', 'test 123');
@@ -116,8 +125,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGenerationCanOverrideEmbedParams() {
-        $router = $this->getMock('RouterInterface', array('generate'));
+    function testUrlGenerationCanOverrideEmbedParams()
+    {
+        $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'override 123', 'success_url' => 'override 321'));
         self::$container->set('router', $router);
         $this->request->query->set('return_url', 'test 123');
@@ -126,7 +136,8 @@ class EmbedHelperTest extends AbstractIntegrationTestCase {
     }
 
 
-    function testGetFormId() {
+    function testGetFormId()
+    {
         $form = $this->form;
         $this->assertInternalType('string', $this->helper->getFormId($form));
     }
