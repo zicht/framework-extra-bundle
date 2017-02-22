@@ -1,4 +1,4 @@
-See the docs in res/doc
+See the docs in [res/doc](res/doc)
 
 # Maintainer(s)
 * Oskar van Velden <oskar@zicht.nl>
