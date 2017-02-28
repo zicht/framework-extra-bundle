@@ -16,24 +16,25 @@ use DOMDocument;
 use SimpleXMLElement;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Traversable;
+use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
+use Zicht\Itertools as iter;
 use Zicht\Util\Debug;
 use Zicht\Util\Str as StrUtil;
-use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
-use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
-use Zicht\Itertools as iter;
-use Twig_Extension;
 
 /**
  * Class Extension
  *
  * @package Zicht\Bundle\FrameworkExtraBundle\Twig
  */
-class Extension extends Twig_Extension
+class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     public static $RELATIVE_DATE_PART_MAP = array(
         'y' => array('year', 'years'),
@@ -46,24 +47,41 @@ class Extension extends Twig_Extension
     );
 
     /**
+     * @var EmbedHelper
+     */
+    private $embedHelper;
+    /**
+     * @var AnnotationRegistry
+     */
+    private $registry;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authChecker;
+
+    /**
      * Extension constructor.
      *
      * @param EmbedHelper $embedHelper
      * @param AnnotationRegistry $registry
      * @param TranslatorInterface|null $translator
-     * @param SecurityContextInterface|null $context
+     * @param AuthorizationCheckerInterface|null $authChecker
      */
     public function __construct(
         EmbedHelper $embedHelper,
         AnnotationRegistry $registry,
         TranslatorInterface $translator = null,
-        SecurityContextInterface $context = null
-    ) {
+        AuthorizationCheckerInterface $authChecker = null
+    )
+    {
         $this->embedHelper = $embedHelper;
-        $this->annotationRegistry = $registry;
+        $this->registry = $registry;
         $this->translator = $translator;
-        $this->context = $context;
-        $this->globals = array();
+        $this->authChecker = $authChecker;
     }
 
     /**
@@ -398,15 +416,10 @@ class Extension extends Twig_Extension
      */
     public function isGranted($role, $object = null, $field = null)
     {
-        if (null === $this->context || !$this->context->getToken()) {
-            return false;
-        }
-
         if (null !== $field) {
             $object = new FieldVote($object, $field);
         }
-
-        return $this->context->isGranted($role, $object);
+        return $this->authChecker->isGranted($role, $object);
     }
 
     /**
