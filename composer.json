@@ -10,8 +10,8 @@
     ],
     "require": {
         "php": ">=5.6",
-        "symfony/symfony": "<=2.7.20",
-        "twig/twig": "<1.28",
+        "symfony/symfony": "^2.7",
+        "twig/twig": "^1.28",
         "zicht/itertools": "^1 || ^2",
         "zicht/util": "~1.1"
     },
