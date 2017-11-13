@@ -51,6 +51,10 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
      */
     private $embedHelper;
     /**
+     * @var array
+     */
+    private $globals;
+    /**
      * @var AnnotationRegistry
      */
     private $registry;
@@ -78,6 +82,7 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
         AuthorizationCheckerInterface $authChecker = null
     )
     {
+        $this->globals = [];
         $this->embedHelper = $embedHelper;
         $this->registry = $registry;
         $this->translator = $translator;
