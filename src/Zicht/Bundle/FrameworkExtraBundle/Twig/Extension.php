@@ -236,12 +236,13 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     /**
      * Returns a 40 byte string representing the sha1 digest of the input string.
      *
-     * @param string $string
+     * @param string|\Twig_Markup $string
      * @return string
      */
     public function shaOne($string)
     {
-        if (is_string($string)) {
+
+        if (is_string($string) || $string instanceof \Twig_Markup) {
             return sha1($string);
         }
         return '';
