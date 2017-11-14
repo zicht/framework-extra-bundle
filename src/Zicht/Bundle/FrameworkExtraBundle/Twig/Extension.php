@@ -49,7 +49,8 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     /**
      * @var EmbedHelper
      */
-    private $embedHelper;
+    protected $embedHelper;
+
     /**
      * @var array
      */
@@ -57,34 +58,36 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     /**
      * @var AnnotationRegistry
      */
-    private $registry;
+    protected $annotationRegistry;
+
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    protected $translator;
+
     /**
      * @var AuthorizationCheckerInterface
      */
-    private $authChecker;
+    protected $authChecker;
 
     /**
      * Extension constructor.
      *
      * @param EmbedHelper $embedHelper
-     * @param AnnotationRegistry $registry
+     * @param AnnotationRegistry $annotationRegistry
      * @param TranslatorInterface|null $translator
      * @param AuthorizationCheckerInterface|null $authChecker
      */
     public function __construct(
         EmbedHelper $embedHelper,
-        AnnotationRegistry $registry,
+        AnnotationRegistry $annotationRegistry,
         TranslatorInterface $translator = null,
         AuthorizationCheckerInterface $authChecker = null
     )
     {
         $this->globals = [];
         $this->embedHelper = $embedHelper;
-        $this->registry = $registry;
+        $this->annotationRegistry = $annotationRegistry;
         $this->translator = $translator;
         $this->authChecker = $authChecker;
     }
