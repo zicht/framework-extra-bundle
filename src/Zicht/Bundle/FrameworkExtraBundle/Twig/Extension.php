@@ -54,7 +54,8 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     /**
      * @var array
      */
-    private $globals;
+    protected $globals;
+
     /**
      * @var AnnotationRegistry
      */
