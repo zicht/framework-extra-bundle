@@ -10,6 +10,8 @@ use IteratorAggregate;
 
 /**
  * List maintaining sort order.
+ *
+ * @deprecated Use sorting functionality from `zicht/itertools` instead
  */
 class SortedList implements IteratorAggregate
 {
