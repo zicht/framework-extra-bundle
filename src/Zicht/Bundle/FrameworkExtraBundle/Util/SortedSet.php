@@ -11,6 +11,8 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
  *
  * All values are ensured unique.
  * All values are ensured sorted.
+ *
+ * @deprecated Use sorting and unique functionality from `zicht/itertools` instead
  */
 class SortedSet implements \Countable
 {

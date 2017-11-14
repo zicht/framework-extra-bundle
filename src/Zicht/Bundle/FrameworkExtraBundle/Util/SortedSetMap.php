@@ -8,6 +8,8 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
 
 /**
  * A key based map of sorted sets.
+ *
+ * @deprecated Use sorting, unique, and mapBy functionality from `zicht/itertools` instead
  */
 class SortedSetMap
 {
