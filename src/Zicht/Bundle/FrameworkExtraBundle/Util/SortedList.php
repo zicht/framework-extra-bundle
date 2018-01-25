@@ -26,7 +26,7 @@ class SortedList implements IteratorAggregate
      */
     public function insert($item, $priority)
     {
-        $this->items[]= array($priority, $item);
+        $this->items[] = array($priority, $item);
 
         $this->sort();
     }
@@ -42,7 +42,10 @@ class SortedList implements IteratorAggregate
         usort(
             $this->items,
             function ($a, $b) {
-                return $a[0] > $b[0] ? 1 : $a[0] === $b[0] ? 0 : -1;
+                if ($a[0] === $b[0]) {
+                    return 0;
+                }
+                return $a[0] < $b[0] ? -1 : 1;
             }
         );
     }
