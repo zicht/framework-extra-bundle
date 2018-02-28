@@ -233,7 +233,6 @@ class EmbedHelper
 
         if ($formState && !$request->isXmlHttpRequest()) {
             if (!empty($formState['form_errors'])) {
-
                 // 1. You cannot serialize or un-serialize PDO instances
                 // 2. We do not want to store cause and origin in the session since these can become quite large
                 foreach ($formState['form_errors'] as $key => $error) {

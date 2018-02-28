@@ -65,7 +65,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     /**
      * Set the current page index, which is 0-index based.
      * (The first page is 0)
-     * 
+     *
      * If the page index format is invalid, an InvalidArgumentException is thrown.
      * If the page index is out of range, it is trimmed to the nearest logical value; e.g. -1 is interpreted as 0,
      * 15 is interpreted as 7 if the number of pages is 8.
@@ -363,7 +363,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
 
     /**
      * Countable::count() implementation; Returns the number of pages in the page set.
-     * 
+     *
      * @return int
      */
     public function count()

@@ -3,8 +3,8 @@
  * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://zicht.nl>
  */
-namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
+namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 /**
  * Helper twig global for zicht_uglify configuration
