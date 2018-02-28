@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
+        "php": "^7",
         "symfony/symfony": "^2.7",
         "twig/twig": "^1.28",
         "zicht/itertools": "^1 || ^2",
