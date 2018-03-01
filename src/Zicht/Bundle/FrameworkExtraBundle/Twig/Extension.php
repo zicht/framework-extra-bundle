@@ -84,8 +84,7 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
         AnnotationRegistry $annotationRegistry,
         TranslatorInterface $translator = null,
         AuthorizationCheckerInterface $authChecker = null
-    )
-    {
+    ) {
         $this->globals = [];
         $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $annotationRegistry;

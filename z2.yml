@@ -1,4 +1,0 @@
-plugins: ['svn']
-
-vcs:
-    url: svn://zon/projecten/zicht-libraries/ZichtFrameworkExtraBundle
