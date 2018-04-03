@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 6.0.1 - 2018-04-03
+- Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
+When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
+This results in errors and data always being handled on the first form.
+
 ## 5.3.0 - 2017-02-15
 ### Changed
 - Adds the twig function `embedded_image`.  This function takes a
