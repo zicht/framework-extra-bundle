@@ -115,13 +115,14 @@ class EmbedHelper
      *
      * The return value is either a Response object that can be returned as the result of the action, or it is an
      * array which can be used in a template.
-     *
+     * 
      * @param \Symfony\Component\Form\Form $form
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \callback $handlerCallback
      * @param string $formTargetRoute
      * @param array $formTargetParams
      * @param array $extraViewVars
+     * @param null|\callable $formIdHandler
      * @return array|Response
      * @throws \Exception
      */
@@ -131,9 +132,10 @@ class EmbedHelper
         $handlerCallback,
         $formTargetRoute,
         $formTargetParams = array(),
-        $extraViewVars = array()
+        $extraViewVars = array(),
+        $formIdHandler = null
     ) {
-        $formId = $this->getFormId($form);
+        $formId = is_callable($formIdHandler) ? $formIdHandler($form) : $this->getFormId($form);
         if ($request->hasPreviousSession()) {
             // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
             // therefore convert the errors iterator to array, on get from session convert to iterator
@@ -308,7 +310,6 @@ class EmbedHelper
                 return preg_replace('/\W/', '_', get_class($form));
             }
         }
-        
         return $ret;
     }
 
