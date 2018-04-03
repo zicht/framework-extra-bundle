@@ -115,7 +115,7 @@ class EmbedHelper
      *
      * The return value is either a Response object that can be returned as the result of the action, or it is an
      * array which can be used in a template.
-     * 
+     *
      * @param \Symfony\Component\Form\Form $form
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \callback $handlerCallback
