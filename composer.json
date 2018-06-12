@@ -22,7 +22,8 @@
     "autoload": {
         "psr-0": {
             "": [
-                "src/"
+                "src/",
+                "tests/"
             ]
         },
         "exclude-from-classmap": [
