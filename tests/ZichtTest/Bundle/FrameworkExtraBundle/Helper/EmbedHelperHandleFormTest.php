@@ -27,7 +27,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->router->expects($this->once())->method('generate')->with('user_login')->will($this->returnValue($value));
         $ret = $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function () {
             },
             'user_login'
@@ -73,7 +73,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->request->set('mock', array('foo' => '321'));
         $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function () {
                 return false;
             },
@@ -90,7 +90,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->setMethod('POST');
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
         $this->request->request->set('mock', array('foo' => '321'));
-        $this->helper->handleForm($this->form, self::$container->get('request'), function () {
+        $this->helper->handleForm($this->form, self::$container->get('request_stack')->getMasterRequest(), function () {
             return false;
         }, 'user_login');
 
@@ -114,7 +114,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
         $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function ($request, $form) use ($error) {
                 $form->addError($error);
                 return false;
@@ -142,7 +142,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
         $response = $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function ($request, $form) {
                 return true;
             },
@@ -165,7 +165,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->any())->method('getName')->will($this->returnValue('mock'));
         $response = $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function ($request, $form) {
                 return false;
             },
@@ -188,7 +188,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->request->set('mock', array('foo' => '321'));
         $response = $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function ($request, $form) {
                 return true;
             },
@@ -211,7 +211,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $response = $this->helper->handleForm(
             $this->form,
-            self::$container->get('request'),
+            self::$container->get('request_stack')->getMasterRequest(),
             function ($request, $form) {
                 return true;
             },
@@ -232,7 +232,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->setMethod('POST');
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $this->form->expects($this->never())->method('addError');
-        $this->helper->handleForm($this->form, self::$container->get('request'), function () {
+        $this->helper->handleForm($this->form, self::$container->get('request_stack')->getMasterRequest(), function () {
             throw new \Exception("foo");
         }, '');
     }
@@ -251,7 +251,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->once())->method('addError')->will($this->returnCallback(function ($e) use (&$errors) {
             $errors[] = $e;
         }));
-        $this->helper->handleForm($this->form, self::$container->get('request'), function () {
+        $this->helper->handleForm($this->form, self::$container->get('request_stack')->getMasterRequest(), function () {
             throw new \Exception("foo");
         }, '');
 

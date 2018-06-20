@@ -90,14 +90,14 @@ class EmbedHelper
     {
         $params = array('return_url' => null, 'success_url' => null, 'do' => null);
 
-        if ($returnUrl = $this->container->get('request')->get('return_url')) {
+        if ($returnUrl = $this->container->get('request_stack')->getMasterRequest()->get('return_url')) {
             $params['return_url'] = $returnUrl;
         }
-        if ($successUrl = $this->container->get('request')->get('success_url')) {
+        if ($successUrl = $this->container->get('request_stack')->getMasterRequest()->get('success_url')) {
             $params['success_url'] = $successUrl;
         }
         // eg: do=change
-        if ($doAction = $this->container->get('request')->get('do')) {
+        if ($doAction = $this->container->get('request_stack')->getMasterRequest()->get('do')) {
             $params['do'] = $doAction;
         }
 
@@ -152,9 +152,9 @@ class EmbedHelper
         // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
         // This is useful for AJAX requests which need to modify the form based on submitted data.
         if ($request->get('_submit_type') === 'bind') {
-            $form->submit($request);
+            $form->handleRequest($request);
         } elseif ($request->getMethod() == 'POST') {
-            $form->submit($request);
+            $form->handleRequest($request);
 
             $returnUrl     = $request->get('return_url');
             $successUrl    = $request->get('success_url');

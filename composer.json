@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7",
-        "symfony/symfony": "^2.7",
+        "symfony/symfony": "^3.4",
         "twig/twig": "^1.28",
         "zicht/itertools": "^1 || ^2",
         "zicht/util": "~1.1"
@@ -19,9 +19,8 @@
         "doctrine/orm": "*",
         "phpunit/phpunit": "^5.7",
         "sonata-project/admin-bundle": "*",
-        "symfony/symfony": "^2.7",
-        "twig/twig": "^1",
-        "zicht/standards-php": "^3"
+        "symfony/symfony": "^3.4",
+        "twig/twig": "^1"
     },
     "autoload": {
         "psr-0": {

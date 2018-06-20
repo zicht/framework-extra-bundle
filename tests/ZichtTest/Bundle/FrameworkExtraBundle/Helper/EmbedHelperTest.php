@@ -7,6 +7,7 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
@@ -51,7 +52,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
         $this->session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
         $this->request = new \Symfony\Component\HttpFoundation\Request();
         $this->request->setSession($this->session);
-        self::$container->set('request', $this->request);
+        $stack = new RequestStack();
+        $stack->push($this->request);
+        self::$container->set('request_stack', $stack);
 
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
