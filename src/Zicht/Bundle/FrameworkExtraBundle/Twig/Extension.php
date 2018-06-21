@@ -19,13 +19,8 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Traversable;
-use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
-use Zicht\Itertools as iter;
 use Zicht\Util\Debug;
 use Zicht\Util\Str as StrUtil;
 
@@ -34,7 +29,7 @@ use Zicht\Util\Str as StrUtil;
  *
  * @package Zicht\Bundle\FrameworkExtraBundle\Twig
  */
-class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterface
+class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     public static $RELATIVE_DATE_PART_MAP = array(
         'y' => array('year', 'years'),
@@ -117,42 +112,42 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter('dump', array($this, 'dump'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('xml', array($this, 'xml')),
-            new Twig_SimpleFilter('regex_replace', array($this, 'regexReplace')),
-            new Twig_SimpleFilter('re_replace', array($this, 'regexReplace')),
-            new Twig_SimpleFilter('str_uscore', array($this, 'strUscore')),
-            new Twig_SimpleFilter('str_dash', array($this, 'strDash')),
-            new Twig_SimpleFilter('str_camel', array($this, 'strCamel')),
-            new Twig_SimpleFilter('str_humanize', array($this, 'strHumanize')),
-            new Twig_SimpleFilter('date_format', array($this, 'dateFormat')),
-            new Twig_SimpleFilter('relative_date', array($this, 'relativeDate')),
-            new Twig_SimpleFilter('ga_trackevent', array($this, 'gaTrackEvent')),
+            new \Twig_SimpleFilter('dump', array($this, 'dump'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('xml', array($this, 'xml')),
+            new \Twig_SimpleFilter('regex_replace', array($this, 'regexReplace')),
+            new \Twig_SimpleFilter('re_replace', array($this, 'regexReplace')),
+            new \Twig_SimpleFilter('str_uscore', array($this, 'strUscore')),
+            new \Twig_SimpleFilter('str_dash', array($this, 'strDash')),
+            new \Twig_SimpleFilter('str_camel', array($this, 'strCamel')),
+            new \Twig_SimpleFilter('str_humanize', array($this, 'strHumanize')),
+            new \Twig_SimpleFilter('date_format', array($this, 'dateFormat')),
+            new \Twig_SimpleFilter('relative_date', array($this, 'relativeDate')),
+            new \Twig_SimpleFilter('ga_trackevent', array($this, 'gaTrackEvent')),
 
-            new Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
-            new Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
-            new Twig_SimpleFilter('truncate_html', array($this, 'truncateHtml')),
+            new \Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
+            new \Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
+            new \Twig_SimpleFilter('truncate_html', array($this, 'truncateHtml')),
 
-            new Twig_SimpleFilter('with', array($this, 'with')),
-            new Twig_SimpleFilter('without', array($this, 'without')),
+            new \Twig_SimpleFilter('with', array($this, 'with')),
+            new \Twig_SimpleFilter('without', array($this, 'without')),
 
-            new Twig_SimpleFilter('where', array($this, 'where')),
-            new Twig_SimpleFilter('not_where', array($this, 'notWhere')),
-            new Twig_SimpleFilter('where_split', array($this, 'whereSplit')),
-            new Twig_SimpleFilter('url_to_form_params', array($this, 'urlToFormParameters')),
-            new Twig_SimpleFilter('url_strip_query', array($this, 'urlStripQuery')),
+            new \Twig_SimpleFilter('where', array($this, 'where')),
+            new \Twig_SimpleFilter('not_where', array($this, 'notWhere')),
+            new \Twig_SimpleFilter('where_split', array($this, 'whereSplit')),
+            new \Twig_SimpleFilter('url_to_form_params', array($this, 'urlToFormParameters')),
+            new \Twig_SimpleFilter('url_strip_query', array($this, 'urlStripQuery')),
 
-            new Twig_SimpleFilter('ceil', 'ceil'),
-            new Twig_SimpleFilter('floor', 'floor'),
-            new Twig_SimpleFilter('groups', array($this, 'groups')),
-            new Twig_SimpleFilter('sort_by_type', array($this, 'sortByType')),
-            new Twig_SimpleFilter('html2text', array($this, 'htmlToText')),
-            new Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
-            new Twig_SimpleFilter('json_decode', array($this, 'jsonDecode')),
-            new Twig_SimpleFilter('sha1', array($this, 'shaOne')),
+            new \Twig_SimpleFilter('ceil', 'ceil'),
+            new \Twig_SimpleFilter('floor', 'floor'),
+            new \Twig_SimpleFilter('groups', array($this, 'groups')),
+            new \Twig_SimpleFilter('sort_by_type', array($this, 'sortByType')),
+            new \Twig_SimpleFilter('html2text', array($this, 'htmlToText')),
+            new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
+            new \Twig_SimpleFilter('json_decode', array($this, 'jsonDecode')),
+            new \Twig_SimpleFilter('sha1', array($this, 'shaOne')),
 
-            new Twig_SimpleFilter('form_root', array($this, 'formRoot')),
-            new Twig_SimpleFilter('form_has_errors', array($this, 'formHasErrors')),
+            new \Twig_SimpleFilter('form_root', array($this, 'formRoot')),
+            new \Twig_SimpleFilter('form_has_errors', array($this, 'formHasErrors')),
         );
     }
 
@@ -161,16 +156,13 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
      *
      * @param array $values
      * @param string $prefix
-     * @return iter\lib\MapIterator
+     * @return \Generator
      */
     public function prefixMultiple($values, $prefix)
     {
-        return iter\map(
-            function ($value) use ($prefix) {
-                return sprintf('%s%s', $prefix, $value);
-            },
-            $values
-        );
+        foreach ($values as $value) {
+            yield "${prefix}${value}";
+        }
     }
 
     /**
@@ -180,17 +172,13 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
      * @param array $parameters
      * @param null $domain
      * @param null $locale
-     * @return iter\lib\MapIterator
+     * @return \Generator
      */
     public function transMultiple($messages, $parameters = [], $domain = null, $locale = null)
     {
-        $translator = $this->translator;
-        return iter\map(
-            function ($message) use ($translator, $parameters, $domain, $locale) {
-                return $this->translator->trans($message, $parameters, $domain, $locale);
-            },
-            $messages
-        );
+        foreach ($messages as $message) {
+            yield  $this->translator->trans($message, $parameters, $domain, $locale);
+        }
     }
 
     /**
@@ -386,12 +374,12 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
     public function getFunctions()
     {
         return array(
-            'trans_form_errors' => new Twig_SimpleFunction('trans_form_errors', [$this, 'transFormErrors']),
-            'embed_params' => new Twig_SimpleFunction('embed_params', [$this, 'getEmbedParams']),
-            'defaults' => new Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
-            'embed' => new Twig_SimpleFunction('embed', [$this, 'embed']),
-            'is_granted' => new Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
-            'embedded_image' => new Twig_SimpleFunction('embedded_image', [$this, 'embeddedImage']),
+            'trans_form_errors' => new \Twig_SimpleFunction('trans_form_errors', [$this, 'transFormErrors']),
+            'embed_params' => new \Twig_SimpleFunction('embed_params', [$this, 'getEmbedParams']),
+            'defaults' => new \Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
+            'embed' => new \Twig_SimpleFunction('embed', [$this, 'embed']),
+            'is_granted' => new \Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
+            'embedded_image' => new \Twig_SimpleFunction('embedded_image', [$this, 'embeddedImage']),
         );
     }
 
@@ -440,7 +428,7 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
      */
     public function groups($list, $numGroups)
     {
-        $items = ($list instanceof Traversable ? iterator_to_array($list) : $list);
+        $items = ($list instanceof \Traversable ? iterator_to_array($list) : $list);
 
         $groups = array();
         $i = 0;
@@ -476,7 +464,7 @@ class Extension extends Twig_Extension implements \Twig_Extension_GlobalsInterfa
      */
     public function sortByType($collection, $types)
     {
-        if ($collection instanceof Traversable) {
+        if ($collection instanceof \Traversable) {
             $collection = iterator_to_array($collection);
         }
 
