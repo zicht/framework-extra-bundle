@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 7.0.0
+- removed (unesesery) dependencie, fixed constraints and global namespaces
+- removed LiipImagine because logic was not working and a changed version
+  is moved to zicht/liip-imagine-bundle.
+- the twig filter prefix_multiple and trans_multiple returns now a Generator instead of MapIterator.
+  
+  
 ## 6.0.1 - 2018-04-03
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
