@@ -145,5 +145,9 @@ class ZichtFrameworkExtraExtension extends DIExtension
         if (false === $config['disable_schema-update']) {
             $container->removeDefinition('zicht_framework_extra.event_listener.update_schema_doctrine_command_listener');
         }
+
+        if (class_exists('Zicht\Itertools\twig\Extension')) {
+            $container->setDefinition('zicht_itertools_twig_extension', (new Definition('Zicht\Itertools\twig\Extension'))->addTag('twig.extension'));
+        }
     }
 }
