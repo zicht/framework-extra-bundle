@@ -5,30 +5,24 @@
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
  */
 class EmbedHelper
 {
-    /**
-     * Service container
-     *
-     * @var \Symfony\Component\DependencyInjection\Container
-     */
-    protected $container;
-
     /**
      * Whether or not to consider exceptions thrown by the handler as formerrors.
      *
@@ -38,14 +32,28 @@ class EmbedHelper
 
 
     /**
-     * Construct the helper with the service container.
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var RequestStack
+     */
+    protected $requestStack;
+
+    /**
+     * EmbedHelper constructor.
      *
-     * @param \Symfony\Component\DependencyInjection\Container $container
+     * @param RouterInterface $router
+     * @param Session $session
+     * @param RequestStack $requestStack
      * @param bool $markExceptionsAsFormErrors
      */
-    public function __construct(Container $container, $markExceptionsAsFormErrors = false)
+    public function __construct(RouterInterface $router, Session $session, RequestStack $requestStack, $markExceptionsAsFormErrors = false)
     {
-        $this->container = $container;
+        $this->router = $router;
+        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 
@@ -88,22 +96,59 @@ class EmbedHelper
      */
     public function getEmbedParams()
     {
-        $params = array('return_url' => null, 'success_url' => null, 'do' => null);
-
-        if ($returnUrl = $this->container->get('request')->get('return_url')) {
-            $params['return_url'] = $returnUrl;
-        }
-        if ($successUrl = $this->container->get('request')->get('success_url')) {
-            $params['success_url'] = $successUrl;
-        }
-        // eg: do=change
-        if ($doAction = $this->container->get('request')->get('do')) {
-            $params['do'] = $doAction;
-        }
-
-        return $params;
+        return [
+            'return_url' => $this->getParamFromRequest('return_url'),
+            'success_url' => $this->getParamFromRequest('success_url'),
+            // eg: do=change
+            'do' => $this->getParamFromRequest('do')
+        ];
     }
 
+    /**
+     * search for a param value in the request stack, start in current
+     * and bubble up till master request when not found.
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    protected function getParamFromRequest($name)
+    {
+        if (null !== $value = $this->requestStack->getCurrentRequest()->get($name)) {
+            return $value;
+        }
+
+        if ((null !== $request = $this->requestStack->getParentRequest()) && null !== $value = $request->get($name)) {
+            return $value;
+        }
+
+        if ((null !== $request = $this->requestStack->getMasterRequest()) && null !== $value = $request->get($name)) {
+            return $value;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Form $form
+     * @param int $formId
+     * @return FormErrorIterator|null
+     */
+    protected function getFormState(Form $form, $formId)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $state = null;
+
+        if ($request->hasPreviousSession()) {
+            // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
+            // therefore convert the errors iterator to array, on get from session convert to iterator
+            // see [1]
+            $state  = $request->getSession()->get($formId);
+            $state['form_errors'] = is_array($state ['form_errors']) ? $state ['form_errors'] : [];
+            $state['form_errors'] = new FormErrorIterator($form, $state['form_errors']);
+        }
+
+        return $state;
+    }
 
     /**
      * Handles a form and executes a callback to do definite handling.
@@ -116,8 +161,7 @@ class EmbedHelper
      * The return value is either a Response object that can be returned as the result of the action, or it is an
      * array which can be used in a template.
      *
-     * @param \Symfony\Component\Form\Form $form
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Form $form
      * @param \callback $handlerCallback
      * @param string $formTargetRoute
      * @param array $formTargetParams
@@ -126,46 +170,27 @@ class EmbedHelper
      * @return array|Response
      * @throws \Exception
      */
-    public function handleForm(
-        Form $form,
-        Request $request,
-        $handlerCallback,
-        $formTargetRoute,
-        $formTargetParams = array(),
-        $extraViewVars = array(),
-        $formIdHandler = null
-    ) {
-        $formId = is_callable($formIdHandler) ? $formIdHandler($form) : $this->getFormId($form);
-        if ($request->hasPreviousSession()) {
-            // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
-            // therefore convert the errors iterator to array, on get from session convert to iterator
-            // see [1]
-            $formState = $request->getSession()->get($formId);
-            $formState['form_errors'] = is_array($formState['form_errors']) ? $formState['form_errors'] : array();
-            $formState['form_errors'] = new FormErrorIterator($form, $formState['form_errors']);
-        } else {
-            $formState = null;
-        }
-        $formStatus = '';
+    public function handleForm(Form $form, callable $handlerCallback, $formTargetRoute, $formTargetParams = [], $extraViewVars = [], $formIdHandler = null) {
 
+        $formId = is_callable($formIdHandler) ? $formIdHandler($form) : $this->getFormId($form);
+        $request = $this->requestStack->getCurrentRequest();
+        $formState = $this->getFormState($form, $formId);
+        $formStatus = '';
 
         // This only binds the form, so the event listeners are triggered, but no actual submit-handling is done.
         // This is useful for AJAX requests which need to modify the form based on submitted data.
         if ($request->get('_submit_type') === 'bind') {
-            $form->submit($request);
+            $form->handleRequest($request);
         } elseif ($request->getMethod() == 'POST') {
-            $form->submit($request);
-
-            $returnUrl     = $request->get('return_url');
-            $successUrl    = $request->get('success_url');
-
+            $form->handleRequest($request);
+            $returnUrl = $request->get('return_url');
+            $successUrl = $request->get('success_url');
             $handlerResult = false;
-
 
             // if it is valid, we can use the callback to handle the actual handling
             if ($form->isValid()) {
                 try {
-                    $handlerResult = call_user_func($handlerCallback, $request, $form, $this->container);
+                    $handlerResult = call_user_func($handlerCallback, $request, $form);
                 } catch (\Exception $e) {
                     if (!$this->isMarkExceptionsAsFormErrors) {
                         throw $e;
@@ -354,7 +379,7 @@ class EmbedHelper
                 "Please do not rely on the container's instance of the session, but fetch it from the Request",
                 E_USER_DEPRECATED
             );
-            $session = $this->container->get('session');
+            $session = $this->session;
         }
         $session->getFlashBag()->set($this->getFormId($form), $message);
     }
