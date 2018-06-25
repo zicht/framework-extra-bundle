@@ -13,7 +13,8 @@ Nothing so far
 - removed LiipImagine because logic was not working and a changed version
   is moved to zicht/liip-imagine-bundle.
 - the twig filter prefix_multiple and trans_multiple returns now a Generator instead of MapIterator.
-  
+- removed unnecessary parameters of the embed helper and hard dependency of service container. The second
+  request argument is removed of the handleForm method and $handlerCallback will only get the form.
   
 ## 6.0.1 - 2018-04-03
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
