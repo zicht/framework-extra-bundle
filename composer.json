@@ -37,7 +37,7 @@
             "./vendor/bin/phpcs -s src/Zicht/ --standard=vendor/zicht-standards/php/Zicht --extensions=php"
         ],
         "test": [
-            "./vendor/phpunit/phpunit/phpunit -c phpunit.xml.dist"
+            "php7.1 ./vendor/phpunit/phpunit/phpunit -c phpunit.xml.dist"
         ]
     }
 }

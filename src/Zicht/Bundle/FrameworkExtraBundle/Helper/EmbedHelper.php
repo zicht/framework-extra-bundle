@@ -30,11 +30,15 @@ class EmbedHelper
      */
     protected $isMarkExceptionsAsFormErrors;
 
-
     /**
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var Session
+     */
+    protected $router;
 
     /**
      * @var RequestStack
@@ -49,7 +53,7 @@ class EmbedHelper
      * @param RequestStack $requestStack
      * @param bool $markExceptionsAsFormErrors
      */
-    public function __construct(RouterInterface $router, Session $session, RequestStack $requestStack, $markExceptionsAsFormErrors = false)
+    public function __construct(RouterInterface $router, SessionInterface $session, RequestStack $requestStack, $markExceptionsAsFormErrors = false)
     {
         $this->router = $router;
         $this->session = $session;
@@ -85,7 +89,7 @@ class EmbedHelper
         // use array filter to remove keys with null values
         $params += array_filter($this->getEmbedParams());
 
-        return $this->container->get('router')->generate($route, $params);
+        return $this->router->generate($route, $params);
     }
 
 
@@ -190,7 +194,7 @@ class EmbedHelper
             // if it is valid, we can use the callback to handle the actual handling
             if ($form->isValid()) {
                 try {
-                    $handlerResult = call_user_func($handlerCallback, $request, $form);
+                    $handlerResult = call_user_func($handlerCallback, $form);
                 } catch (\Exception $e) {
                     if (!$this->isMarkExceptionsAsFormErrors) {
                         throw $e;
@@ -304,12 +308,11 @@ class EmbedHelper
             }
 
             $viewVars['messages'] = [];
-            if ($request->hasPreviousSession() && ($messages = $this->container->get('session')->getFlashBag()->get($formId))) {
+            if ($request->hasPreviousSession() && ($messages = $this->session->getFlashBag()->get($formId))) {
                 foreach ($messages as $value) {
                     $viewVars['messages'][] = $prefix . $value;
                 }
             }
-
 
             return $viewVars;
         }

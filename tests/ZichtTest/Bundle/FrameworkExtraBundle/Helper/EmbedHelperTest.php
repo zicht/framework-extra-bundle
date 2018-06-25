@@ -31,31 +31,25 @@ class MockData
 
 class EmbedHelperTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @var \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper
-     */
+    /** @var \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper */
     protected $helper;
-    /**
-     * @var SessionInterface
-     */
+
+    /** @var SessionInterface */
     protected $session;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
+    /** @var \Symfony\Component\HttpFoundation\RequestStack */
     protected $request;
 
     function setUp()
     {
-        $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper(self::$container);
         $this->session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
-        $this->request = new \Symfony\Component\HttpFoundation\Request();
-        $this->request->setSession($this->session);
-        self::$container->set('request', $this->request);
-
+        $this->request = new \Symfony\Component\HttpFoundation\RequestStack();
+        $request = new \Symfony\Component\HttpFoundation\Request;
+        $request->setSession($this->session);
+        $this->request->push($request);
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        self::$container->set('router', $this->router);
+        $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper($this->router, $this->session, $this->request);
     }
 
 
@@ -65,8 +59,8 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
      */
     function testGetEmbedParams()
     {
-        $this->request->query->set('return_url', 'test 123');
-        $this->request->query->set('success_url', 'test 321');
+        $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
+        $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
         $this->assertEquals(
             array(
                 'success_url' => 'test 321',
@@ -103,7 +97,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     {
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array());
-        self::$container->set('router', $router);
+        $property = new \ReflectionProperty($this->helper, 'router');
+        $property->setAccessible(true);
+        $property->setValue($this->helper, $router);
         $this->helper->url('test', array());
     }
 
@@ -115,9 +111,11 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     {
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'test 123', 'success_url' => 'test 321'));
-        self::$container->set('router', $router);
-        $this->request->query->set('return_url', 'test 123');
-        $this->request->query->set('success_url', 'test 321');
+        $property = new \ReflectionProperty($this->helper, 'router');
+        $property->setAccessible(true);
+        $property->setValue($this->helper, $router);
+        $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
+        $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
         $this->helper->url('test', array());
     }
 
@@ -129,9 +127,11 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     {
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'override 123', 'success_url' => 'override 321'));
-        self::$container->set('router', $router);
-        $this->request->query->set('return_url', 'test 123');
-        $this->request->query->set('success_url', 'test 321');
+        $property = new \ReflectionProperty($this->helper, 'router');
+        $property->setAccessible(true);
+        $property->setValue($this->helper, $router);
+        $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
+        $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
         $this->helper->url('test', array('return_url' => 'override 123', 'success_url' => 'override 321'));
     }
 
