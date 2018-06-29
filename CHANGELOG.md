@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.0 - 2018-06-21
+### Added
+- Support for Symfony 3.x and Twig 2.x
+### Removed
+- Support for Symfony 2.x and Twig 1.x
+
 ## 7.0.0 - 2018-06-21
 - removed (unesesery) dependencie, fixed constraints and global namespaces
 - removed LiipImagine because logic was not working and a changed version

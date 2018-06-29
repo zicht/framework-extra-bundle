@@ -113,7 +113,6 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $loader->load('services.xml');
 
         $loader->load('doctrine.xml');
-        $loader->load('imagine.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

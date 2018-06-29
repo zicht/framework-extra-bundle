@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -36,18 +37,14 @@ class ParentChoiceType extends AbstractType
         $this->doctrine = $doctrine;
     }
 
-
-    /**
-     * @{inheritDoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setRequired(array('class'))
             ->setDefaults(
                 array(
                     'data_class' => function (Options $o) {
-                        return $o->get('class');
+                        return $o->offsetGet('class');
                     },
                     'required' => false
                 )
@@ -84,7 +81,7 @@ class ParentChoiceType extends AbstractType
                 'parent',
                 'choice',
                 $parentId,
-                array('choices' => $choices, 'mapped' => false, 'auto_initialize' => false)
+                array('choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false)
             );
         };
 
@@ -153,6 +150,14 @@ class ParentChoiceType extends AbstractType
      * @{inheritDoc}
      */
     public function getName()
+    {
+        return 'zicht_parent_choice';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBlockPrefix()
     {
         return 'zicht_parent_choice';
     }

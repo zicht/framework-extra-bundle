@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7",
-        "symfony/symfony": "^2.7",
+        "symfony/symfony": "^3.4",
         "twig/twig": "^2",
         "zicht/util": "~1.1"
     },
