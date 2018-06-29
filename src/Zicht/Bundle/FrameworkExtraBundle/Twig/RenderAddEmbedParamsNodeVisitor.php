@@ -20,12 +20,12 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
     /**
      * Called before child nodes are visited.
      *
-     * @param \Twig_NodeInterface $node The node to visit
+     * @param \Twig_Node $node The node to visit
      * @param \Twig_Environment   $env  The Twig environment instance
      *
      * @return \Twig_NodeInterface The modified node
      */
-    public function enterNode(Twig_NodeInterface $node, Twig_Environment $env)
+    public function enterNode(\Twig_Node $node, Twig_Environment $env)
     {
         return $node;
     }
@@ -33,25 +33,25 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
     /**
      * Called after child nodes are visited.
      *
-     * @param \Twig_NodeInterface $node The node to visit
+     * @param \Twig_Node $node The node to visit
      * @param \Twig_Environment   $env  The Twig environment instance
      *
      * @return \Twig_NodeInterface The modified node
      */
-    public function leaveNode(Twig_NodeInterface $node, Twig_Environment $env)
+    public function leaveNode(\Twig_Node $node, Twig_Environment $env)
     {
         if ($node instanceof \Twig_Node_Expression_Function) {
             if ($node->getAttribute('name') === 'controller') {
                 $args = $node->getNode('arguments');
                 if (!$args->hasNode(1)) {
-                    $args->setNode(1, new \Twig_Node_Expression_Array(array(), $node->getLine()));
+                    $args->setNode(1, new \Twig_Node_Expression_Array(array(), $node->getTemplateLine()));
                 }
                 $args->setNode(
                     1,
                     new \Twig_Node_Expression_Function(
                         'embed',
                         new \Twig_Node(array($args->getNode(1))),
-                        $node->getLine()
+                        $node->getTemplateLine()
                     )
                 );
             }

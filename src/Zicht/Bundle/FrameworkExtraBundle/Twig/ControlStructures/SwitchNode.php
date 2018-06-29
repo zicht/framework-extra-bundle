@@ -3,6 +3,7 @@
  * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
 use Twig_Node;
@@ -17,16 +18,16 @@ class SwitchNode extends Twig_Node
     /**
      * Constructor
      *
-     * @param \Twig_NodeInterface $cases
-     * @param \Twig_NodeInterface $expression
+     * @param \Twig_Node $cases
+     * @param \Twig_Node $expression
      * @param int $line
      */
-    public function __construct(Twig_NodeInterface $cases, Twig_NodeInterface $expression, $line)
+    public function __construct(\Twig_Node $cases, \Twig_Node $expression, $line)
     {
         parent::__construct(
             array(
                 'expression' => $expression,
-                'cases'      => $cases
+                'cases' => $cases
             ),
             array(),
             $line
