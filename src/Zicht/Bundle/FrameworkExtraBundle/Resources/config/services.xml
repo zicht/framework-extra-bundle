@@ -6,8 +6,11 @@
         <parameter key="zicht_framework_extra.embed_helper.class">Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper</parameter>
     </parameters>
     <services>
+
         <service id="zicht_embed_helper" class="%zicht_framework_extra.embed_helper.class%">
-            <argument type="service" id="service_container"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="session"/>
+            <argument type="service" id="request_stack"/>
         </service>
 
         <service id="zicht_twig_extension" class="Zicht\Bundle\FrameworkExtraBundle\Twig\Extension">
