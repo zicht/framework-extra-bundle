@@ -87,7 +87,7 @@ class SwitchTokenParser extends Twig_TokenParser
         $stream->expect('endswitch');
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        return new SwitchNode(new Twig_Node($tests), $switchExpr, $lineno);
+        return new SwitchNode(new \Twig_Node($tests), $switchExpr, $lineno);
     }
 
 
