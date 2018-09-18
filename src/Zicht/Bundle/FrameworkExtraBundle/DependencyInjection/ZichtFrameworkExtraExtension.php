@@ -41,7 +41,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $container->addResource(new FileResource($uglifyConfigFile));
 
         try {
-            $uglifyConfig = Yaml::parse($uglifyConfigFile);
+            $uglifyConfig = Yaml::parse(file_get_contents($uglifyConfigFile));
         } catch (\Exception $e) {
             throw new InvalidConfigurationException(
                 "zicht_framework_extra.uglify setting '$uglifyConfigFile' could not be read",
