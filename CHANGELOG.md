@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.2 - 2018-09-19
+### Changed
+- Fix bug in parsing uglify config
+
 ## 8.0.0 - 2018-06-21
 ### Added
 - Support for Symfony 3.x and Twig 2.x
