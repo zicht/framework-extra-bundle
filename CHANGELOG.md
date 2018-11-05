@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.3 - 2018-11-05
+### Changed
+- Changed the MarkupType option 'virtual' to 'inherit_data' because 'virtual' is deprecated
+
 ## 8.0.2 - 2018-09-19
 ### Changed
 - Fix bug in parsing uglify config
