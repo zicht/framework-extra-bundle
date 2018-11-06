@@ -24,7 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  *      Use in your form builder like this:
  *
- *           $formMapper->add('teaserExplanation', 'zicht_markup_type', ['virtual' => true, 'markup' => 'admin.help.teaser_info'])
+ *           $formMapper->add('teaserExplanation', 'zicht_markup_type', ['inherit_data' => true, 'markup' => 'admin.help.teaser_info'])
  *
  * @package Zicht\Bundle\MokveldSiteBundle\Form\Type
  */
@@ -36,7 +36,7 @@ class MarkupType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefaults(['markup' => false, 'virtual' => true]);
+        $resolver->setDefaults(['markup' => false, 'inherit_data' => true]);
     }
 
     /**
