@@ -1,7 +1,5 @@
 <?php
 /**
- * @author Muhammed Akbulut <muhammed@zicht.nl>
- * @author Gerard van Helden <gerard@zicht.nl>
  * @copyright Zicht Online <http://www.zicht.nl>
  */
 
