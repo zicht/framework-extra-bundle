@@ -1,16 +1,15 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Node;
 use Twig_Compiler;
+use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExtension;
 
 /**
  * Class AnnotationsNode
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
  */
 class AnnotationsNode extends Twig_Node
 {
@@ -23,13 +22,15 @@ class AnnotationsNode extends Twig_Node
     {
         $compiler->addDebugInfo($this);
 
+        $getExtension = sprintf('$this->env->getExtension(\'%s\')', ZichtFrameworkExtraExtension::class);
+
         $compiler
             ->write('$parent = $context;')
-            ->write('foreach ($this->env->getExtension(\'zicht_framework_extra\')->getAnnotationRegistry()->getAnnotations() as $annotation) {')
+            ->write(sprintf('foreach (%s->getAnnotationRegistry()->getAnnotations() as $annotation) {', $getExtension))
             ->indent()
-                ->write('$context[\'name\'] = $annotation[\'name\'];')
-                ->write('$context[\'value\'] = $annotation[\'value\'];')
-                ->subcompile($this->getNode('body'))
+            ->write('$context[\'name\'] = $annotation[\'name\'];')
+            ->write('$context[\'value\'] = $annotation[\'value\'];')
+            ->subcompile($this->getNode('body'))
             ->outdent()
             ->write('}');
         $compiler->write('$context = $parent;');
