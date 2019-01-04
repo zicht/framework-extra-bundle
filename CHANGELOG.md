@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.4 - 2018-12-21
+### Changed
+- Get Twig extension by FQCN
+### Removed
+- Removed deprecated PHPDoc author tag
+
 ## 8.0.3 - 2018-11-05
 ### Changed
 - Changed the MarkupType option 'virtual' to 'inherit_data' because 'virtual' is deprecated
