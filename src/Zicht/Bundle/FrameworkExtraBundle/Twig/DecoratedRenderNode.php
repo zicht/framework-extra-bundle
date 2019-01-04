@@ -34,12 +34,13 @@ class DecoratedRenderNode extends \Twig_Node
      */
     public function compile(Twig_Compiler $compiler)
     {
+        $getExtension = sprintf('$this->env->getExtension(\'%s\')', ZichtFrameworkExtraExtension::class);
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('actions')->renderAction(")
+            ->write('echo $this->env->getExtension(\'actions\')->renderAction(')
             ->subcompile($this->wrapped->getNode('expr'))
             ->raw(', ')
-            ->raw("\$this->env->getExtension('zicht_framework_extra')->embed(")
+            ->raw(sprintf('%s->embed(', $getExtension))
             ->subcompile($this->wrapped->getNode('attributes'))
             ->raw(')')
             ->raw(', ')

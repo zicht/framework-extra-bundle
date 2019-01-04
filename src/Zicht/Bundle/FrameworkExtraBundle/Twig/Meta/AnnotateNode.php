@@ -6,6 +6,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Node;
 use Twig_Compiler;
+use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExtension;
 
 /**
  * Class AnnotateNode
@@ -21,10 +22,12 @@ class AnnotateNode extends Twig_Node
      */
     public function compile(Twig_Compiler $compiler)
     {
-        $has_prio = $this->hasNode('prio');
-        $prio = ($has_prio) ? $this->getNode('prio') : 0 ;
+        $prio = ($this->hasNode('prio')) ? $this->getNode('prio') : 0;
+
+        $getExtension = sprintf('$this->env->getExtension(\'%s\')', ZichtFrameworkExtraExtension::class);
+
         $compiler->addDebugInfo($this);
-        $compiler->write('$this->env->getExtension(\'zicht_framework_extra\')->getAnnotationRegistry()');
+        $compiler->write(sprintf('%s->getAnnotationRegistry()', $getExtension));
 
         if ($this->hasNode('name')) {
             $compiler->raw('->addAnnotation(')->subcompile($this->getNode('name'))->raw(', ');
@@ -34,7 +37,7 @@ class AnnotateNode extends Twig_Node
 
         $compiler->subcompile($this->getNode('expr'));
 
-        if ($has_prio) {
+        if ($this->hasNode('prio')) {
             $compiler->raw(', ');
             $compiler->subcompile($prio);
         }

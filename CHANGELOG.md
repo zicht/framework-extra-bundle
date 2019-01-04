@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.5 - 2019-01-04
+### Changed
+- Get Twig extension by FQCN in other Twig Node classes
+
 ## 8.0.4 - 2018-12-21
 ### Changed
 - Get Twig extension by FQCN
