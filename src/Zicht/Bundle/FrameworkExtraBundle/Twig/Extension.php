@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
-use Doctrine\Common\Util\Debug as DoctrineUtilDebug;
+use Symfony\Component\VarDumper\VarDumper;
 use Doctrine\ORM\PersistentCollection;
 use DOMDocument;
 use SimpleXMLElement;
@@ -776,7 +776,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
         } else {
             switch ($mode) {
                 case 'export':
-                    DoctrineUtilDebug::dump($var, 5);
+                    VarDumper::dump($var);
                     break;
                 default:
                     var_dump($var);
