@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListUserImagesCommand extends ContainerAwareCommand
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -33,7 +33,7 @@ class ListUserImagesCommand extends ContainerAwareCommand
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

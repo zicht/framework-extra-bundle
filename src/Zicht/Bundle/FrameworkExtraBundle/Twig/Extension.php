@@ -98,7 +98,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getGlobals()
     {
@@ -106,7 +106,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getFilters()
     {
@@ -368,7 +368,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getFunctions()
     {
@@ -675,7 +675,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * @return array|\Twig_NodeVisitorInterface[]
+     * {@inheritdoc}
      */
     public function getNodeVisitors()
     {
@@ -685,7 +685,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getTokenParsers()
     {

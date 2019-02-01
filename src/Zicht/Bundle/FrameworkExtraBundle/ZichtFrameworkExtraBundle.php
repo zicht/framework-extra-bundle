@@ -14,9 +14,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class ZichtFrameworkExtraBundle extends Bundle
 {
     /**
-     * Build
-     *
-     * @param ContainerBuilder $container
+     * {@inheritdoc}
      */
     public function build(ContainerBuilder $container)
     {

@@ -50,7 +50,7 @@ class SortedList implements IteratorAggregate
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator()
     {

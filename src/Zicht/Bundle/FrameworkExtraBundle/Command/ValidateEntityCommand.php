@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 class ValidateEntityCommand extends ContainerAwareCommand
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -32,7 +32,7 @@ class ValidateEntityCommand extends ContainerAwareCommand
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

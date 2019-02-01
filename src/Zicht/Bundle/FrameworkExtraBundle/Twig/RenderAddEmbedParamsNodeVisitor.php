@@ -17,12 +17,7 @@ use Twig_Environment;
 class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
 {
     /**
-     * Called before child nodes are visited.
-     *
-     * @param \Twig_Node $node The node to visit
-     * @param \Twig_Environment   $env  The Twig environment instance
-     *
-     * @return \Twig_NodeInterface The modified node
+     * {@inheritdoc}
      */
     public function enterNode(\Twig_Node $node, Twig_Environment $env)
     {
@@ -30,12 +25,7 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
     }
 
     /**
-     * Called after child nodes are visited.
-     *
-     * @param \Twig_Node $node The node to visit
-     * @param \Twig_Environment   $env  The Twig environment instance
-     *
-     * @return \Twig_NodeInterface The modified node
+     * {@inheritdoc}
      */
     public function leaveNode(\Twig_Node $node, Twig_Environment $env)
     {
@@ -59,11 +49,7 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
     }
 
     /**
-     * Returns the priority for this visitor.
-     *
-     * Priority should be between -10 and 10 (0 is the default).
-     *
-     * @return integer The priority level
+     * {@inheritdoc}
      */
     public function getPriority()
     {

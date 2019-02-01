@@ -61,9 +61,7 @@ class DoctrineQueryPager implements Pageable
 
 
     /**
-     * Returns the absolute total of the pageable set of elements.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getTotal()
     {
@@ -75,11 +73,7 @@ class DoctrineQueryPager implements Pageable
     }
 
     /**
-     * Sets the range that needs to be displayed on the current page
-     *
-     * @param int $start
-     * @param int $length
-     * @return int
+     * {@inheritdoc}
      */
     public function setRange($start, $length)
     {

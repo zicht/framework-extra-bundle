@@ -34,7 +34,7 @@ class NestedTreeValidationSubscriber implements EventSubscriber
     protected $entityName;
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {

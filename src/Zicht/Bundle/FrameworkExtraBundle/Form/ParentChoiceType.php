@@ -35,6 +35,9 @@ class ParentChoiceType extends AbstractType
         $this->doctrine = $doctrine;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
@@ -49,9 +52,8 @@ class ParentChoiceType extends AbstractType
             );
     }
 
-
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -114,9 +116,8 @@ class ParentChoiceType extends AbstractType
         );
     }
 
-
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -143,9 +144,8 @@ class ParentChoiceType extends AbstractType
         }
     }
 
-
     /**
-     * @{inheritDoc}
+     * @return string
      */
     public function getName()
     {
@@ -153,7 +153,7 @@ class ParentChoiceType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {
