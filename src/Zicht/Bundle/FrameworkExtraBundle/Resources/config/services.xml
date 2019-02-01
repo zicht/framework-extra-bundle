@@ -4,6 +4,7 @@
 
     <parameters>
         <parameter key="zicht_framework_extra.embed_helper.class">Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper</parameter>
+        <parameter key="zicht_framework_extra.translator.class">Zicht\Bundle\FrameworkExtraBundle\Translation\Translator</parameter>
     </parameters>
     <services>
 
