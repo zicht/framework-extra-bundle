@@ -13,7 +13,7 @@ use Twig_Token;
 class StrictTokenParser extends Twig_TokenParser
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getTag()
     {
@@ -21,7 +21,7 @@ class StrictTokenParser extends Twig_TokenParser
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function parse(Twig_Token $token)
     {

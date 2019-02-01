@@ -104,7 +104,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {

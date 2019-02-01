@@ -17,7 +17,7 @@ use Twig_Node;
 class SwitchTokenParser extends Twig_TokenParser
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getTag()
     {
@@ -25,7 +25,7 @@ class SwitchTokenParser extends Twig_TokenParser
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function parse(Twig_Token $token)
     {

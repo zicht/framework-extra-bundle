@@ -16,10 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class RemoveExtensionsPass implements CompilerPassInterface
 {
     /**
-     * Adds extra configurations
-     *
-     * @param ContainerBuilder $container
-     * @return null
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

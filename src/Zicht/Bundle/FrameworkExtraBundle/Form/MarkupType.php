@@ -30,7 +30,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class MarkupType extends AbstractType
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -39,11 +39,7 @@ class MarkupType extends AbstractType
     }
 
     /**
-     * Finish view
-     *
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
+     * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -51,9 +47,8 @@ class MarkupType extends AbstractType
         $view->vars['markup'] = $options['markup'];
     }
 
-
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getParent()
     {
@@ -69,7 +64,7 @@ class MarkupType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {

@@ -12,6 +12,7 @@ Nothing so far
 ### Changed
 - Changed injection of own Translator because of deprecated translator.class parameter
 - Drop false positives in deprecations check and fix depr warning about doctrinedumper
+- Fixed wrong inheritdoc syntax and replace unnecessary doc blocks with inheritdoc
 
 ## 8.0.5 - 2019-01-04
 ### Changed

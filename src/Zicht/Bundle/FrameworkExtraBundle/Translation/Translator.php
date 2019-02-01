@@ -20,7 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 class Translator extends BaseTranslator
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function trans($id, array $parameters = array(), $domain = 'messages', $locale = null)
     {
@@ -47,7 +47,7 @@ class Translator extends BaseTranslator
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function transChoice($id, $number, array $parameters = array(), $domain = 'messages', $locale = null)
     {

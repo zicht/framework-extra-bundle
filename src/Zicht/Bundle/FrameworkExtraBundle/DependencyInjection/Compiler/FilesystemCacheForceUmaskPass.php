@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class FilesystemCacheForceUmaskPass implements CompilerPassInterface
 {
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

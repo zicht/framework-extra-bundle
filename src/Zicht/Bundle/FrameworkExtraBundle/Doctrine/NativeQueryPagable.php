@@ -29,7 +29,7 @@ class NativeQueryPagable implements Pageable
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getTotal()
     {
@@ -38,7 +38,7 @@ class NativeQueryPagable implements Pageable
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function setRange($start, $length)
     {

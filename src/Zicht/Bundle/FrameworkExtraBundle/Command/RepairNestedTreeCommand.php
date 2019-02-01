@@ -26,7 +26,7 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
     const COMMAND_NAME = 'zicht:repair:nested-tree';
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -42,7 +42,7 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

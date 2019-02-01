@@ -60,7 +60,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
 
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
@@ -68,7 +68,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetGet($offset)
     {
@@ -83,7 +83,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -91,7 +91,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetUnset($offset)
     {
@@ -99,7 +99,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator()
     {
