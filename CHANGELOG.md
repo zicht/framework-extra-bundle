@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.0.6 - 2019-02-01
+### Changed
+- Changed injection of own Translator because of deprecated translator.class parameter
+- Drop false positives in deprecations check and fix depr warning about doctrinedumper
+
 ## 8.0.5 - 2019-01-04
 ### Changed
 - Get Twig extension by FQCN in other Twig Node classes
