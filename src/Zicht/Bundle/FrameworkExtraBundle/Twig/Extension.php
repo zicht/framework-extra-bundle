@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\TwigTest;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Util\Debug;
@@ -828,5 +829,26 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
             $ret[$k] = $this->translator->trans($formError->getMessage(), $formError->getMessageParameters(), $translationDomain);
         }
         return $ret;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTests()
+    {
+        return [
+            new TwigTest('numeric', [$this, 'isNumeric']),
+        ];
+    }
+
+    /**
+     * Checks if a given value is numeric
+     *
+     * @param mixed $value
+     * @return boolean
+     */
+    public function isNumeric($value)
+    {
+        return is_numeric($value);
     }
 }
