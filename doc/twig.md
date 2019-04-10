@@ -3,21 +3,21 @@
 ## Filters ##
 
 ------------------  -------------------------------------------------------------------------------------------
-`date_format`       Format the date using strftime()
-`dump`              Dumps the contents of the variable
-`truncate`          Truncate a string and add an ellipsis (...) if the original size was more than the truncated size
-`regex_replace`     Do a regular expression replace
-`re_replace`        Alias for regex_replace
-`relative_date`     Calculate the relative date and output it, e.g. "4 hours ago"
-`str_uscore`        Convert the string to an underscore-delimited string
-`str_dash`          Convert the string to a dash-delimited string
-`str_camel`         Convert the string to a camelcased format
-`ga_trackevent`     Render an `onclick="_gaq.push([])"`
-`with`              Add a key/value pair to an array and return the result
-`without`           Remove a key from an array and return the result
-`round`             Round the value
-`ceil`              Ceil the value
-`floor`             Floor the value
+`date_format`       Format the date using strftime()  
+`dump`              Dumps the contents of the variable  
+`truncate`          Truncate a string and add an ellipsis (...) if the original size was more than the truncated size  
+`regex_replace`     Do a regular expression replace  
+`re_replace`        Alias for regex_replace  
+`relative_date`     Calculate the relative date and output it, e.g. "4 hours ago"  
+`str_uscore`        Convert the string to an underscore-delimited string  
+`str_dash`          Convert the string to a dash-delimited string  
+`str_camel`         Convert the string to a camelcased format  
+`ga_trackevent`     Render an `onclick="_gaq.push([])"`  
+`with`              Add a key/value pair to an array and return the result  
+`without`           Remove a key from an array and return the result  
+`round`             Round the value  
+`ceil`              Ceil the value  
+`floor`             Floor the value  
 ------------------  -------------------------------------------------------------------------------------------
 
 ## Tests ##
