@@ -112,6 +112,9 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
                     'https://zicht.nl.example.com',
                     'https://zicht.nl.example.com/',
                     'https://zicht.nl.example.com/foo',
+
+                    // urls containing javascript
+                    'javascript:window.location=46759602//*/window.location=46759602/*',
                 ],
             ],
         ];
