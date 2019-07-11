@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 5.4.0 - 2019-07-11
+### Added
+- Adds the `UrlCheckerService`.
+- The `EmbedHelper::getEmbedParams` and `EmbedHelper::handleForm` will not
+  accept a return_url or success_url when the `UrlCheckerService` considers
+  it to be unsafe.
+
 ## 5.3.0 - 2017-02-15
 ### Changed
 - Adds the twig function `embedded_image`.  This function takes a
