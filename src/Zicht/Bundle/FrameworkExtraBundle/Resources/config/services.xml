@@ -33,5 +33,9 @@
                 class="Zicht\Bundle\FrameworkExtraBundle\EventListener\UpdateSchemaDoctrineCommandListener">
             <tag name="kernel.event_listener" event="console.command"/>
         </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" class="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService">
+            <argument type="service" id="request_stack"/>
+        </service>
     </services>
 </container>
