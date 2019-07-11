@@ -12,6 +12,7 @@
             <argument type="service" id="router"/>
             <argument type="service" id="session"/>
             <argument type="service" id="request_stack"/>
+            <argument type="service" id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService"/>
         </service>
 
         <service id="zicht_twig_extension" class="Zicht\Bundle\FrameworkExtraBundle\Twig\Extension">
@@ -32,6 +33,10 @@
                 id="zicht_framework_extra.event_listener.update_schema_doctrine_command_listener"
                 class="Zicht\Bundle\FrameworkExtraBundle\EventListener\UpdateSchemaDoctrineCommandListener">
             <tag name="kernel.event_listener" event="console.command"/>
+        </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" class="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService">
+            <argument type="service" id="request_stack"/>
         </service>
     </services>
 </container>

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.1.0 - 2019-07-11
+### Added
+- Merge from 7.1.0.
+
 ## 8.0.6 - 2019-02-01
 ### Changed
 - Changed injection of own Translator because of deprecated translator.class parameter
@@ -38,6 +42,10 @@ Nothing so far
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
 
+## 7.1.0 - 2019-07-11
+### Added
+- Merge from 6.1.0.
+
 ## 7.0.0 - 2018-06-21
 - removed (unesesery) dependencie, fixed constraints and global namespaces
 - removed LiipImagine because logic was not working and a changed version
@@ -46,10 +54,21 @@ Nothing so far
 - removed unnecessary parameters of the embed helper and hard dependency of service container. The second
   request argument is removed of the handleForm method and $handlerCallback will only get the form.
   
+## 6.1.0 - 2019-07-11
+### Added
+- Merge from 5.4.0.
+
 ## 6.0.1 - 2018-04-03
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.4.0 - 2019-07-11
+### Added
+- Adds the `UrlCheckerService`.
+- The `EmbedHelper::getEmbedParams` and `EmbedHelper::handleForm` will not
+  accept a return_url or success_url when the `UrlCheckerService` considers
+  it to be unsafe.
 
 ## 5.3.0 - 2017-02-15
 ### Changed
