@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Zicht\Bundle\FrameworkExtraBundle\Http\JsonResponse;
+use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
@@ -86,15 +87,15 @@ class EmbedHelper
      *
      * @return array
      */
-    public function getEmbedParams()
+    public function getEmbedParams($checkSafety = true)
     {
         $params = array('return_url' => null, 'success_url' => null, 'do' => null);
 
         if ($returnUrl = $this->container->get('request')->get('return_url')) {
-            $params['return_url'] = $returnUrl;
+            $params['return_url'] = $checkSafety ? $this->container->get(UrlCheckerService::class)->getSafeUrl($returnUrl) : $returnUrl;
         }
         if ($successUrl = $this->container->get('request')->get('success_url')) {
-            $params['success_url'] = $successUrl;
+            $params['success_url'] = $checkSafety ? $this->container->get(UrlCheckerService::class)->getSafeUrl($successUrl) : $successUrl;
         }
         // eg: do=change
         if ($doAction = $this->container->get('request')->get('do')) {
@@ -154,8 +155,8 @@ class EmbedHelper
         } elseif ($request->getMethod() == 'POST') {
             $form->submit($request);
 
-            $returnUrl     = $request->get('return_url');
-            $successUrl    = $request->get('success_url');
+            $returnUrl     = $this->container->get(UrlCheckerService::class)->getSafeUrl($request->get('return_url'));
+            $successUrl    = $this->container->get(UrlCheckerService::class)->getSafeUrl($request->get('success_url'));
 
             $handlerResult = false;
 
