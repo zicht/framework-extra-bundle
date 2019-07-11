@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
@@ -46,18 +47,25 @@ class EmbedHelper
     protected $requestStack;
 
     /**
+     * @var UrlCheckerService
+     */
+    protected $urlChecker;
+
+    /**
      * EmbedHelper constructor.
      *
      * @param RouterInterface $router
      * @param Session $session
      * @param RequestStack $requestStack
+     * @param UrlCheckerService $urlChecker
      * @param bool $markExceptionsAsFormErrors
      */
-    public function __construct(RouterInterface $router, SessionInterface $session, RequestStack $requestStack, $markExceptionsAsFormErrors = false)
+    public function __construct(RouterInterface $router, SessionInterface $session, RequestStack $requestStack, UrlCheckerService $urlChecker, $markExceptionsAsFormErrors = false)
     {
         $this->router = $router;
         $this->session = $session;
         $this->requestStack = $requestStack;
+        $this->urlChecker = $urlCheker;
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 
@@ -96,13 +104,14 @@ class EmbedHelper
     /**
      * Returns the parameters to add to an embedded url from the current request.
      *
+     * @param bool $checkSafety
      * @return array
      */
-    public function getEmbedParams()
+    public function getEmbedParams($checkSafety = true)
     {
         return [
-            'return_url' => $this->getParamFromRequest('return_url'),
-            'success_url' => $this->getParamFromRequest('success_url'),
+            'return_url' => $this->getParamFromRequest('return_url', $checkSafety),
+            'success_url' => $this->getParamFromRequest('success_url', $checkSafety),
             // eg: do=change
             'do' => $this->getParamFromRequest('do')
         ];
@@ -112,21 +121,22 @@ class EmbedHelper
      * search for a param value in the request stack, start in current
      * and bubble up till master request when not found.
      *
+     * @param bool $checkSafety
      * @param string $name
      * @return mixed|null
      */
-    protected function getParamFromRequest($name)
+    protected function getParamFromRequest($name, $checkSafety = true)
     {
         if (null !== $value = $this->requestStack->getCurrentRequest()->get($name)) {
-            return $value;
+            return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
         if ((null !== $request = $this->requestStack->getParentRequest()) && null !== $value = $request->get($name)) {
-            return $value;
+            return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
         if ((null !== $request = $this->requestStack->getMasterRequest()) && null !== $value = $request->get($name)) {
-            return $value;
+            return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
         return null;
@@ -187,8 +197,8 @@ class EmbedHelper
             $form->handleRequest($request);
         } elseif ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
-            $returnUrl = $request->get('return_url');
-            $successUrl = $request->get('success_url');
+            $returnUrl = $this->urlChecker->get(UrlCheckerService::class)->getSafeUrl($request->get('return_url'));
+            $successUrl = $this->urlChecker->get(UrlCheckerService::class)->getSafeUrl($request->get('success_url'));
             $handlerResult = false;
 
             // if it is valid, we can use the callback to handle the actual handling
