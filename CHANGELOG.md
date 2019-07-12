@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 7.1.1 - 2019-07-12
+### Fixed
+- Fixed but introduced by the previous merge.  This caused the
+  `EmbedHelper` to fail, as it was using undefined parameters.
+
 ## 7.1.0 - 2019-07-11
 ### Added
 - Merge from 6.1.0.
