@@ -7,8 +7,11 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
 
 class MockType extends Form\AbstractType
@@ -45,6 +48,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
      */
     protected $request;
 
+    /** @var UrlCheckerService */
+    protected $urlChecker;
+
     function setUp()
     {
         $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper(self::$container);
@@ -52,6 +58,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
         $this->request = new \Symfony\Component\HttpFoundation\Request();
         $this->request->setSession($this->session);
         self::$container->set('request', $this->request);
+
+        $this->urlChecker = new UrlCheckerService($this->getRequestStackMock(), ['/.*/']);
+        self::$container->set(UrlCheckerService::class, $this->urlChecker);
 
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
@@ -140,5 +149,20 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     {
         $form = $this->form;
         $this->assertInternalType('string', $this->helper->getFormId($form));
+    }
+
+    /**
+     * @param string $host
+     * @return \PHPUnit_Framework_MockObject_MockObject|RequestStack
+     */
+    private function getRequestStackMock($host = 'localhost')
+    {
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(['getHost'])->getMock();
+        $requestMock->method('getHost')->willReturn($host);
+
+        $requestStackMock = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->setMethods(['getMasterRequest'])->getMock();
+        $requestStackMock->method('getMasterRequest')->willReturn($requestMock);
+
+        return $requestStackMock;
     }
 }
