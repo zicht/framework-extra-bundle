@@ -64,7 +64,7 @@ class EmbedHelper
         $this->router = $router;
         $this->session = $session;
         $this->requestStack = $requestStack;
-        $this->urlChecker = $urlCheker;
+        $this->urlChecker = $urlChecker;
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
 
@@ -196,8 +196,8 @@ class EmbedHelper
             $form->handleRequest($request);
         } elseif ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
-            $returnUrl = $this->urlChecker->get(UrlCheckerService::class)->getSafeUrl($request->get('return_url'));
-            $successUrl = $this->urlChecker->get(UrlCheckerService::class)->getSafeUrl($request->get('success_url'));
+            $returnUrl = $this->urlChecker->getSafeUrl($request->get('return_url'));
+            $successUrl = $this->urlChecker->getSafeUrl($request->get('success_url'));
             $handlerResult = false;
 
             // if it is valid, we can use the callback to handle the actual handling

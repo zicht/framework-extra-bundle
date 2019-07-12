@@ -6,8 +6,11 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
 
 class MockType extends Form\AbstractType
@@ -39,6 +42,9 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     /** @var \Symfony\Component\HttpFoundation\RequestStack */
     protected $request;
 
+    /** @var UrlCheckerService */
+    protected $urlChecker;
+
     function setUp()
     {
         $this->session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
@@ -46,9 +52,13 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
         $request = new \Symfony\Component\HttpFoundation\Request;
         $request->setSession($this->session);
         $this->request->push($request);
+
+        $this->urlChecker = $this->getMockBuilder(UrlCheckerService::class)->disableOriginalConstructor()->setMethods(['getSafeUrl'])->getMock();
+        $this->urlChecker->method('getSafeUrl')->willReturnArgument(0);
+
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper($this->router, $this->session, $this->request);
+        $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper($this->router, $this->session, $this->request, $this->urlChecker);
     }
 
 

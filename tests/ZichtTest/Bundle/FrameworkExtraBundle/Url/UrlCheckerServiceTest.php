@@ -13,43 +13,47 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmptyUrlIsUnsafe()
     {
-        $urlChecker = new UrlCheckerService($this->getRequestStack());
+        $urlChecker = new UrlCheckerService($this->getRequestStackMock());
         self::assertFalse($urlChecker->isSafeUrl(null));
         self::assertFalse($urlChecker->isSafeUrl(''));
     }
 
     public function testConfiguredMatch()
     {
-        $urlChecker = new UrlCheckerService($this->getRequestStack(), ['#safe#i']);
+        $urlChecker = new UrlCheckerService($this->getRequestStackMock(), ['#safe#i']);
         self::assertTrue($urlChecker->isSafeUrl('this is safe'));
         self::assertFalse($urlChecker->isSafeUrl('though shallt not pass'));
     }
 
     /**
-     * @param string $host
+     * @param string[] $hosts
      * @param string[] $urls
      * @dataProvider safeUrlsProvider
      */
-    public function testSafeUrls($host, array $urls)
+    public function testSafeUrls(array $hosts, array $urls)
     {
-        $urlChecker = new UrlCheckerService($this->getRequestStack($host));
-        foreach ($urls as $url) {
-            self::assertTrue($urlChecker->isSafeUrl($url), sprintf('Expecting host:"%s" url:"%s" to be safe', $host, $url));
-            self::assertEquals($url, $urlChecker->getSafeUrl($url, 'fallback'));
+        foreach ($hosts as $host) {
+            $urlChecker = new UrlCheckerService($this->getRequestStackMock($host));
+            foreach ($urls as $url) {
+                self::assertTrue($urlChecker->isSafeUrl($url), sprintf('Expecting host:"%s" url:"%s" to be safe', $host, $url));
+                self::assertEquals($url, $urlChecker->getSafeUrl($url, 'fallback'));
+            }
         }
     }
 
     /**
-     * @param string $host
+     * @param string[] $hosts
      * @param string[] $urls
      * @dataProvider unsafeUrlsProvider
      */
-    public function testUnsafeUrls($host, array $urls)
+    public function testUnsafeUrls(array $hosts, array $urls)
     {
-        $urlChecker = new UrlCheckerService($this->getRequestStack($host));
-        foreach ($urls as $url) {
-            self::assertFalse($urlChecker->isSafeUrl($url), sprintf('Expecting host:"%s" url:"%s" to be unsafe', $host, $url));
-            self::assertEquals('fallback', $urlChecker->getSafeUrl($url, 'fallback'));
+        foreach ($hosts as $host) {
+            $urlChecker = new UrlCheckerService($this->getRequestStackMock($host));
+            foreach ($urls as $url) {
+                self::assertFalse($urlChecker->isSafeUrl($url), sprintf('Expecting host:"%s" url:"%s" to be unsafe', $host, $url));
+                self::assertEquals('fallback', $urlChecker->getSafeUrl($url, 'fallback'));
+            }
         }
     }
 
@@ -60,13 +64,16 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'host' => 'zicht.nl',
+                'hosts' => [
+                    'nl',
+                    'zicht.nl',
+                    'www.zicht.nl',
+                    'foo.zicht.nl',
+                ],
                 'urls' => [
-                    // Relative urls
                     '/',
                     '/foo',
-
-                    // Absolute urls
+                    '/foo/',
                     '//www.zicht.nl',
                     '//www.zicht.nl/',
                     '//zicht.nl',
@@ -90,8 +97,21 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'host' => 'zicht.nl',
+                'hosts' => [
+                    'nl',
+                    'zicht.nl',
+                    'www.zicht.nl',
+                    'foo.zicht.nl',
+                ],
                 'urls' => [
+                    // incorrect urls
+                    '//',
+                    '//foo',
+                    '//foo/',
+                    'foo',
+                    'foo/',
+
+                    // external urls
                     '//example.com',
                     '//example.com/',
                     '//example.com/foo',
@@ -124,7 +144,7 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
      * @param string $host
      * @return \PHPUnit_Framework_MockObject_MockObject|RequestStack
      */
-    private function getRequestStack($host = 'localhost')
+    private function getRequestStackMock($host = 'localhost')
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(['getHost'])->getMock();
         $requestMock->method('getHost')->willReturn($host);
