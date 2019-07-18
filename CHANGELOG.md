@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 6.1.1 - 2019-07-18
+### Added
+- Merge from 5.4.1.
+
 ## 6.1.0 - 2019-07-11
 ### Added
 - Merge from 5.4.0.
@@ -16,6 +20,10 @@ Nothing so far
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.4.1 - 2019-07-18
+### Fixed
+- Fixed issue in `UrlCheckerService` where it would crash when no master request exists.
 
 ## 5.4.0 - 2019-07-11
 ### Added
