@@ -46,7 +46,7 @@ class UrlCheckerService
         $this->masterRequest = $requestStack->getMasterRequest();
         $this->safeUrlMatches = $safeUrlMatches;
 
-        if (empty($this->safeUrlMatches)) {
+        if ($this->masterRequest && empty($this->safeUrlMatches)) {
             // When no matches are configured we will accept relative urls
             // Do *not* tweak this matcher without running the unit tests
             $this->safeUrlMatches [] = '#^/([^/]|$)#';
