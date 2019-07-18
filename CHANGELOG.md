@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.1.2 - 2019-07-18
+### Added
+- Merge from 7.1.2.
+
 ## 8.1.1 - 2019-07-12
 ### Added
 - Merge from 7.1.1.
@@ -46,6 +50,10 @@ Nothing so far
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
 
+## 7.1.2 - 2019-07-18
+### Added
+- Merge from 6.1.1.
+
 ## 7.1.1 - 2019-07-12
 ### Fixed
 - Fixed but introduced by the previous merge.  This caused the
@@ -62,15 +70,23 @@ Nothing so far
 - the twig filter prefix_multiple and trans_multiple returns now a Generator instead of MapIterator.
 - removed unnecessary parameters of the embed helper and hard dependency of service container. The second
   request argument is removed of the handleForm method and $handlerCallback will only get the form.
-  
+
+## 6.1.1 - 2019-07-18
+### Added
+- Merge from 5.4.1.
+
 ## 6.1.0 - 2019-07-11
 ### Added
 - Merge from 5.4.0.
 
 ## 6.0.1 - 2018-04-03
-- Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
+- Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id.
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.4.1 - 2019-07-18
+### Fixed
+- Fixed issue in `UrlCheckerService` where it would crash when no master request exists.
 
 ## 5.4.0 - 2019-07-11
 ### Added
