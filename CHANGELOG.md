@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 5.4.1 - 2019-07-18
+### Fixed
+- Fixed issue in `UrlCheckerService` where it would crash when no master request exists.
+
 ## 5.4.0 - 2019-07-11
 ### Added
 - Adds the `UrlCheckerService`.
