@@ -22,13 +22,16 @@
     "autoload": {
         "psr-0": {
             "": [
-                "src/",
+                "src/"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "": [
                 "tests/"
             ]
-        },
-        "exclude-from-classmap": [
-            "/tests/"
-        ]
+        }
     },
     "minimum-stability": "stable",
     "license": "MIT",
