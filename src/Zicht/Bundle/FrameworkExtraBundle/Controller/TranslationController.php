@@ -6,8 +6,7 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package Zicht\Bundle\FrameworkExtraBundle\Controller
  */
-class TranslationController extends ContainerAware
+class TranslationController extends AbstractController
 {
     /**
      * Wrapper for the translator-service
@@ -71,8 +70,7 @@ class TranslationController extends ContainerAware
      */
     private function getTranslationsForDomainAndIds($locale, $domain, $ids)
     {
-        /** @var Translator $translator */
-        $translator = $this->container->get('translator');
+        $translator = $this->get('translator');
 
         $translations = [];
         foreach ($ids as $id) {
@@ -109,9 +107,6 @@ class TranslationController extends ContainerAware
      */
     private function getTranslationsForLocale($locale)
     {
-        /** @var Translator $translator */
-        $translator = $this->container->get('translator');
-
-        return $translator->getMessages($locale);
+        return $this->get('translator')->getMessages($locale);
     }
 }

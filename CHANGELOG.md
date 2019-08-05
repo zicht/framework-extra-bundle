@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.1.3 - 2019-08-05
+### Fixed
+- No longer using non existing `ContainerAware` class.  This no longer exists in
+  symfony 3.4.  Using `AbstractController` instead.
+
 ## 8.1.2 - 2019-07-18
 ### Added
 - Merge from 7.1.2.
