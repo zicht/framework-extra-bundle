@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.1.4 - 2019-09-20
+### Fixed
+- `UrlCheckerService` now supports subdomains with `-`
+
 ## 8.1.3 - 2019-08-05
 ### Fixed
 - No longer using non existing `ContainerAware` class.  This no longer exists in

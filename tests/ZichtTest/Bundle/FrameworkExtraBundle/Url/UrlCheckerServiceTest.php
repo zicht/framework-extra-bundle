@@ -69,6 +69,7 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
                     'zicht.nl',
                     'www.zicht.nl',
                     'foo.zicht.nl',
+                    'a-foo.zicht.nl'
                 ],
                 'urls' => [
                     '/',
@@ -85,6 +86,8 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
                     'https://www.zicht.nl/',
                     'https://zicht.nl',
                     'https://zicht.nl/',
+                    'https://foo.zicht.nl/abc',
+                    'https://a-foo.zicht.nl/abc',
                 ],
             ],
         ];

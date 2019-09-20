@@ -49,12 +49,12 @@ class UrlCheckerService
         if ($this->masterRequest && empty($this->safeUrlMatches)) {
             // When no matches are configured we will accept relative urls
             // Do *not* tweak this matcher without running the unit tests
-            $this->safeUrlMatches [] = '#^/([^/]|$)#';
+            $this->safeUrlMatches[] = '#^/([^/]|$)#';
 
             // When no matches are configured we will accept absolute urls to the same domain
             // Do *not* tweak this matcher without running the unit tests
             $hostParts = array_slice(explode('.', $this->masterRequest->getHost()), -2);
-            $this->safeUrlMatches [] = sprintf('#^((https?://)|(/{0,2}))?([a-z0-9.]+[.])?%s(/|$)#i', join('[.]', $hostParts));
+            $this->safeUrlMatches[] = sprintf('#^((https?://)|(/{0,2}))?([a-z0-9.\-]+[.])?%s(/|$)#i', join('[.]', $hostParts));
         }
     }
 
