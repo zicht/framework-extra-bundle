@@ -111,7 +111,9 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $loader->load('doctrine.xml');
+        if ($container->hasExtension('doctrine')) {
+            $loader->load('doctrine.xml');
+        }
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -123,7 +125,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
             $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
         }
-        
+
         if (!empty($config['requirejs'])) {
             if (!isset($config['requirejs_debug'])) {
                 $config['requirejs_debug']= $container->getParameter('kernel.debug');
@@ -131,7 +133,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
             $this->addRequirejsConfiguration($config['requirejs'], $config['requirejs_debug'], $container);
         }
-        
+
         if (!empty($config['embed_helper'])) {
             $container->getDefinition('zicht_embed_helper')
                 ->addMethodCall(
