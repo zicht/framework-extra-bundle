@@ -20,10 +20,6 @@ class RemoveExtensionsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasExtension('doctrine')) {
-            $container->removeDefinition('zicht_framework_extra.form.zicht_parent_choice_type');
-        }
-
         if (!$container->hasExtension('liip_imagine')) {
             $container->removeDefinition('zicht_framework_extra.imagine.match_filter_loader');
         }
