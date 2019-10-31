@@ -111,7 +111,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        if ($container->hasExtension('doctrine')) {
+        if (array_key_exists('DoctrineBundle', $container->getParameter('kernel.bundles'))) {
             $loader->load('doctrine.xml');
         }
 
