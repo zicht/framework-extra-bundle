@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.1.7 - 2020-01-29
+### Fixed
+- Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array. 
+  But is used as an array.
+
 ## 8.1.4 - 2019-09-20
 ### Fixed
 - `UrlCheckerService` now supports subdomains with `-`

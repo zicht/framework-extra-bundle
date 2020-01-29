@@ -156,7 +156,7 @@ class EmbedHelper
             // therefore convert the errors iterator to array, on get from session convert to iterator
             // see [1]
             $state  = $request->getSession()->get($formId);
-            $state['form_errors'] = is_array($state ['form_errors']) ? $state ['form_errors'] : [];
+            $state['form_errors'] = (is_array($state) && is_array($state['form_errors'])) ? $state['form_errors'] : [];
             $state['form_errors'] = new FormErrorIterator($form, $state['form_errors']);
         }
 
