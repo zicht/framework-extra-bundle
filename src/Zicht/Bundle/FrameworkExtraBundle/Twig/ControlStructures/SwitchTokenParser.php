@@ -5,12 +5,12 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Error_Syntax;
-use Twig_TokenParser;
-use Twig_Token;
-use Twig_Node;
+use Twig\Error\SyntaxError;
+use Twig\Node\Node;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
-class SwitchTokenParser extends Twig_TokenParser
+class SwitchTokenParser extends AbstractTokenParser
 {
     /**
      * {@inheritDoc}
@@ -23,36 +23,35 @@ class SwitchTokenParser extends Twig_TokenParser
     /**
      * {@inheritDoc}
      */
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $lineno = $token->getLine();
 
         $switchExpr = $this->parser->getExpressionParser()->parseExpression();
 
-        /** @var $stream Twig_TokenStream */
         $stream = $this->parser->getStream();
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
 
         // skip whitespace between switch and first case
-        while ($stream->test(Twig_Token::TEXT_TYPE)) {
+        while ($stream->test(Token::TEXT_TYPE)) {
             if (trim($stream->getCurrent()->getValue()) != '') {
                 $content = $stream->getCurrent()->getValue();
-                throw new Twig_Error_Syntax("Can not render content '$content' directly after switch", $stream->getCurrent()->getLine());
+                throw new SyntaxError("Can not render content '$content' directly after switch", $stream->getCurrent()->getLine());
             }
             $stream->next();
         }
-        $stream->expect(Twig_Token::BLOCK_START_TYPE);
+        $stream->expect(Token::BLOCK_START_TYPE);
 
         $tests = [];
 
         while (!$stream->test('endswitch')) {
-            $token = $stream->expect(Twig_Token::NAME_TYPE, ['case', 'default']);
+            $token = $stream->expect(Token::NAME_TYPE, ['case', 'default']);
             switch ($token->getValue()) {
                 case 'case':
                     $caseExpr = [];
                     $caseExpr[] = $this->parser->getExpressionParser()->parseExpression();
-                    while ($stream->test(Twig_Token::OPERATOR_TYPE, ',')) {
+                    while ($stream->test(Token::OPERATOR_TYPE, ',')) {
                         $stream->next();
                         $caseExpr[] = $this->parser->getExpressionParser()->parseExpression();
                     }
@@ -67,7 +66,7 @@ class SwitchTokenParser extends Twig_TokenParser
                 $stream->next();
                 $fallthrough = true;
             }
-            $stream->expect(Twig_Token::BLOCK_END_TYPE);
+            $stream->expect(Token::BLOCK_END_TYPE);
             $body = $this->parser->subparse([$this, 'decideSwitchFork']);
 
             $tests[] = new SwitchCaseNode(
@@ -80,16 +79,16 @@ class SwitchTokenParser extends Twig_TokenParser
         }
 
         $stream->expect('endswitch');
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new SwitchNode(new \Twig_Node($tests), $switchExpr, $lineno);
+        return new SwitchNode(new Node($tests), $switchExpr, $lineno);
     }
 
 
     /**
      * Checks if the token is part of the current control structure.
      *
-     * @param Twig_Token $token
+     * @param Token $token
      * @return mixed
      */
     public function decideSwitchFork($token)

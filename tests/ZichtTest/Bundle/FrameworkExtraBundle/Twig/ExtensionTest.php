@@ -62,7 +62,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $filterName
-     * @return \Twig_SimpleFilter
+     * @return \Twig\TwigFilter
      */
     private function getFilter($filterName)
     {

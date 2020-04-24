@@ -12,7 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\MemoryPeakUsageProcessor;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Zicht\Util\Mutex;
@@ -21,7 +21,7 @@ use Zicht\Util\Str;
 /**
  * Simple utility class for console applications. Uses Monolog for logging and error/exception reporting.
  */
-abstract class AbstractCronCommand extends ContainerAwareCommand
+abstract class AbstractCronCommand extends Command
 {
     /**
      * @var bool If the application was neatly cleaned up, this is set to true, and the endOfScript() method will not issue an error
@@ -37,6 +37,15 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      * @var bool Set this to a filename if a mutex should be used.
      */
     protected $mutex = false;
+
+    /** @var string */
+    protected $cacheDir;
+
+    public function __construct(string $cacheDir, string $name = null)
+    {
+        parent::__construct($name);
+        $this->cacheDir = $cacheDir;
+    }
 
     /**
      * Initialize the logger and attach it to error/exception handling and the clean shutdown function.
@@ -193,7 +202,7 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
         $file = false;
 
         if (true === $this->mutex) {
-            $file = $this->getContainer()->getParameter('kernel.cache_dir')
+            $file = $this->cacheDir
                 . '/'
                 . Str::dash(lcfirst(Str::classname(get_class($this))))
                 . '.lock';

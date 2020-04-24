@@ -5,8 +5,9 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,15 +18,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Results are sorted by size descending.
  */
-class ListUserImagesCommand extends ContainerAwareCommand
+class ListUserImagesCommand extends Command
 {
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'zicht:content:list-images';
+
+    /** @var ManagerRegistry */
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine, string $name = null)
+    {
+        $this->doctrine = $doctrine;
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritDoc}
      */
     protected function configure()
     {
         $this
-            ->setName('zicht:content:list-images')
             ->addArgument('entity', InputArgument::REQUIRED, 'The entity to query. Example: ZichtWebsiteBundle:Page:ContentPage ')
             ->addArgument('fields', InputArgument::REQUIRED, 'The fields to check for images, comma seperated. Example: body,teaser')
             ->addOption('concat', 'c', InputOption::VALUE_OPTIONAL, 'Optional concatenation string. Example: -c "CONCAT(\'http://www.krollermuller.nl/\', p.language, \'/\', p.id)" ')
@@ -38,7 +52,7 @@ class ListUserImagesCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em = $this->doctrine->getManager();
 
         $userFields = explode(',', $input->getArgument('fields'));
         $fields = [];

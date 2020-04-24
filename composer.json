@@ -10,8 +10,11 @@
     ],
     "require": {
         "php": "^7",
-        "symfony/symfony": "^3.4",
-        "twig/twig": "^2",
+        "symfony/console": "^4.4",
+        "symfony/form": "^4.4",
+        "symfony/http-foundation": "^4.4",
+        "symfony/routing": "^4.4",
+        "twig/twig": "^2 || ^3",
         "zicht/util": "~1.1"
     },
     "require-dev": {

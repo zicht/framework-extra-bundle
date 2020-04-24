@@ -5,21 +5,20 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Node;
-use Twig_NodeInterface;
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * Represents a 'switch' statement
  */
-class SwitchNode extends Twig_Node
+class SwitchNode extends Node
 {
     /**
-     * @param \Twig_Node $cases
-     * @param \Twig_Node $expression
+     * @param Node $cases
+     * @param Node $expression
      * @param int $line
      */
-    public function __construct(\Twig_Node $cases, \Twig_Node $expression, $line)
+    public function __construct(Node $cases, Node $expression, $line)
     {
         parent::__construct(
             [
@@ -33,10 +32,10 @@ class SwitchNode extends Twig_Node
 
 
     /**
-     * @param \Twig_Compiler $compiler
+     * @param Compiler $compiler
      * @return void
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 

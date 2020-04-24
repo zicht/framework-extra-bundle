@@ -18,8 +18,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('zicht_framework_extra');
+        $treeBuilder = new TreeBuilder('zicht_framework_extra');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
