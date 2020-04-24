@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Util;
@@ -23,7 +23,7 @@ class SortedSetMap
      *
      * @param array $values
      */
-    public function __construct($values = array())
+    public function __construct($values = [])
     {
         $this->setValues($values);
     }
@@ -37,7 +37,7 @@ class SortedSetMap
      */
     public function setValues($values)
     {
-        $this->values = array();
+        $this->values = [];
         foreach ($values as $key => $value) {
             $this->replace($key, (array)$value);
         }
@@ -88,7 +88,7 @@ class SortedSetMap
             return $this->values[$key]->toArray();
         }
 
-        return array();
+        return [];
     }
 
 
@@ -190,7 +190,7 @@ class SortedSetMap
      */
     public function toArray()
     {
-        $ret = array();
+        $ret = [];
         foreach (array_keys($this->values) as $key) {
             $ret[$key] = $this->get($key);
         }

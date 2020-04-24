@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
 use Twig_Error_Syntax;
@@ -9,15 +10,10 @@ use Twig_TokenParser;
 use Twig_Token;
 use Twig_Node;
 
-/**
- * Class SwitchTokenParser
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures
- */
 class SwitchTokenParser extends Twig_TokenParser
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTag()
     {
@@ -25,7 +21,7 @@ class SwitchTokenParser extends Twig_TokenParser
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function parse(Twig_Token $token)
     {
@@ -48,13 +44,13 @@ class SwitchTokenParser extends Twig_TokenParser
         }
         $stream->expect(Twig_Token::BLOCK_START_TYPE);
 
-        $tests = array();
+        $tests = [];
 
         while (!$stream->test('endswitch')) {
-            $token = $stream->expect(Twig_Token::NAME_TYPE, array('case', 'default'));
+            $token = $stream->expect(Twig_Token::NAME_TYPE, ['case', 'default']);
             switch ($token->getValue()) {
                 case 'case':
-                    $caseExpr   = array();
+                    $caseExpr = [];
                     $caseExpr[] = $this->parser->getExpressionParser()->parseExpression();
                     while ($stream->test(Twig_Token::OPERATOR_TYPE, ',')) {
                         $stream->next();
@@ -72,7 +68,7 @@ class SwitchTokenParser extends Twig_TokenParser
                 $fallthrough = true;
             }
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
-            $body = $this->parser->subparse(array($this, 'decideSwitchFork'));
+            $body = $this->parser->subparse([$this, 'decideSwitchFork']);
 
             $tests[] = new SwitchCaseNode(
                 $body,
@@ -98,6 +94,6 @@ class SwitchTokenParser extends Twig_TokenParser
      */
     public function decideSwitchFork($token)
     {
-        return $token->test(array('case', 'default', 'endswitch'));
+        return $token->test(['case', 'default', 'endswitch']);
     }
 }

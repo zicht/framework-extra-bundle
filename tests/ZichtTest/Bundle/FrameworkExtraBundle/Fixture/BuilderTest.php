@@ -1,8 +1,11 @@
 <?php
+// phpcs:ignoreFile
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
+
     use Zicht\Bundle\FrameworkExtraBundle\Fixture\Builder;
 
     class BuilderTest extends \PHPUnit_Framework_TestCase
@@ -11,10 +14,10 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
 
         function setUp()
         {
-            $this->builder = Builder::create(array('ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets'));
+            $this->builder = Builder::create(['ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets']);
         }
 
-        function testBuilderCallsSetterOnEnd()
+        public function testBuilderCallsSetterOnEnd()
         {
             $a = $this->builder->A()->B()->end()->peek();
 
@@ -23,7 +26,7 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         }
 
 
-        function testBuilderCallsParentSetterOnEnd()
+        public function testBuilderCallsParentSetterOnEnd()
         {
             $a = $this->builder->A()->B()->end()->peek();
 
@@ -32,7 +35,7 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         }
 
 
-        function testBuilderCallsChildAdder()
+        public function testBuilderCallsChildAdder()
         {
             $a = $this->builder->A()->A()->end()->peek();
             $this->assertGreaterThan(0, count($a->children));
@@ -41,14 +44,14 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             $this->assertInstanceOf('ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets\A', $child);
         }
 
-        function testCustomSetter()
+        public function testCustomSetter()
         {
             $a = $this->builder->A()->B()->end('customSetter')->peek();
             $this->assertInstanceOf('ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets\B', $a->customSet);
         }
 
 
-        function testBuilderCallsSetParentIfSameClass()
+        public function testBuilderCallsSetParentIfSameClass()
         {
             $a = $this->builder->A()->A()->end()->peek();
             $this->assertGreaterThan(0, count($a->children));
@@ -58,19 +61,19 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         }
 
 
-
-        function testCallerIsAlwaysCalled()
+        public function testCallerIsAlwaysCalled()
         {
-            $calls = array();
-            $this->builder->always(function($obj) use(&$calls) {
-                $calls[spl_object_hash($obj)]= $obj;
+            $calls = [];
+            $this->builder->always(function ($obj) use (&$calls) {
+                $calls[spl_object_hash($obj)] = $obj;
             });
             $this->builder->A()->A()->end()->end();
             $this->assertEquals(2, count($calls));
         }
 
 
-        function testMethodCall() {
+        public function testMethodCall()
+        {
             $a = $this->builder->A()->setSomething('foo')->peek();
             $this->assertEquals('foo', $a->getSomething());
         }
@@ -79,7 +82,8 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         /**
          * @expectedException \BadMethodCallException
          */
-        function testBadMethodCall() {
+        public function testBadMethodCall()
+        {
             $this->builder->A()->setSomethingElse('foo');
         }
 
@@ -87,60 +91,71 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         /**
          * @expectedException \UnexpectedValueException
          */
-        function testEmptyStack() {
+        public function testEmptyStack()
+        {
             $this->builder->A()->end()->end();
         }
 
         /**
          * @expectedException \UnexpectedValueException
          */
-        function testEmptyStackPeek() {
+        public function testEmptyStackPeek()
+        {
             $this->builder->A()->end()->peek();
         }
     }
 }
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets {
-    class A {
+    class A
+    {
         public $b;
         public $children;
         public $parent;
         public $something;
 
-        function addB(B $b) {
-            $this->b[]= $b;
+        function addB(B $b)
+        {
+            $this->b[] = $b;
         }
 
 
-        function addChildren(A $a) {
-            $this->children[]= $a;
+        function addChildren(A $a)
+        {
+            $this->children[] = $a;
         }
 
 
-        function setParent(A $a) {
+        function setParent(A $a)
+        {
             $this->parent = $a;
         }
 
 
-        function customSetter(B $b) {
+        function customSetter(B $b)
+        {
             $this->customSet = $b;
         }
 
 
-        function setSomething($something) {
+        function setSomething($something)
+        {
             $this->something = $something;
         }
 
 
-        function getSomething() {
+        function getSomething()
+        {
             return $this->something;
         }
     }
 
-    class B {
+    class B
+    {
         public $a;
 
-        function setA(A $a) {
+        function setA(A $a)
+        {
             $this->a = $a;
         }
     }

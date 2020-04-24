@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
@@ -18,8 +18,6 @@ use Twig_Compiler;
 class StrictNode extends \Twig_Node
 {
     /**
-     * Compile
-     *
      * @param Twig_Compiler $compiler
      */
     public function compile(Twig_Compiler $compiler)

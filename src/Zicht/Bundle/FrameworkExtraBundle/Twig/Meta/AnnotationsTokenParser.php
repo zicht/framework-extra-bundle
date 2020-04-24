@@ -1,16 +1,12 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Token;
 
-/**
- * Class AnnotationsTokenParser
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
- */
 class AnnotationsTokenParser extends \Twig_TokenParser
 {
     /**
@@ -25,11 +21,11 @@ class AnnotationsTokenParser extends \Twig_TokenParser
         $stream = $this->parser->getStream();
 
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse(array($this, 'decideEndAnnotations'));
+        $body = $this->parser->subparse([$this, 'decideEndAnnotations']);
         $stream->expect('endannotations');
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        return new AnnotationsNode(array('body' => $body));
+        return new AnnotationsNode(['body' => $body]);
     }
 
     /**
@@ -43,8 +39,6 @@ class AnnotationsTokenParser extends \Twig_TokenParser
     }
 
     /**
-     * Decide end annotations
-     *
      * @param string $token
      * @return mixed
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://www.zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Translation;
@@ -20,9 +20,9 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 class Translator extends BaseTranslator
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function trans($id, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function trans($id, array $parameters = [], $domain = 'messages', $locale = null)
     {
         if (null === $locale) {
             $locale = $this->getLocale();
@@ -32,10 +32,10 @@ class Translator extends BaseTranslator
             if (null === $domain) {
                 $domain = 'messages';
             }
-            $parts = array(
+            $parts = [
                 sprintf('{%s', $id),
                 sprintf('@%s', $domain),
-            );
+            ];
             if (!empty($parameters)) {
                 $parts [] = json_encode($parameters);
             }
@@ -47,9 +47,9 @@ class Translator extends BaseTranslator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function transChoice($id, $number, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function transChoice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
     {
         if (null === $locale) {
             $locale = $this->getLocale();
@@ -59,11 +59,11 @@ class Translator extends BaseTranslator
             if (null === $domain) {
                 $domain = 'messages';
             }
-            $parts = array(
+            $parts = [
                 sprintf('{%s', $id),
                 sprintf('#%s', $number),
                 sprintf('@%s', $domain),
-            );
+            ];
             if (!empty($parameters)) {
                 $parts [] = sprintf('[%s]', join(', ', array_keys($parameters)));
             }

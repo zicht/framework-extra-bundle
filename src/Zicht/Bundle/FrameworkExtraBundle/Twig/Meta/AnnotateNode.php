@@ -1,23 +1,17 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Node;
 use Twig_Compiler;
 use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExtension;
 
-/**
- * Class AnnotateNode
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
- */
 class AnnotateNode extends Twig_Node
 {
     /**
-     * Compile
-     *
      * @param Twig_Compiler $compiler
      */
     public function compile(Twig_Compiler $compiler)

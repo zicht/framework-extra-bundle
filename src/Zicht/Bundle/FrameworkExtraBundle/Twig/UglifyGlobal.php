@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
@@ -11,8 +11,6 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
 {
     /**
-     * Constructor
-     *
      * @param array $config
      * @param bool $debug
      */
@@ -60,7 +58,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
 
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetExists($offset)
     {
@@ -68,22 +66,22 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetGet($offset)
     {
         if ($this->debug) {
             return array_map(
-                array($this, 'getSourceFile'),
+                [$this, 'getSourceFile'],
                 $this->config['resources'][$offset]['files']
             );
         } else {
-            return array($this->getTargetFile($offset));
+            return [$this->getTargetFile($offset)];
         }
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -91,7 +89,7 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetUnset($offset)
     {
@@ -99,11 +97,11 @@ class UglifyGlobal implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getIterator()
     {
-        $ret = array();
+        $ret = [];
         foreach (array_keys($this->config['resources']) as $key) {
             $ret[$key] = $this[$key];
         }

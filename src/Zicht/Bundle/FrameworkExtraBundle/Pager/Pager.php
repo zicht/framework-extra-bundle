@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Pager;
 
 /**
@@ -9,26 +10,37 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Pager;
  */
 class Pager implements \Iterator, \ArrayAccess, \Countable
 {
-    private $currentPage;
+    /** @var int */
+    private $currentPage = -1;
+
+    /** @var int|null */
     private $total;
-    private $numPages;
-    private $offset;
-    private $lengthOfRange;
-    private $itemsPerPage;
+
+    /** @var int */
+    private $numPages = -1;
+
+    /** @var int */
+    private $offset = -1;
+
+    /** @var int */
+    private $lengthOfRange = -1;
+
+    /** @var int */
+    private $itemsPerPage = -1;
+
+    /** @var Pageable */
     private $results;
 
     /**
-     * Used for iterator implementation
-     *
-     * @var null
+     * @var int|null Used for iterator implementation
      */
-    private $ptr = null;
+    private $ptr;
 
     /**
      * Constructs the pager with the given set of elements to page over, and the given amount of items per page.
      *
-     * @param \Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable $pagable
-     * @param int                                               $itemsPerPage
+     * @param Pageable $pagable
+     * @param int $itemsPerPage
      */
     public function __construct(Pageable $pagable, $itemsPerPage)
     {
@@ -55,7 +67,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     public function setItemsPerPage($itemsPerPage)
     {
         if ($itemsPerPage <= 0) {
-            throw new \InvalidArgumentException("Number of items per page must be positive integer");
+            throw new \InvalidArgumentException('Number of items per page must be positive integer');
         }
         $this->itemsPerPage = $itemsPerPage;
     }
@@ -81,7 +93,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
         }
         if ((int)$page != $page) {
             throw new \InvalidArgumentException(
-                "Invalid argument \$page, expected integer number, got " . gettype($page)
+                'Invalid argument $page, expected integer number, got ' . gettype($page)
             );
         }
         $this->numPages = (int)ceil($this->total / $this->itemsPerPage);
@@ -148,7 +160,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
      */
     public function getRange()
     {
-        return array($this->getRangeStart(), $this->getRangeEnd());
+        return [$this->getRangeStart(), $this->getRangeEnd()];
     }
 
 
@@ -238,13 +250,13 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
      */
     private function itemAt($i)
     {
-        return array(
+        return [
             'index' => $i,
             'title' => $i + 1,
             'is_previous' => $i == ($this->currentPage - 1),
             'is_current' => $i == $this->currentPage,
             'is_next' => $i == ($this->currentPage + 1)
-        );
+        ];
     }
 
     /**
@@ -379,8 +391,6 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     }
 
     /**
-     * With gaps
-     *
      * @param int $surround
      * @return array
      */
@@ -397,7 +407,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
                 $isPreviousGap = false;
             } elseif (!$isPreviousGap) {
                 $isPreviousGap = true;
-                $ret[$i]= null;
+                $ret[$i] = null;
             }
         }
 

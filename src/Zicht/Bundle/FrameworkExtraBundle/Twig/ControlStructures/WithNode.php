@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
@@ -13,8 +13,6 @@ use Twig_Compiler;
 class WithNode extends \Twig_Node
 {
     /**
-     * Constructs the node.
-     *
      * @param array $items
      * @param array $body
      * @param int $options
@@ -24,8 +22,8 @@ class WithNode extends \Twig_Node
     public function __construct($items, $body, $options, $line, $tag)
     {
         parent::__construct(
-            array('body' => $body),
-            array('items' => $items, 'options' => $options),
+            ['body' => $body],
+            ['items' => $items, 'options' => $options],
             $line,
             $tag
         );
@@ -47,8 +45,6 @@ class WithNode extends \Twig_Node
 
 
     /**
-     * Compiles the node.
-     *
      * @param \Twig_Compiler $compiler
      * @return void
      */
@@ -67,7 +63,7 @@ class WithNode extends \Twig_Node
         $compiler->write('$values = array_merge(' . "\n")->indent();
         $i = 0;
         foreach ($this->getAttribute('items') as $argument) {
-            if ($i ++ > 0) {
+            if ($i++ > 0) {
                 $compiler->raw(',' . "\n");
             }
             $this->compileArgument($compiler, $argument);
@@ -104,8 +100,6 @@ class WithNode extends \Twig_Node
 
 
     /**
-     * Compiles the 'with' argument.
-     *
      * @param Twig_Compiler $compiler
      * @param mixed $argument
      * @return void

@@ -1,16 +1,12 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
 use Twig_Token;
 
-/**
- * Class AnnotateTokenParser
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig\Meta
- */
 class AnnotateTokenParser extends \Twig_TokenParser
 {
     /**
@@ -24,16 +20,16 @@ class AnnotateTokenParser extends \Twig_TokenParser
     {
         $stream = $this->parser->getStream();
 
-        $info = array();
+        $info = [];
         $first = $this->parser->getExpressionParser()->parseExpression();
 
         if ($stream->test(Twig_Token::BLOCK_END_TYPE)) {
-            $info['expr']= $first;
+            $info['expr'] = $first;
         } else {
-            $info['name']= $first;
-            $info['expr']= $this->parser->getExpressionParser()->parseExpression();
+            $info['name'] = $first;
+            $info['expr'] = $this->parser->getExpressionParser()->parseExpression();
             if (!$stream->test(Twig_Token::BLOCK_END_TYPE)) {
-                $info['prio']= $this->parser->getExpressionParser()->parseExpression();
+                $info['prio'] = $this->parser->getExpressionParser()->parseExpression();
             }
         }
 

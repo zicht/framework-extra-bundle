@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Tests;
@@ -10,7 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
-    static $testParams = array();
+    /** @var array */
+    protected static $testParams = [];
 
     protected function requireTestParams()
     {

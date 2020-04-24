@@ -1,12 +1,12 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use Twig_Compiler;
 use Symfony\Bundle\TwigBundle\Node\RenderNode as BaseRenderNode;
+use Twig_Compiler;
 
 /**
  * This decorator makes sure that if a {% render ... %} is used in Twig, the embed parameters (success_url, return_url)
@@ -17,8 +17,6 @@ use Symfony\Bundle\TwigBundle\Node\RenderNode as BaseRenderNode;
 class DecoratedRenderNode extends \Twig_Node
 {
     /**
-     * DecoratedRenderNode constructor.
-     *
      * @param BaseRenderNode $wrappedNode
      */
     public function __construct(BaseRenderNode $wrappedNode)
@@ -28,8 +26,6 @@ class DecoratedRenderNode extends \Twig_Node
     }
 
     /**
-     * Compile
-     *
      * @param Twig_Compiler $compiler
      */
     public function compile(Twig_Compiler $compiler)

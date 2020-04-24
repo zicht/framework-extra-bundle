@@ -1,21 +1,16 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 /**
- * Class RequirejsGlobal
  * Helper twig global for zicht_requirejs configuration
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig
  */
 class RequirejsGlobal
 {
     /**
-     * Constructor
-     *
      * @param array $config
      * @param bool $debug
      */

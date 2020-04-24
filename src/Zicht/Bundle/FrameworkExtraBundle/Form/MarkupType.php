@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://www.zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -24,13 +25,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *      Use in your form builder like this:
  *
  *           $formMapper->add('teaserExplanation', 'zicht_markup_type', ['inherit_data' => true, 'markup' => 'admin.help.teaser_info'])
- *
- * @package Zicht\Bundle\MokveldSiteBundle\Form\Type
  */
 class MarkupType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -39,7 +38,7 @@ class MarkupType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -48,7 +47,7 @@ class MarkupType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getParent()
     {
@@ -56,15 +55,7 @@ class MarkupType extends AbstractType
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'zicht_markup_type';
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getBlockPrefix()
     {

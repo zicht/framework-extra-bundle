@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Url;
@@ -69,7 +69,7 @@ class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
                     'zicht.nl',
                     'www.zicht.nl',
                     'foo.zicht.nl',
-                    'a-foo.zicht.nl'
+                    'a-foo.zicht.nl',
                 ],
                 'urls' => [
                     '/',

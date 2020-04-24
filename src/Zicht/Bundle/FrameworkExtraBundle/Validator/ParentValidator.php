@@ -1,17 +1,12 @@
 <?php
 /**
- * @copyright Zicht Online <http://www.zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Validator;
 
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-/**
- * Class ParentValidator
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Validator
- */
 class ParentValidator
 {
     /**
