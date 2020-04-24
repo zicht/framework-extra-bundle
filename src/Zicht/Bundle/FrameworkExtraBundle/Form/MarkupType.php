@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *           form:
  *              resources:
  *                  ....
- *                  - 'ZichtFrameworkExtraBundle::form_theme.html.twig'
+ *                  - '@ZichtFrameworkExtra/form_theme.html.twig'
  *
  *      Use in your form builder like this:
  *

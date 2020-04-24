@@ -70,7 +70,8 @@ class Translator extends BaseTranslator
             $parts [] = '}';
             return join('', $parts);
         } else {
-            return parent::transChoice($id, $number, $parameters, $domain, $locale);
+            $parameters['%count%'] = $number;
+            return parent::trans($id, $parameters, $domain, $locale);
         }
     }
 }

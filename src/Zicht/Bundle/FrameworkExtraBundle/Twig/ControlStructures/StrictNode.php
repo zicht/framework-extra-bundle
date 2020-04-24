@@ -5,7 +5,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * A 'strict' node wraps the contents within a 'true' or 'false' setting for the strict_variables option.
@@ -15,12 +16,12 @@ use Twig_Compiler;
  *
  * After the node ends, the original value the block started with (whether it was true or false) is restored.
  */
-class StrictNode extends \Twig_Node
+class StrictNode extends Node
 {
     /**
-     * @param Twig_Compiler $compiler
+     * @param Compiler $compiler
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)

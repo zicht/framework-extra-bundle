@@ -9,9 +9,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TranslationController extends AbstractController
 {
+    /** {@inheritDoc} */
+    public static function getSubscribedServices()
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            ['translator' => '?' . TranslatorInterface::class]
+        );
+    }
+
     /**
      * Wrapper for the translator-service
      *

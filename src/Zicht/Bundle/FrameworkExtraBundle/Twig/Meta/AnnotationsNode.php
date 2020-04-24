@@ -5,16 +5,16 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
-use Twig_Node;
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Node;
 use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExtension;
 
-class AnnotationsNode extends Twig_Node
+class AnnotationsNode extends Node
 {
     /**
-     * @param Twig_Compiler $compiler
+     * @param Compiler $compiler
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 

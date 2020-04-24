@@ -5,8 +5,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Token;
-use Twig_NodeInterface;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
 /**
  * The 'with' tag allows a scope-shift into a defined array. The format is as follows:
@@ -15,7 +15,7 @@ use Twig_NodeInterface;
  *     content
  * {% endwith %}
  */
-class WithTokenParser extends \Twig_TokenParser
+class WithTokenParser extends AbstractTokenParser
 {
     /** @var string[] */
     private $options = [
@@ -37,10 +37,10 @@ class WithTokenParser extends \Twig_TokenParser
     /**
      * Parses a token and returns a node.
      *
-     * @param Twig_Token $token A Twig_Token instance
+     * @param Token $token A Token instance
      * @return Twig_NodeInterface A Twig_NodeInterface instance
      */
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $options = [];
         $stream = $this->parser->getStream();
@@ -50,15 +50,15 @@ class WithTokenParser extends \Twig_TokenParser
             $value = $this->parser->getExpressionParser()->parseExpression();
             if ($stream->test('as')) {
                 $stream->expect('as');
-                $name = $stream->expect(Twig_Token::NAME_TYPE)->getValue();
+                $name = $stream->expect(Token::NAME_TYPE)->getValue();
             } else {
                 $name = null;
             }
             $arguments[] = ['name' => $name, 'value' => $value];
 
-            $end = !$stream->test(Twig_Token::PUNCTUATION_TYPE, ',');
+            $end = !$stream->test(Token::PUNCTUATION_TYPE, ',');
             if (!$end) {
-                $stream->expect(Twig_Token::PUNCTUATION_TYPE, ',');
+                $stream->expect(Token::PUNCTUATION_TYPE, ',');
             }
         } while (!$end);
 
@@ -66,9 +66,9 @@ class WithTokenParser extends \Twig_TokenParser
             $options[] = $stream->expect($this->options)->getValue();
         }
 
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse([$this, 'decideWithEnd'], true);
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
         return new WithNode($arguments, $body, $options, $start->getLine(), $start->getValue());
     }
 
@@ -76,7 +76,7 @@ class WithTokenParser extends \Twig_TokenParser
     /**
      * Checks for the end of the control structure.
      *
-     * @param Twig_Token $token
+     * @param Token $token
      * @return bool
      */
     public function decideWithEnd($token)

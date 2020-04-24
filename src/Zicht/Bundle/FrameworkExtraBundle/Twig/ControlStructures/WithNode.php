@@ -5,12 +5,13 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * Represents a 'with' node.
  */
-class WithNode extends \Twig_Node
+class WithNode extends Node
 {
     /**
      * @param array $items
@@ -48,7 +49,7 @@ class WithNode extends \Twig_Node
      * @param \Twig_Compiler $compiler
      * @return void
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)

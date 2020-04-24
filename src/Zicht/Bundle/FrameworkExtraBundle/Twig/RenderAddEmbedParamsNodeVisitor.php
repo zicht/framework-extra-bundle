@@ -5,16 +5,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use Twig_NodeVisitorInterface;
-use Twig_NodeInterface;
-use Twig_Environment;
+use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use Twig\Environment;
+use Twig\Node\Expression\ArrayExpression;
+use Twig\Node\Node;
+use Twig\NodeVisitor\NodeVisitorInterface;
 
-class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
+class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function enterNode(\Twig_Node $node, Twig_Environment $env)
+    public function enterNode(Node $node, Environment $env): Node
     {
         return $node;
     }
@@ -22,19 +24,19 @@ class RenderAddEmbedParamsNodeVisitor implements Twig_NodeVisitorInterface
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(\Twig_Node $node, Twig_Environment $env)
+    public function leaveNode(Node $node, Environment $env): Node
     {
-        if ($node instanceof \Twig_Node_Expression_Function) {
+        if ($node instanceof ExpressionFunction) {
             if ($node->getAttribute('name') === 'controller') {
                 $args = $node->getNode('arguments');
                 if (!$args->hasNode(1)) {
-                    $args->setNode(1, new \Twig_Node_Expression_Array([], $node->getTemplateLine()));
+                    $args->setNode(1, new ArrayExpression([], $node->getTemplateLine()));
                 }
                 $args->setNode(
                     1,
-                    new \Twig_Node_Expression_Function(
+                    new ExpressionFunction(
                         'embed',
-                        new \Twig_Node([$args->getNode(1)]),
+                        new Node([$args->getNode(1)]),
                         $node->getTemplateLine()
                     )
                 );

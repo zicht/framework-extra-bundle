@@ -6,7 +6,8 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Checks if a NestedTree set is verified (correct), if not repairs the tree
  * using the NestedSet methods.
  */
-class RepairNestedTreeCommand extends ContainerAwareCommand
+class RepairNestedTreeCommand extends Command
 {
     /**
      * This is const because it's referred by the exception thrown when a validation error occurs
@@ -24,12 +25,25 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
     const COMMAND_NAME = 'zicht:repair:nested-tree';
 
     /**
+     * @var string
+     */
+    protected static $defaultName = self::COMMAND_NAME;
+
+    /** @var ManagerRegistry */
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine, string $name = null)
+    {
+        parent::__construct($name);
+        $this->doctrine = $doctrine;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function configure()
     {
         $this
-            ->setName(self::COMMAND_NAME)
             ->setDescription('Repair a NestedTreeSet')
             ->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Do a dry run, i.e. only report the problems without doing any changes')
             ->addArgument('entity', InputArgument::REQUIRED, 'The entity to be repaired, must be of nested tree set. E.g. ZichtMenuBundle:MenuItem')
@@ -44,10 +58,9 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $doctrine = $this->getContainer()->get('doctrine');
         $entity = $input->getArgument('entity');
         $formatter = $this->getHelperSet()->get('formatter');
-        $repository = $doctrine->getRepository($entity);
+        $repository = $this->doctrine->getRepository($entity);
 
         if ($repository instanceof NestedTreeRepository) {
             if (true !== ($issues = $repository->verify())) {
@@ -62,7 +75,7 @@ class RepairNestedTreeCommand extends ContainerAwareCommand
                 } else {
                     $output->writeln('Recovering');
                     $repository->recover();
-                    $doctrine->getManager()->flush();
+                    $this->doctrine->getManager()->flush();
                 }
             } else {
                 $output->writeln('No issues found');

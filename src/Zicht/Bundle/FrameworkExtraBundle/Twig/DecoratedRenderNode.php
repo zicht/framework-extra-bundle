@@ -6,7 +6,8 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
 use Symfony\Bundle\TwigBundle\Node\RenderNode as BaseRenderNode;
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * This decorator makes sure that if a {% render ... %} is used in Twig, the embed parameters (success_url, return_url)
@@ -14,7 +15,7 @@ use Twig_Compiler;
  *
  * TwigExtension::embedParams() is used for this.
  */
-class DecoratedRenderNode extends \Twig_Node
+class DecoratedRenderNode extends Node
 {
     /**
      * @param BaseRenderNode $wrappedNode
@@ -26,9 +27,9 @@ class DecoratedRenderNode extends \Twig_Node
     }
 
     /**
-     * @param Twig_Compiler $compiler
+     * @param Compiler $compiler
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $getExtension = sprintf('$this->env->getExtension(\'%s\')', ZichtFrameworkExtraExtension::class);
         $compiler

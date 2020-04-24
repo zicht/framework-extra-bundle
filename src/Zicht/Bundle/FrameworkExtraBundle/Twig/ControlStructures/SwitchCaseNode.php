@@ -5,12 +5,12 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
-use Twig_Node;
+use Twig\Node\Node;
 
 /**
  * Represents a 'case' or a 'default' inside a switch
  */
-class SwitchCaseNode extends Twig_Node
+class SwitchCaseNode extends Node
 {
     /**
      * @param array $body

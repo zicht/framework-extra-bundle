@@ -5,25 +5,26 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
-use Twig_Token;
+use Twig\TokenParser\AbstractTokenParser;
+use Twig\Token;
 
-class AnnotationsTokenParser extends \Twig_TokenParser
+class AnnotationsTokenParser extends AbstractTokenParser
 {
     /**
      * Parses a token and returns a node.
      *
-     * @param Twig_Token $token A Twig_Token instance
+     * @param Token $token A Token instance
      *
      * @return AnnotationsNode A Twig_NodeInterface instance
      */
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $stream = $this->parser->getStream();
 
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse([$this, 'decideEndAnnotations']);
         $stream->expect('endannotations');
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         return new AnnotationsNode(['body' => $body]);
     }

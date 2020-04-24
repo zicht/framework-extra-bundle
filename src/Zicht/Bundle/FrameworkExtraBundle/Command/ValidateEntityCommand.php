@@ -5,21 +5,45 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ValidateEntityCommand extends ContainerAwareCommand
+class ValidateEntityCommand extends Command
 {
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'zicht:entity:validate';
+
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    public function __construct(ManagerRegistry $doctrine, ValidatorInterface $validator, string $name = null)
+    {
+        parent::__construct($name);
+        $this->doctrine = $doctrine;
+        $this->validator = $validator;
+    }
+
+
     /**
      * {@inheritDoc}
      */
     protected function configure()
     {
         $this
-            ->setName('zicht:entity:validate')
             ->addArgument('entity', InputArgument::IS_ARRAY | InputArgument::OPTIONAL)
             ->setHelp('This command validates all entities in a repository, useful to test the database for irregularities')
             ->addOption('group', 'g', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Optional validation group(s)');
@@ -34,10 +58,10 @@ class ValidateEntityCommand extends ContainerAwareCommand
 
         foreach ($entities as $entity) {
             $groups = $input->getOption('group');
-            $repo = $this->getContainer()->get('doctrine')->getRepository($entity);
+            $repo = $this->doctrine->getRepository($entity);
 
             foreach ($repo->findAll() as $entity) {
-                $violations = $this->getContainer()->get('validator')->validate($entity, $groups ? $groups : null);
+                $violations = $this->validator->validate($entity, $groups ? $groups : null);
 
                 if (count($violations)) {
                     $output->writeln(get_class($entity) . '::' . $entity->getId());
@@ -55,8 +79,7 @@ class ValidateEntityCommand extends ContainerAwareCommand
     protected function getAllEntities()
     {
         $allMeta = $this
-            ->getContainer()
-            ->get('doctrine')
+            ->doctrine
             ->getManager()
             ->getMetadataFactory()
             ->getAllMetadata();
