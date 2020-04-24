@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection;
@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getConfigTreeBuilder()
     {

@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
 use Pdo;
@@ -9,16 +10,9 @@ use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
 use Doctrine\ORM\NativeQuery;
 use Doctrine\DBAL\Statement;
 
-/**
- * Class NativeQueryPagable
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Doctrine
- */
 class NativeQueryPagable implements Pageable
 {
     /**
-     * NativeQueryPagable constructor.
-     *
      * @param NativeQuery $queryWrapper
      * @param Statement $countQuery
      */
@@ -29,7 +23,7 @@ class NativeQueryPagable implements Pageable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTotal()
     {
@@ -38,7 +32,7 @@ class NativeQueryPagable implements Pageable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setRange($start, $length)
     {

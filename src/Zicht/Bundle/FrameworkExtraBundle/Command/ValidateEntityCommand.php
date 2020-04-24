@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -10,29 +11,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
-
-/**
- * Class ValidateEntityCommand
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Command
- */
 class ValidateEntityCommand extends ContainerAwareCommand
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure()
     {
         $this
             ->setName('zicht:entity:validate')
-            ->addArgument('entity', InputArgument::IS_ARRAY|InputArgument::OPTIONAL)
+            ->addArgument('entity', InputArgument::IS_ARRAY | InputArgument::OPTIONAL)
             ->setHelp('This command validates all entities in a repository, useful to test the database for irregularities')
-            ->addOption('group', 'g', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, "Optional validation group(s)")
-        ;
+            ->addOption('group', 'g', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Optional validation group(s)');
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -46,7 +40,7 @@ class ValidateEntityCommand extends ContainerAwareCommand
                 $violations = $this->getContainer()->get('validator')->validate($entity, $groups ? $groups : null);
 
                 if (count($violations)) {
-                    $output->writeln(get_class($entity) . "::" . $entity->getId());
+                    $output->writeln(get_class($entity) . '::' . $entity->getId());
                     foreach ($violations as $error) {
                         $output->writeln(" -> {$error}");
                     }
@@ -56,8 +50,6 @@ class ValidateEntityCommand extends ContainerAwareCommand
     }
 
     /**
-     * get all entities
-     *
      * @return \Generator
      */
     protected function getAllEntities()

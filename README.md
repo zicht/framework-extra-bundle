@@ -8,5 +8,5 @@ Provides a set of utilities for use in Symfony projects.
 See the docs in [doc](doc)
 
 # Maintainer
-- Philip Bergman <philip@zicht.nl>
 - Boudewijn Schoon <boudewijn@zicht.nl>
+- Erik Trapman <erik@zicht.nl>

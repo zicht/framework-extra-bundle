@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://www.zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\EventListener;
@@ -8,9 +8,6 @@ namespace Zicht\Bundle\FrameworkExtraBundle\EventListener;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\UpdateSchemaDoctrineCommand;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 
-/**
- * Class UpdateSchemaDoctrineCommandListener
- */
 class UpdateSchemaDoctrineCommandListener
 {
     /**

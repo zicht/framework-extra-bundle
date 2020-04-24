@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
@@ -26,8 +27,6 @@ class ParentChoiceType extends AbstractType
     protected $doctrine;
 
     /**
-     * Constructs the type.
-     *
      * @param Registry $doctrine
      */
     public function __construct(Registry $doctrine)
@@ -36,24 +35,24 @@ class ParentChoiceType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(array('class'))
+            ->setRequired(['class'])
             ->setDefaults(
-                array(
+                [
                     'data_class' => function (Options $o) {
                         return $o->offsetGet('class');
                     },
                     'required' => false
-                )
+                ]
             );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -65,7 +64,7 @@ class ParentChoiceType extends AbstractType
         // TODO implement a subscriber for this
         $createParentChoice = function ($parentId) use ($ff, $doctrine, $options) {
             $repo = $doctrine->getRepository($options['class']);
-            $choices = array();
+            $choices = [];
             if (!$parentId) {
                 $list = $repo->getRootNodes();
                 $choices[''] = '';
@@ -75,21 +74,21 @@ class ParentChoiceType extends AbstractType
                 $list = $repo->getChildren($parent, true);
             }
             foreach ($list as $item) {
-                $choices[$item->getId()]= (string)$item;
+                $choices[$item->getId()] = (string)$item;
             }
             return $ff->createNamed(
                 'parent',
                 'choice',
                 $parentId,
-                array('choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false)
+                ['choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false]
             );
         };
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function ($e) use ($ff, $doctrine, $createParentChoice, $options) {
-                $data     = $e->getData();
-                $form     = $e->getForm();
+                $data = $e->getData();
+                $form = $e->getForm();
                 $parentId = $data['parent'];
                 if (!$parentId) {
                     return;
@@ -117,17 +116,17 @@ class ParentChoiceType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         parent::finishView($view, $form, $options);
         $parent = $form->getData();
-        $view->vars['parents']= array();
+        $view->vars['parents'] = [];
 
         if ($parent) {
             if ($parent->getId()) {
-                $view->vars['parents'][]= $parent;
+                $view->vars['parents'][] = $parent;
             }
             while ($parent = $parent->getParent()) {
                 // Circular reference break
@@ -145,15 +144,7 @@ class ParentChoiceType extends AbstractType
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'zicht_parent_choice';
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getBlockPrefix()
     {

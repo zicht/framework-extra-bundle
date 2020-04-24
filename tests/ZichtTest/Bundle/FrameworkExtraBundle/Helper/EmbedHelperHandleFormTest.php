@@ -1,21 +1,24 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
-use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Routing\Router as RouterAlias;
 
 /**
  * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
  */
 class EmbedHelperHandleFormTest extends EmbedHelperTest
 {
+    /** @var Form */
     protected $form;
-    protected $router;
 
+    /** @var RouterAlias */
+    protected $router;
 
     /**
      * @return void
@@ -41,7 +44,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->getCurrentRequest()->request->set('return_url', 'return url value');
         $this->request->getCurrentRequest()->request->set('success_url', 'success url value');
         $this->router->expects($this->once())->method('generate')
-            ->with('user_login', array('return_url' => 'return url value', 'success_url' => 'success url value'))
+            ->with('user_login', ['return_url' => 'return url value', 'success_url' => 'success url value'])
             ->will(
                 $this->returnCallback(
                     function ($route, $params) {
@@ -67,7 +70,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     public function testHandleFormWillStoreFormStateIfNotXmlHttpRequest()
     {
         $this->request->getCurrentRequest()->setMethod('POST');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $this->helper->handleForm(
             $this->form,
             function () {
@@ -85,10 +88,14 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     {
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->headers->set('X-Requested-With', 'XMLHttpRequest');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
-        $this->helper->handleForm($this->form, function () {
-            return false;
-        }, 'user_login');
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
+        $this->helper->handleForm(
+            $this->form,
+            function () {
+                return false;
+            },
+            'user_login'
+        );
 
         $this->assertTrue($this->request->getCurrentRequest()->isXmlHttpRequest());
         $this->assertNull($this->session->get($this->helper->getFormId($this->form)));
@@ -101,11 +108,11 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     public function testHandleFormStateWillContainErrorsIfAddedByCallback()
     {
         $this->request->getCurrentRequest()->setMethod('POST');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
-        $error = new \Symfony\Component\Form\FormError('FooBar');
+        $error = new FormError('FooBar');
         $this->form->expects($this->once())->method('addError');
-        $this->form->expects($this->once())->method('getErrors')->will($this->returnValue(array($error)));
+        $this->form->expects($this->once())->method('getErrors')->will($this->returnValue([$error]));
         $this->form->expects($this->any())->method('getName')->will($this->returnValue('mock'));
 
         $this->helper->handleForm(
@@ -124,7 +131,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertEquals('321', $state['data']['foo']);
     }
 
-
     /**
      * @return void
      */
@@ -132,7 +138,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     {
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->query->set('return_url', 'return url');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
 
         $response = $this->helper->handleForm(
@@ -147,7 +153,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertEmpty($this->session->get($this->helper->getFormId($this->form)));
     }
 
-
     /**
      * @return void
      */
@@ -155,7 +160,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     {
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->request->set('return_url', 'return url');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $this->form->expects($this->any())->method('getName')->will($this->returnValue('mock'));
         $response = $this->helper->handleForm(
             $this->form,
@@ -169,7 +174,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertNotEmpty($this->session->get($this->helper->getFormId($this->form)));
     }
 
-
     /**
      * @return void
      */
@@ -178,7 +182,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->query->set('return_url', 'return url');
         $this->request->getCurrentRequest()->headers->set('X-Requested-With', 'XMLHttpRequest');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $response = $this->helper->handleForm(
             $this->form,
             function ($form) {
@@ -190,7 +194,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertNotInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
     }
 
-
     /**
      * @return void
      */
@@ -198,7 +201,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     {
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->query->set('success_url', 'success url');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $this->request->getCurrentRequest()->headers->set('X-Requested-With', 'XMLHttpRequest');
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $response = $this->helper->handleForm(
@@ -217,34 +220,42 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     public function testExceptionHandlingWillThrowExceptionIfNotMarkedAsError()
     {
         $this->request->getCurrentRequest()->setMethod('POST');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
 
         $this->helper->setMarkExceptionsAsFormErrors(false);
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $this->form->expects($this->never())->method('addError');
-        $this->helper->handleForm($this->form, function () {
-            throw new \Exception("foo");
-        }, '');
+        $this->helper->handleForm(
+            $this->form,
+            function () {
+                throw new \Exception('foo');
+            },
+            ''
+        );
     }
 
-    /**
-     */
     public function testExceptionHandlingWillNotThrowExceptionIfNotMarkedAsError()
     {
         $this->request->getCurrentRequest()->setMethod('POST');
-        $this->request->getCurrentRequest()->request->set('mock', array('foo' => '321'));
+        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
 
         $this->helper->setMarkExceptionsAsFormErrors(true);
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
-        $errors = array();
-        $this->form->expects($this->once())->method('addError')->will($this->returnCallback(function ($e) use (&$errors) {
-            $errors[] = $e;
-        }));
-        $this->helper->handleForm($this->form, function () {
-            throw new \Exception("foo");
-        }, '');
+        $errors = [];
+        $this->form->expects($this->once())->method('addError')->will(
+            $this->returnCallback(function ($e) use (&$errors) {
+                $errors[] = $e;
+            })
+        );
+        $this->helper->handleForm(
+            $this->form,
+            function () {
+                throw new \Exception('foo');
+            },
+            ''
+        );
 
         $this->assertInstanceOf('Symfony\Component\Form\FormError', $errors[0]);
     }

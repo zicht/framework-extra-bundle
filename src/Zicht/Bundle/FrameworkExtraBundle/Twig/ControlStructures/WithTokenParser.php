@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
@@ -17,11 +17,12 @@ use Twig_NodeInterface;
  */
 class WithTokenParser extends \Twig_TokenParser
 {
-    private $options = array(
+    /** @var string[] */
+    private $options = [
         'merged',
         'sandboxed',
-        'always'
-    );
+        'always',
+    ];
 
     /**
      * Gets the tag name associated with this token parser.
@@ -41,10 +42,10 @@ class WithTokenParser extends \Twig_TokenParser
      */
     public function parse(Twig_Token $token)
     {
-        $options = array();
+        $options = [];
         $stream = $this->parser->getStream();
         $start = $stream->getCurrent();
-        $arguments = array();
+        $arguments = [];
         do {
             $value = $this->parser->getExpressionParser()->parseExpression();
             if ($stream->test('as')) {
@@ -53,7 +54,7 @@ class WithTokenParser extends \Twig_TokenParser
             } else {
                 $name = null;
             }
-            $arguments[] = array('name' => $name, 'value' => $value);
+            $arguments[] = ['name' => $name, 'value' => $value];
 
             $end = !$stream->test(Twig_Token::PUNCTUATION_TYPE, ',');
             if (!$end) {
@@ -66,7 +67,7 @@ class WithTokenParser extends \Twig_TokenParser
         }
 
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
-        $body = $this->parser->subparse(array($this, 'decideWithEnd'), true);
+        $body = $this->parser->subparse([$this, 'decideWithEnd'], true);
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
         return new WithNode($arguments, $body, $options, $start->getLine(), $start->getValue());
     }

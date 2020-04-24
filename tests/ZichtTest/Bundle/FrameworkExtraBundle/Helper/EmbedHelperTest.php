@@ -1,6 +1,7 @@
 <?php
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
@@ -8,8 +9,11 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 use Symfony\Component\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\RouterInterface;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 use ZichtTest\Bundle\FrameworkExtraBundle\Tests\AbstractIntegrationTestCase;
 
@@ -20,6 +24,9 @@ class MockType extends Form\AbstractType
         $builder->add('foo', 'text');
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'aForm';
@@ -28,28 +35,29 @@ class MockType extends Form\AbstractType
 
 class MockData
 {
+    /** @var string */
     public $foo = '123';
 }
 
 class EmbedHelperTest extends AbstractIntegrationTestCase
 {
-    /** @var \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper */
+    /** @var EmbedHelper */
     protected $helper;
 
     /** @var SessionInterface */
     protected $session;
 
-    /** @var \Symfony\Component\HttpFoundation\RequestStack */
+    /** @var RequestStack */
     protected $request;
 
     /** @var UrlCheckerService */
     protected $urlChecker;
 
-    function setUp()
+    protected function setUp()
     {
-        $this->session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
-        $this->request = new \Symfony\Component\HttpFoundation\RequestStack();
-        $request = new \Symfony\Component\HttpFoundation\Request;
+        $this->session = new Session(new MockArraySessionStorage());
+        $this->request = new RequestStack();
+        $request = new Request;
         $request->setSession($this->session);
         $this->request->push($request);
 
@@ -58,7 +66,7 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
 
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')->disableOriginalConstructor()->getMock();
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $this->helper = new \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper($this->router, $this->session, $this->request, $this->urlChecker);
+        $this->helper = new EmbedHelper($this->router, $this->session, $this->request, $this->urlChecker);
     }
 
 
@@ -66,16 +74,16 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::getEmbedParams
      * @return void
      */
-    function testGetEmbedParams()
+    public function testGetEmbedParams()
     {
         $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
         $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
         $this->assertEquals(
-            array(
+            [
                 'success_url' => 'test 321',
                 'return_url' => 'test 123',
                 'do' => null
-            ),
+            ],
             $this->helper->getEmbedParams()
         );
     }
@@ -85,14 +93,14 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::getEmbedParams
      * @return void
      */
-    function testGetEmbedParamsWithoutEmbedParams()
+    public function testGetEmbedParamsWithoutEmbedParams()
     {
         $this->assertEquals(
-            array(
+            [
                 'return_url' => null,
                 'success_url' => null,
                 'do' => null
-            ),
+            ],
             $this->helper->getEmbedParams()
         );
     }
@@ -102,50 +110,50 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGeneration()
+    public function testUrlGeneration()
     {
         $router = $this->createMock(RouterInterface::class);
-        $router->expects($this->once())->method('generate')->with('test', array());
+        $router->expects($this->once())->method('generate')->with('test', []);
         $property = new \ReflectionProperty($this->helper, 'router');
         $property->setAccessible(true);
         $property->setValue($this->helper, $router);
-        $this->helper->url('test', array());
+        $this->helper->url('test', []);
     }
 
     /**
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGenerationWillInheritEmbedParams()
+    public function testUrlGenerationWillInheritEmbedParams()
     {
         $router = $this->createMock(RouterInterface::class);
-        $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'test 123', 'success_url' => 'test 321'));
+        $router->expects($this->once())->method('generate')->with('test', ['return_url' => 'test 123', 'success_url' => 'test 321']);
         $property = new \ReflectionProperty($this->helper, 'router');
         $property->setAccessible(true);
         $property->setValue($this->helper, $router);
         $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
         $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
-        $this->helper->url('test', array());
+        $this->helper->url('test', []);
     }
 
     /**
      * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::url
      * @return void
      */
-    function testUrlGenerationCanOverrideEmbedParams()
+    public function testUrlGenerationCanOverrideEmbedParams()
     {
         $router = $this->createMock(RouterInterface::class);
-        $router->expects($this->once())->method('generate')->with('test', array('return_url' => 'override 123', 'success_url' => 'override 321'));
+        $router->expects($this->once())->method('generate')->with('test', ['return_url' => 'override 123', 'success_url' => 'override 321']);
         $property = new \ReflectionProperty($this->helper, 'router');
         $property->setAccessible(true);
         $property->setValue($this->helper, $router);
         $this->request->getCurrentRequest()->query->set('return_url', 'test 123');
         $this->request->getCurrentRequest()->query->set('success_url', 'test 321');
-        $this->helper->url('test', array('return_url' => 'override 123', 'success_url' => 'override 321'));
+        $this->helper->url('test', ['return_url' => 'override 123', 'success_url' => 'override 321']);
     }
 
 
-    function testGetFormId()
+    public function testGetFormId()
     {
         $form = $this->form;
         $this->assertInternalType('string', $this->helper->getFormId($form));

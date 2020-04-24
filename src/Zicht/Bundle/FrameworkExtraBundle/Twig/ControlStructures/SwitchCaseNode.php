@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
 use Twig_Node;
@@ -12,8 +13,6 @@ use Twig_Node;
 class SwitchCaseNode extends Twig_Node
 {
     /**
-     * Constructor
-     *
      * @param array $body
      * @param array $expression
      * @param int $fallthrough
@@ -23,13 +22,13 @@ class SwitchCaseNode extends Twig_Node
     public function __construct($body, $expression, $fallthrough, $lineno = 0, $tag = null)
     {
         parent::__construct(
-            array(
-                'body' => $body
-            ),
-            array(
-                'expression'  => $expression,
-                'fallthrough' => $fallthrough
-            ),
+            [
+                'body' => $body,
+            ],
+            [
+                'expression' => $expression,
+                'fallthrough' => $fallthrough,
+            ],
             $lineno,
             $tag
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
-use Symfony\Component\VarDumper\VarDumper;
 use Doctrine\ORM\PersistentCollection;
 use DOMDocument;
 use SimpleXMLElement;
@@ -18,28 +17,25 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\VarDumper\VarDumper;
 use Twig\TwigTest;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
 use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Util\Debug;
 use Zicht\Util\Str as StrUtil;
 
-/**
- * Class Extension
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Twig
- */
 class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
-    public static $RELATIVE_DATE_PART_MAP = array(
-        'y' => array('year', 'years'),
-        'm' => array('month', 'months'),
-        'd' => array('day', 'days'),
-        'w' => array('week', 'weeks'),
-        'h' => array('hour', 'hours'),
-        'i' => array('minute', 'minutes'),
-        's' => array('second', 'seconds')
-    );
+    /** @var array<string, string[]>|array[] */
+    public static $RELATIVE_DATE_PART_MAP = [
+        'y' => ['year', 'years'],
+        'm' => ['month', 'months'],
+        'd' => ['day', 'days'],
+        'w' => ['week', 'weeks'],
+        'h' => ['hour', 'hours'],
+        'i' => ['minute', 'minutes'],
+        's' => ['second', 'seconds'],
+    ];
 
     /**
      * @var EmbedHelper
@@ -67,8 +63,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     protected $authChecker;
 
     /**
-     * Extension constructor.
-     *
      * @param EmbedHelper $embedHelper
      * @param AnnotationRegistry $annotationRegistry
      * @param TranslatorInterface|null $translator
@@ -88,8 +82,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Set global
-     *
      * @param string $name
      * @param mixed $value
      */
@@ -99,7 +91,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getGlobals()
     {
@@ -107,53 +99,51 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('dump', array($this, 'dump'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('xml', array($this, 'xml')),
-            new \Twig_SimpleFilter('regex_replace', array($this, 'regexReplace')),
-            new \Twig_SimpleFilter('re_replace', array($this, 'regexReplace')),
-            new \Twig_SimpleFilter('str_uscore', array($this, 'strUscore')),
-            new \Twig_SimpleFilter('str_dash', array($this, 'strDash')),
-            new \Twig_SimpleFilter('str_camel', array($this, 'strCamel')),
-            new \Twig_SimpleFilter('str_humanize', array($this, 'strHumanize')),
-            new \Twig_SimpleFilter('date_format', array($this, 'dateFormat')),
-            new \Twig_SimpleFilter('relative_date', array($this, 'relativeDate')),
-            new \Twig_SimpleFilter('ga_trackevent', array($this, 'gaTrackEvent')),
+        return [
+            new \Twig_SimpleFilter('dump', [$this, 'dump'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('xml', [$this, 'xml']),
+            new \Twig_SimpleFilter('regex_replace', [$this, 'regexReplace']),
+            new \Twig_SimpleFilter('re_replace', [$this, 'regexReplace']),
+            new \Twig_SimpleFilter('str_uscore', [$this, 'strUscore']),
+            new \Twig_SimpleFilter('str_dash', [$this, 'strDash']),
+            new \Twig_SimpleFilter('str_camel', [$this, 'strCamel']),
+            new \Twig_SimpleFilter('str_humanize', [$this, 'strHumanize']),
+            new \Twig_SimpleFilter('date_format', [$this, 'dateFormat']),
+            new \Twig_SimpleFilter('relative_date', [$this, 'relativeDate']),
+            new \Twig_SimpleFilter('ga_trackevent', [$this, 'gaTrackEvent']),
 
-            new \Twig_SimpleFilter('prefix_multiple', array($this, 'prefixMultiple')),
-            new \Twig_SimpleFilter('trans_multiple', array($this, 'transMultiple')),
-            new \Twig_SimpleFilter('truncate_html', array($this, 'truncateHtml')),
+            new \Twig_SimpleFilter('prefix_multiple', [$this, 'prefixMultiple']),
+            new \Twig_SimpleFilter('trans_multiple', [$this, 'transMultiple']),
+            new \Twig_SimpleFilter('truncate_html', [$this, 'truncateHtml']),
 
-            new \Twig_SimpleFilter('with', array($this, 'with')),
-            new \Twig_SimpleFilter('without', array($this, 'without')),
+            new \Twig_SimpleFilter('with', [$this, 'with']),
+            new \Twig_SimpleFilter('without', [$this, 'without']),
 
-            new \Twig_SimpleFilter('where', array($this, 'where')),
-            new \Twig_SimpleFilter('not_where', array($this, 'notWhere')),
-            new \Twig_SimpleFilter('where_split', array($this, 'whereSplit')),
-            new \Twig_SimpleFilter('url_to_form_params', array($this, 'urlToFormParameters')),
-            new \Twig_SimpleFilter('url_strip_query', array($this, 'urlStripQuery')),
+            new \Twig_SimpleFilter('where', [$this, 'where']),
+            new \Twig_SimpleFilter('not_where', [$this, 'notWhere']),
+            new \Twig_SimpleFilter('where_split', [$this, 'whereSplit']),
+            new \Twig_SimpleFilter('url_to_form_params', [$this, 'urlToFormParameters']),
+            new \Twig_SimpleFilter('url_strip_query', [$this, 'urlStripQuery']),
 
             new \Twig_SimpleFilter('ceil', 'ceil'),
             new \Twig_SimpleFilter('floor', 'floor'),
-            new \Twig_SimpleFilter('groups', array($this, 'groups')),
-            new \Twig_SimpleFilter('sort_by_type', array($this, 'sortByType')),
-            new \Twig_SimpleFilter('html2text', array($this, 'htmlToText')),
+            new \Twig_SimpleFilter('groups', [$this, 'groups']),
+            new \Twig_SimpleFilter('sort_by_type', [$this, 'sortByType']),
+            new \Twig_SimpleFilter('html2text', [$this, 'htmlToText']),
             new \Twig_SimpleFilter('replace_recursive', 'array_replace_recursive'),
-            new \Twig_SimpleFilter('json_decode', array($this, 'jsonDecode')),
-            new \Twig_SimpleFilter('sha1', array($this, 'shaOne')),
+            new \Twig_SimpleFilter('json_decode', [$this, 'jsonDecode']),
+            new \Twig_SimpleFilter('sha1', [$this, 'shaOne']),
 
-            new \Twig_SimpleFilter('form_root', array($this, 'formRoot')),
-            new \Twig_SimpleFilter('form_has_errors', array($this, 'formHasErrors')),
-        );
+            new \Twig_SimpleFilter('form_root', [$this, 'formRoot']),
+            new \Twig_SimpleFilter('form_has_errors', [$this, 'formHasErrors']),
+        ];
     }
 
     /**
-     * Prefix multiple
-     *
      * @param array $values
      * @param string $prefix
      * @return \Generator
@@ -303,10 +293,10 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
      */
     public function whereSplit($items, $keyValuePairs)
     {
-        return array(
+        return [
             $this->notWhere($items, $keyValuePairs),
-            $this->where($items, $keyValuePairs)
-        );
+            $this->where($items, $keyValuePairs),
+        ];
     }
 
     /**
@@ -330,15 +320,13 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Url to form parameters
-     *
      * @param string $url
      * @return array
      */
     public function urlToFormParameters($url)
     {
         $query = parse_url($url, PHP_URL_QUERY);
-        $vars = array();
+        $vars = [];
         parse_str($query, $vars);
         return $this->valuesToFormParameters($vars, null);
     }
@@ -352,7 +340,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
      */
     private function valuesToFormParameters($values, $parent)
     {
-        $ret = array();
+        $ret = [];
         foreach ($values as $key => $value) {
             if (null !== $parent) {
                 $keyName = sprintf('%s[%s]', $parent, $key);
@@ -369,18 +357,18 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getFunctions()
     {
-        return array(
+        return [
             'trans_form_errors' => new \Twig_SimpleFunction('trans_form_errors', [$this, 'transFormErrors']),
             'embed_params' => new \Twig_SimpleFunction('embed_params', [$this, 'getEmbedParams']),
             'defaults' => new \Twig_SimpleFunction('defaults', [$this, 'getDefaultOf']),
             'embed' => new \Twig_SimpleFunction('embed', [$this, 'embed']),
             'is_granted' => new \Twig_SimpleFunction('is_granted', [$this, 'isGranted']),
             'embedded_image' => new \Twig_SimpleFunction('embedded_image', [$this, 'embeddedImage']),
-        );
+        ];
     }
 
     /**
@@ -420,8 +408,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Groups
-     *
      * @param array|object $list
      * @param int $numGroups
      * @return array
@@ -430,7 +416,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     {
         $items = ($list instanceof \Traversable ? iterator_to_array($list) : $list);
 
-        $groups = array();
+        $groups = [];
         $i = 0;
         foreach ($items as $item) {
             $groups[$i++ % $numGroups][] = $item;
@@ -456,8 +442,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Sort by type
-     *
      * @param array|object $collection
      * @param array $types
      * @return array
@@ -470,7 +454,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
 
         // store a map of the original sorting, so the usort can use this to keep the original sorting if the types are
         // equal
-        $idToIndexMap = array();
+        $idToIndexMap = [];
         foreach ($collection as $index => $item) {
             $idToIndexMap[$item->getId()] = $index;
         }
@@ -555,8 +539,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Humanize
-     *
      * @param string $str
      * @return string
      */
@@ -566,8 +548,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Format Date
-     *
      * @param string|object|int $date
      * @param string $format
      * @return string
@@ -583,15 +563,13 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
             $ts = new \DateTime($date);
             $ts = $ts->getTimestamp();
         } else {
-            throw new \InvalidArgumentException(sprintf("Cannot format %s as a date", $date));
+            throw new \InvalidArgumentException(sprintf('Cannot format %s as a date', $date));
         }
 
         return strftime($format, $ts);
     }
 
     /**
-     * Relative date
-     *
      * @param string|object $date
      * @return string
      */
@@ -602,7 +580,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
         // natively, diff doesn't contain 'weeks'.
         $diff->w = round($diff->d / 7);
         $message = '';
-        foreach (array('y', 'm', 'w', 'd', 'h', 'i', 's') as $part) {
+        foreach (['y', 'm', 'w', 'd', 'h', 'i', 's'] as $part) {
             if ($diff->$part > 0) {
                 list($singular, $plural) = self::$RELATIVE_DATE_PART_MAP[$part];
                 if ($diff->$part > 1) {
@@ -614,7 +592,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
                 if (null !== $this->translator) {
                     $message = $this->translator->trans(
                         '%count% ' . $denominator . ' ago',
-                        array('%count%' => $diff->$part)
+                        ['%count%' => $diff->$part]
                     );
                 } else {
                     $message = sprintf('%d %s ago', $diff->$part, $denominator);
@@ -676,26 +654,26 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getNodeVisitors()
     {
-        return array(
-            'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor()
-        );
+        return [
+            'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor(),
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTokenParsers()
     {
-        return array(
+        return [
             'zicht_switch' => new ControlStructures\SwitchTokenParser(),
             'zicht_strict' => new ControlStructures\StrictTokenParser(),
             'zicht_meta_annotate' => new Meta\AnnotateTokenParser(),
-            'zicht_meta_annotations' => new Meta\AnnotationsTokenParser()
-        );
+            'zicht_meta_annotations' => new Meta\AnnotationsTokenParser(),
+        ];
     }
 
     /**
@@ -707,8 +685,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Embed
-     *
      * @param array|string $urlOrArray
      * @return array|mixed|string
      */
@@ -723,13 +699,13 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
         } elseif (is_string($urlOrArray)) {
             $query = parse_url($urlOrArray, PHP_URL_QUERY);
             $urlOrArray = str_replace($query, '', $urlOrArray);
-            $currentParams = array();
+            $currentParams = [];
             parse_str($query, $currentParams);
             $currentParams += $embedParams;
 
             return preg_replace('/\?$/', '', $urlOrArray) . '?' . http_build_query($currentParams);
         } else {
-            throw new \InvalidArgumentException("Only supports arrays or strings");
+            throw new \InvalidArgumentException('Only supports arrays or strings');
         }
     }
 
@@ -788,8 +764,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * XML
-     *
      * @param object $data
      * @return string
      */
@@ -816,8 +790,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * Transforms errors
-     *
      * @param FormError[] $formErrorList
      * @param string $translationDomain
      * @return array
@@ -832,7 +804,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTests()
     {

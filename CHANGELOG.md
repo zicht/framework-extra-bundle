@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.2.0 - 2020-04-24
+### Fixed
+- Fixed composer.json (psr-4 autoloader, dependencies), fixed linter errors, fixed maintainers
+
 ## 8.1.7 - 2020-01-29
 ### Fixed
 - Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array. 

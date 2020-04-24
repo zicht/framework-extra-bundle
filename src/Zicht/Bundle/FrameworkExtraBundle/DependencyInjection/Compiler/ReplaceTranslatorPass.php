@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://www.zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler;
@@ -9,14 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * Class ReplaceTranslatorPass
- */
 class ReplaceTranslatorPass implements CompilerPassInterface
 {
     /**
      * Replace the default translator class with our own (if configured) to support `/zz/` browsing
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @see \Zicht\Bundle\FrameworkExtraBundle\Translation\Translator
      */

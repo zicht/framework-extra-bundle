@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form\FormError;
@@ -24,9 +25,7 @@ use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 class EmbedHelper
 {
     /**
-     * Whether or not to consider exceptions thrown by the handler as formerrors.
-     *
-     * @var bool
+     * @var bool Whether or not to consider exceptions thrown by the handler as formerrors.
      */
     protected $isMarkExceptionsAsFormErrors;
 
@@ -51,8 +50,6 @@ class EmbedHelper
     protected $urlChecker;
 
     /**
-     * EmbedHelper constructor.
-     *
      * @param RouterInterface $router
      * @param Session $session
      * @param RequestStack $requestStack
@@ -120,8 +117,8 @@ class EmbedHelper
      * search for a param value in the request stack, start in current
      * and bubble up till master request when not found.
      *
-     * @param bool $checkSafety
      * @param string $name
+     * @param bool $checkSafety
      * @return mixed|null
      */
     protected function getParamFromRequest($name, $checkSafety = true)
@@ -130,11 +127,13 @@ class EmbedHelper
             return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
-        if ((null !== $request = $this->requestStack->getParentRequest()) && null !== $value = $request->get($name)) {
+        if ((null !== $request = $this->requestStack->getParentRequest()) && null !== $request->get($name)) {
+            $value = $request->get($name);
             return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
-        if ((null !== $request = $this->requestStack->getMasterRequest()) && null !== $value = $request->get($name)) {
+        if ((null !== $request = $this->requestStack->getMasterRequest()) && null !== $request->get($name)) {
+            $value = $request->get($name);
             return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
@@ -155,7 +154,7 @@ class EmbedHelper
             // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
             // therefore convert the errors iterator to array, on get from session convert to iterator
             // see [1]
-            $state  = $request->getSession()->get($formId);
+            $state = $request->getSession()->get($formId);
             $state['form_errors'] = (is_array($state) && is_array($state['form_errors'])) ? $state['form_errors'] : [];
             $state['form_errors'] = new FormErrorIterator($form, $state['form_errors']);
         }
@@ -183,8 +182,8 @@ class EmbedHelper
      * @return array|Response
      * @throws \Exception
      */
-    public function handleForm(Form $form, callable $handlerCallback, $formTargetRoute, $formTargetParams = [], $extraViewVars = [], $formIdHandler = null) {
-
+    public function handleForm(Form $form, callable $handlerCallback, $formTargetRoute, $formTargetParams = [], $extraViewVars = [], $formIdHandler = null)
+    {
         $formId = is_callable($formIdHandler) ? $formIdHandler($form) : $this->getFormId($form);
         $request = $this->requestStack->getCurrentRequest();
         $formState = $this->getFormState($form, $formId);
@@ -228,7 +227,7 @@ class EmbedHelper
                         $returnUrl = $successUrl;
 
                         if ($request->isXmlHttpRequest()) {
-                            return new JsonResponse(array('success_url' => $successUrl));
+                            return new JsonResponse(['success_url' => $successUrl]);
                         }
                     } else {
                         // we set a convenience flash message if there was no success url, because
@@ -238,15 +237,15 @@ class EmbedHelper
                 } else {
                     $formStatus = 'errors';
 
-                    $formState['has_errors']  = true;
-                    $formState['data']        = $request->request->get($form->getName());
+                    $formState['has_errors'] = true;
+                    $formState['data'] = $request->request->get($form->getName());
                     $formState['form_errors'] = $form->getErrors();
                 }
             } else {
                 $formStatus = 'errors';
 
-                $formState['has_errors']  = true;
-                $formState['data']        = $request->request->get($form->getName());
+                $formState['has_errors'] = true;
+                $formState['data'] = $request->request->get($form->getName());
                 $formState['form_errors'] = $form->getErrors();
             }
             // redirect to the return url, if available
@@ -302,14 +301,14 @@ class EmbedHelper
 
         if (empty($response)) {
             if ($request->get('extension')) {
-                $formTargetParams += array(
-                    'extension' => $request->get('extension')
-                );
+                $formTargetParams += [
+                    'extension' => $request->get('extension'),
+                ];
             }
             $viewVars['form_status'] = $formStatus;
 
             $viewVars['form_url'] = $this->url($formTargetRoute, $formTargetParams);
-            $viewVars['form']     = $form->createView();
+            $viewVars['form'] = $form->createView();
 
             $prefix = '';
             if ($root = self::getFormRoot($viewVars['form'])) {
@@ -317,9 +316,12 @@ class EmbedHelper
             }
 
             $viewVars['messages'] = [];
-            if ($request->hasPreviousSession() && ($messages = $this->session->getFlashBag()->get($formId))) {
-                foreach ($messages as $value) {
-                    $viewVars['messages'][] = $prefix . $value;
+            if ($request->hasPreviousSession()) {
+                $messages = $this->session->getFlashBag()->get($formId);
+                if ($messages) {
+                    foreach ($messages as $value) {
+                        $viewVars['messages'][] = $prefix . $value;
+                    }
                 }
             }
 
@@ -383,6 +385,7 @@ class EmbedHelper
      *
      * @param Form $form
      * @param string $message
+     * @param SessionInterface|null $session
      */
     public function setFlashMessage(Form $form, $message, SessionInterface $session = null)
     {

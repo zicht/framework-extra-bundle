@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Controller;
@@ -10,11 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class TranslationController
- *
- * @package Zicht\Bundle\FrameworkExtraBundle\Controller
- */
 class TranslationController extends AbstractController
 {
     /**

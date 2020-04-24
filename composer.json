@@ -16,31 +16,35 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
-        "sonata-project/admin-bundle": "*",
-        "zicht/standards-php": "*@stable"
+        "zicht/standards-php": "^4"
     },
     "autoload": {
-        "psr-0": {
-            "": [
-                "src/"
+        "psr-4": {
+            "Zicht\\Bundle\\FrameworkExtraBundle\\": [
+                "src/Zicht/Bundle/FrameworkExtraBundle/"
             ]
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "": [
-                "tests/"
+        "psr-4": {
+            "ZichtTest\\Bundle\\FrameworkExtraBundle\\": [
+                "tests/ZichtTest/Bundle/FrameworkExtraBundle/"
             ]
         }
     },
-    "minimum-stability": "stable",
     "license": "MIT",
     "scripts": {
         "lint": [
-            "./vendor/bin/phpcs -s src/Zicht/ --standard=vendor/zicht-standards/php/Zicht --extensions=php"
+            "phpcs --standard=vendor/zicht/standards-php/phpcs.xml src/ tests/"
+        ],
+        "lint-no-warn": [
+            "phpcs -n --standard=vendor/zicht/standards-php/phpcs.xml src/ tests/"
+        ],
+        "lint-fix": [
+            "phpcbf --standard=vendor/zicht/standards-php/phpcs.xml src/ tests/"
         ],
         "test": [
-            "php7.1 ./vendor/phpunit/phpunit/phpunit -c phpunit.xml.dist"
+            "phpunit tests/"
         ]
     }
 }

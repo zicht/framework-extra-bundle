@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
 /**
@@ -12,25 +13,18 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 class AnnotationRegistry
 {
     /**
-     * The annotations
-     *
      * @var array
      */
-    private $annotations = array();
+    private $annotations = [];
 
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->annotations = array();
+        $this->annotations = [];
     }
 
 
     /**
-     * Add an annotation.
-     *
      * @param string $name
      * @param mixed $value
      * @param int $priority
@@ -39,25 +33,23 @@ class AnnotationRegistry
     public function addAnnotation($name, $value, $priority = 0)
     {
         $annotation = $this->getAnnotation($name);
-        $new_annotation = array('name' => $name, 'value' => $value, 'priority' => $priority);
+        $new_annotation = ['name' => $name, 'value' => $value, 'priority' => $priority];
         if (!empty($annotation)) {
             if ($priority > $annotation['value']['priority']) {
                 $this->setAnnotation($annotation['key'], $new_annotation);
             }
         } else {
-            $this->annotations[]= $new_annotation;
+            $this->annotations[] = $new_annotation;
         }
     }
 
     /**
-     * Get annotation
-     *
      * @param string $name
      * @return array
      */
     public function getAnnotation($name)
     {
-        $match = array();
+        $match = [];
         foreach ($this->getAnnotations() as $key => $annotation) {
             if ($annotation['name'] == $name) {
                 $match['key'] = $key;
@@ -68,8 +60,6 @@ class AnnotationRegistry
     }
 
     /**
-     * Set annotation
-     *
      * @param string $key
      * @param string $annotation
      */
@@ -81,8 +71,6 @@ class AnnotationRegistry
     }
 
     /**
-     * Get the annotations.
-     *
      * @return array
      */
     public function getAnnotations()

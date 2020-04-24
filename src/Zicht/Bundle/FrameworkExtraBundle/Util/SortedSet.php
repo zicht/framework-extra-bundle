@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Util;
@@ -16,9 +16,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Util;
 class SortedSet implements \Countable
 {
     /**
-     * The set values
-     *
-     * @var array
+     * @var array The set values
      */
     private $values;
 
@@ -28,7 +26,7 @@ class SortedSet implements \Countable
      *
      * @param array $values
      */
-    public function __construct(array $values = array())
+    public function __construct(array $values = [])
     {
         $this->setValues($values);
     }
@@ -42,7 +40,7 @@ class SortedSet implements \Countable
      */
     public function setValues($values)
     {
-        $this->values = array();
+        $this->values = [];
         $this->addValues($values);
     }
 

@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Fixture;
 
 use Zicht\Util\Str;
@@ -31,8 +32,8 @@ class Builder
     private function __construct($namespaces)
     {
         $this->namespaces = (array)$namespaces;
-        $this->stack    = array();
-        $this->alwaysDo = array();
+        $this->stack = [];
+        $this->alwaysDo = [];
     }
 
 
@@ -44,7 +45,7 @@ class Builder
      */
     public function always($do)
     {
-        $this->alwaysDo[]= $do;
+        $this->alwaysDo[] = $do;
         return $this;
     }
 
@@ -61,7 +62,7 @@ class Builder
     public function __call($method, $args)
     {
         if (method_exists($this->current(), $method)) {
-            call_user_func_array(array($this->current(), $method), $args);
+            call_user_func_array([$this->current(), $method], $args);
         } else {
             $entity = $method;
 
@@ -76,11 +77,11 @@ class Builder
                 $this->push($entityInstance);
             } else {
                 throw new \BadMethodCallException(
-                    "No class found for {$entity} in [" . join(", ", $this->namespaces) . "]"
+                    "No class found for {$entity} in [" . join(', ', $this->namespaces) . ']'
                     . (
-                        $this->current()
-                            ? ", nor is it a method in " . get_class($this->current())
-                            : ""
+                    $this->current()
+                        ? ', nor is it a method in ' . get_class($this->current())
+                        : ''
                     )
                 );
             }
@@ -116,7 +117,7 @@ class Builder
     protected function current()
     {
         if (count($this->stack)) {
-            return $this->stack[count($this->stack) -1];
+            return $this->stack[count($this->stack) - 1];
         }
         return null;
     }
@@ -129,7 +130,7 @@ class Builder
      */
     protected function push($entity)
     {
-        $this->stack[]= $entity;
+        $this->stack[] = $entity;
     }
 
 
@@ -142,7 +143,7 @@ class Builder
     public function end($setter = null)
     {
         if (!count($this->stack)) {
-            throw new \UnexpectedValueException("Stack is empty. Did you call end() too many times?");
+            throw new \UnexpectedValueException('Stack is empty. Did you call end() too many times?');
         }
         $current = array_pop($this->stack);
         if ($parent = $this->current()) {
@@ -151,11 +152,11 @@ class Builder
 
             if ($current instanceof $parentClassName) {
                 if (method_exists($parent, 'addChildren')) {
-                    call_user_func(array($parent, 'addChildren'), $current);
+                    call_user_func([$parent, 'addChildren'], $current);
                 }
             }
             if (is_null($setter)) {
-                foreach (array('set', 'add') as $methodPrefix) {
+                foreach (['set', 'add'] as $methodPrefix) {
                     $methodName = $methodPrefix . $entityLocalName;
 
                     if (method_exists($parent, $methodName)) {
@@ -165,10 +166,10 @@ class Builder
                 }
             }
             if (!is_null($setter)) {
-                call_user_func(array($parent, $setter), $current);
+                call_user_func([$parent, $setter], $current);
             }
 
-            $parentClassNames = array_merge(class_parents($parentClassName), array($parentClassName));
+            $parentClassNames = array_merge(class_parents($parentClassName), [$parentClassName]);
 
             foreach (array_reverse($parentClassNames) as $lParentClassName) {
                 $lParentClass = Str::classname($lParentClassName);
@@ -178,7 +179,7 @@ class Builder
                 }
                 if (method_exists($current, $parentSetter)) {
                     call_user_func(
-                        array($current, $parentSetter),
+                        [$current, $parentSetter],
                         $parent
                     );
                     break;
@@ -205,9 +206,9 @@ class Builder
     {
         $c = count($this->stack);
         if ($c == 0) {
-            throw new \UnexpectedValueException("The stack is empty. You should probably peek() before the last end() call.");
+            throw new \UnexpectedValueException('The stack is empty. You should probably peek() before the last end() call.');
         }
-        $ret = $this->stack[$c -1];
+        $ret = $this->stack[$c - 1];
         return $ret;
     }
 }

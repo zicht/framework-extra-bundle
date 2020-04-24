@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Util;
@@ -14,7 +14,8 @@ use IteratorAggregate;
  */
 class SortedList implements IteratorAggregate
 {
-    protected $items = array();
+    /** @var array */
+    protected $items = [];
 
     /**
      * Add an item with the specified priority.
@@ -25,15 +26,13 @@ class SortedList implements IteratorAggregate
      */
     public function insert($item, $priority)
     {
-        $this->items[] = array($priority, $item);
+        $this->items[] = [$priority, $item];
 
         $this->sort();
     }
 
 
     /**
-     * Sort the list.
-     *
      * @return void
      */
     public function sort()
@@ -50,7 +49,7 @@ class SortedList implements IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getIterator()
     {

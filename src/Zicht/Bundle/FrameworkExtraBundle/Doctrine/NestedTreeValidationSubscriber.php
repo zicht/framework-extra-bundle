@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
@@ -34,13 +34,13 @@ class NestedTreeValidationSubscriber implements EventSubscriber
     protected $entityName;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'postFlush'
-        );
+        ];
     }
 
     /**

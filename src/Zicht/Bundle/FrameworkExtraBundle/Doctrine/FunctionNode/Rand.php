@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine\FunctionNode;
@@ -11,15 +11,12 @@ use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
 
 /**
- * see https://gist.github.com/919465
- */
-/**
- * "RAND" "(" ")"
+ * @deprecated Use https://github.com/beberlei/DoctrineExtensions/blob/master/src/Query/Mysql/Rand.php
  */
 class Rand extends FunctionNode
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function parse(Parser $parser)
     {
@@ -29,7 +26,7 @@ class Rand extends FunctionNode
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSql(SqlWalker $sqlWalker)
     {

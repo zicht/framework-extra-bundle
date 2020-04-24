@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\DependencyInjection;
@@ -20,8 +20,6 @@ use Symfony\Component\Config\Resource\FileResource;
 class ZichtFrameworkExtraExtension extends DIExtension
 {
     /**
-     * Adds the uglify configuration
-     *
      * @param string $uglifyConfigFile
      * @param boolean $isDebug
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -51,20 +49,18 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
         $global = new Definition(
             'Zicht\Bundle\FrameworkExtraBundle\Twig\UglifyGlobal',
-            array(
+            [
                 $uglifyConfig,
-                $isDebug
-            )
+                $isDebug,
+            ]
         );
 
         $global->addTag('twig.global');
-        $global->addMethodCall('setDebug', array($isDebug));
-        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_uglify', $global));
+        $global->addMethodCall('setDebug', [$isDebug]);
+        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', ['zicht_uglify', $global]);
     }
 
     /**
-     * Adds the requirejs configuration
-     *
      * @param string $requirejsConfigFile
      * @param boolean $isDebug
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -92,19 +88,19 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
         $global = new Definition(
             'Zicht\Bundle\FrameworkExtraBundle\Twig\RequirejsGlobal',
-            array(
+            [
                 $requirejsConfig,
-                $isDebug
-            )
+                $isDebug,
+            ]
         );
 
         $global->addTag('twig.global');
-        $global->addMethodCall('setDebug', array($isDebug));
-        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', array('zicht_requirejs', $global));
+        $global->addMethodCall('setDebug', [$isDebug]);
+        $container->getDefinition('zicht_twig_extension')->addMethodCall('setGlobal', ['zicht_requirejs', $global]);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -120,7 +116,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
         if (!empty($config['uglify'])) {
             if (!isset($config['uglify_debug'])) {
-                $config['uglify_debug']= $container->getParameter('kernel.debug');
+                $config['uglify_debug'] = $container->getParameter('kernel.debug');
             }
 
             $this->addUglifyConfiguration($config['uglify'], $config['uglify_debug'], $container);
@@ -128,7 +124,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
 
         if (!empty($config['requirejs'])) {
             if (!isset($config['requirejs_debug'])) {
-                $config['requirejs_debug']= $container->getParameter('kernel.debug');
+                $config['requirejs_debug'] = $container->getParameter('kernel.debug');
             }
 
             $this->addRequirejsConfiguration($config['requirejs'], $config['requirejs_debug'], $container);

@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
 use Twig_TokenParser;
@@ -13,7 +14,7 @@ use Twig_Token;
 class StrictTokenParser extends Twig_TokenParser
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTag()
     {
@@ -21,7 +22,7 @@ class StrictTokenParser extends Twig_TokenParser
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function parse(Twig_Token $token)
     {
@@ -33,7 +34,7 @@ class StrictTokenParser extends Twig_TokenParser
         $stream = $this->parser->getStream();
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        $body = $this->parser->subparse(array($this, 'decideEnd'), true);
+        $body = $this->parser->subparse([$this, 'decideEnd'], true);
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
         return new StrictNode(['body' => $body, 'expr' => $strictExpr], [], $lineno);
@@ -48,6 +49,6 @@ class StrictTokenParser extends Twig_TokenParser
      */
     public function decideEnd($token)
     {
-        return $token->test(array('endstrict'));
+        return $token->test(['endstrict']);
     }
 }

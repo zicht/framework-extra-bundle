@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Exception;
@@ -23,24 +24,17 @@ use Zicht\Util\Str;
 abstract class AbstractCronCommand extends ContainerAwareCommand
 {
     /**
-     * If the application was neatly cleaned up, this is set to true, and the endOfScript() method will not issue
-     * an error
-     *
-     * @var bool
+     * @var bool If the application was neatly cleaned up, this is set to true, and the endOfScript() method will not issue an error
      */
     private $isFinishedCleanly = false;
 
     /**
-     * Logger instance
-     *
-     * @var \Monolog\Logger
+     * @var Logger
      */
     protected $logger;
 
     /**
-     * Set this to a filename if a mutex should be used.
-     *
-     * @var bool
+     * @var bool Set this to a filename if a mutex should be used.
      */
     protected $mutex = false;
 
@@ -56,10 +50,10 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
     {
         $this->logger = $logger;
         if ($paranoid) {
-            register_shutdown_function(array($this, 'endOfScript'));
+            register_shutdown_function([$this, 'endOfScript']);
         }
-        set_error_handler(array($this, 'errorHandler'));
-        set_exception_handler(array($this, 'exceptionHandler'));
+        set_error_handler([$this, 'errorHandler']);
+        set_exception_handler([$this, 'exceptionHandler']);
 
         if ($verbosity == OutputInterface::VERBOSITY_VERBOSE) {
             $logger->pushHandler(
@@ -85,7 +79,7 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
      */
     public function exceptionHandler(Exception $exception)
     {
-        $this->logger->addError($exception->getMessage(), array($exception->getFile(), $exception->getLine()));
+        $this->logger->addError($exception->getMessage(), [$exception->getFile(), $exception->getLine()]);
         exit(-1);
     }
 
@@ -105,15 +99,15 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
             case E_USER_ERROR:
             case E_ERROR:
             case E_RECOVERABLE_ERROR:
-                $this->logger->addError($errstr, array($file, $line));
+                $this->logger->addError($errstr, [$file, $line]);
                 exit();
                 break;
             case E_WARNING:
             case E_USER_WARNING:
-                $this->logger->addWarning($errstr, array($file, $line));
+                $this->logger->addWarning($errstr, [$file, $line]);
                 break;
             default:
-                $this->logger->addInfo($errstr, array($file, $line));
+                $this->logger->addInfo($errstr, [$file, $line]);
                 break;
         }
     }
@@ -146,8 +140,6 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
 
 
     /**
-     * Run the command.
-     *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
@@ -168,7 +160,7 @@ abstract class AbstractCronCommand extends ContainerAwareCommand
                 $isLockAcquired
             );
             if (!$isLockAcquired && $this->logger) {
-                $this->logger->addWarning("Mutex failed in " . get_class($this) . ", job was not run");
+                $this->logger->addWarning('Mutex failed in ' . get_class($this) . ', job was not run');
             }
         } else {
             $result = $this->doParentRun($input, $output);

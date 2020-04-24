@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Zicht Online <http://zicht.nl>
+ * @copyright Zicht Online <https://zicht.nl>
  */
+
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
 use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
@@ -33,8 +34,6 @@ class DoctrineQueryPager implements Pageable
     protected $countQuery;
 
     /**
-     * Constructor.
-     *
      * @param \Doctrine\ORM\QueryBuilder $q
      * @param string $alias
      * @param string $countAlias
@@ -61,7 +60,7 @@ class DoctrineQueryPager implements Pageable
 
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTotal()
     {
@@ -73,7 +72,7 @@ class DoctrineQueryPager implements Pageable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setRange($start, $length)
     {
