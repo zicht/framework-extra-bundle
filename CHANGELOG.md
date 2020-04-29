@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.2.1 - 2020-04-29
+### Changed
+- Use FQCN for form types
+
 ## 8.2.0 - 2020-04-24
 ### Fixed
 - Fixed composer.json (psr-4 autoloader, dependencies), fixed linter errors, fixed maintainers

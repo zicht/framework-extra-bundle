@@ -7,6 +7,7 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -21,7 +22,7 @@ class MockType extends Form\AbstractType
 {
     public function buildForm(Form\FormBuilderInterface $builder, array $options)
     {
-        $builder->add('foo', 'text');
+        $builder->add('foo', TextType::class);
     }
 
     /**

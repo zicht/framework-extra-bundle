@@ -8,6 +8,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -57,12 +58,12 @@ class ParentChoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $ff = $builder->getFormFactory();
+        $formFactory = $builder->getFormFactory();
 
         $doctrine = $this->doctrine;
 
         // TODO implement a subscriber for this
-        $createParentChoice = function ($parentId) use ($ff, $doctrine, $options) {
+        $createParentChoice = function ($parentId) use ($formFactory, $doctrine, $options) {
             $repo = $doctrine->getRepository($options['class']);
             $choices = [];
             if (!$parentId) {
@@ -76,9 +77,9 @@ class ParentChoiceType extends AbstractType
             foreach ($list as $item) {
                 $choices[$item->getId()] = (string)$item;
             }
-            return $ff->createNamed(
+            return $formFactory->createNamed(
                 'parent',
-                'choice',
+                ChoiceType::class,
                 $parentId,
                 ['choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false]
             );
@@ -86,7 +87,7 @@ class ParentChoiceType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function ($e) use ($ff, $doctrine, $createParentChoice, $options) {
+            function ($e) use ($formFactory, $doctrine, $createParentChoice, $options) {
                 $data = $e->getData();
                 $form = $e->getForm();
                 $parentId = $data['parent'];
@@ -103,7 +104,7 @@ class ParentChoiceType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $e) use ($ff, $doctrine, $createParentChoice) {
+            function (FormEvent $e) use ($formFactory, $doctrine, $createParentChoice) {
                 $parentId = null;
                 if (null !== $e->getData()) {
                     $selectedItem = $e->getData();
