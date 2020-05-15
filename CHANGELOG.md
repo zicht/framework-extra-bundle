@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.0.0 - 2020-05-15
+### Added
+- Support for Symfony 4.x and Twig 3.x
+### Removed
+- Support for Symfony 3.x
+- RequireJs and Uglify JS toolings
+### Changed
+- Removed Zicht(Test)/Bundle/FrameworkExtraBundle/ directory depth: moved all code up directly into src/ and test/
+
 ## 8.2.1 - 2020-04-29
 ### Changed
 - Use FQCN for form types
