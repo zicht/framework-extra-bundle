@@ -24,14 +24,14 @@
     "autoload": {
         "psr-4": {
             "Zicht\\Bundle\\FrameworkExtraBundle\\": [
-                "src/Zicht/Bundle/FrameworkExtraBundle/"
+                "src/"
             ]
         }
     },
     "autoload-dev": {
         "psr-4": {
             "ZichtTest\\Bundle\\FrameworkExtraBundle\\": [
-                "tests/ZichtTest/Bundle/FrameworkExtraBundle/"
+                "tests/"
             ]
         }
     },

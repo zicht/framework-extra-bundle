@@ -14,6 +14,8 @@ Nothing so far
 ### Removed
 - Support for Symfony 3.x
 - RequireJs and Uglify JS toolings
+### Changed
+- Removed Zicht(Test)/Bundle/FrameworkExtraBundle/ directory depth: moved all code up directly into src/ and test/
 
 ## 8.2.1 - 2020-04-29
 ### Changed
