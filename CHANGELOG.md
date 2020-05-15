@@ -13,6 +13,7 @@ Nothing so far
 - Support for Symfony 4.x and Twig 3.x
 ### Removed
 - Support for Symfony 3.x
+- RequireJs and Uglify JS toolings
 
 ## 8.2.1 - 2020-04-29
 ### Changed

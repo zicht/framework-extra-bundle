@@ -23,9 +23,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('requirejs')->end()
-                ->scalarNode('uglify')->end()
-                ->booleanNode('uglify_debug')->end()
                 ->arrayNode('embed_helper')
                     ->children()
                         ->booleanNode('mark_exceptions_as_errors')->defaultValue(false)->end()
