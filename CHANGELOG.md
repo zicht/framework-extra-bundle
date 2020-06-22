@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.0.1 - 2020-06-22
+### Fixed
+- `Builder::create` allows for both `string` and `array` values.
+
 ## 9.0.0 - 2020-05-15
 ### Added
 - Support for Symfony 4.x and Twig 3.x
