@@ -15,7 +15,7 @@ class Builder
     /**
      * Creates a builder for the specified namespace
      *
-     * @param string $namespaces
+     * @param string|array $namespaces
      * @return Builder
      */
     public static function create($namespaces)
