@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.2.2 - 2020-06-30
+### Changed
+- Fix bug in parsing requirejs config
+
 ## 8.2.1 - 2020-04-29
 ### Changed
 - Use FQCN for form types

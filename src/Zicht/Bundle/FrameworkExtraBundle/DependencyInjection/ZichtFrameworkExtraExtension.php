@@ -77,7 +77,7 @@ class ZichtFrameworkExtraExtension extends DIExtension
         }
         $container->addResource(new FileResource($requirejsConfigFile));
         try {
-            $requirejsConfig = Yaml::parse($requirejsConfigFile);
+            $requirejsConfig = Yaml::parse(file_get_contents($requirejsConfigFile));
         } catch (\Exception $e) {
             throw new InvalidConfigurationException(
                 "zicht_framework_extra.requirejs setting '$requirejsConfigFile' could not be read",
