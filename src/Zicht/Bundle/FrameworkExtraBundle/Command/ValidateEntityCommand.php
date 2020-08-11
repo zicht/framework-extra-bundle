@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ValidateEntityCommand extends ContainerAwareCommand
 {
@@ -30,6 +31,7 @@ class ValidateEntityCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
         $entities = $input->getArgument('entity') ?: $this->getAllEntities();
 
         foreach ($entities as $entity) {
@@ -40,9 +42,9 @@ class ValidateEntityCommand extends ContainerAwareCommand
                 $violations = $this->getContainer()->get('validator')->validate($entity, $groups ? $groups : null);
 
                 if (count($violations)) {
-                    $output->writeln(get_class($entity) . '::' . $entity->getId());
+                    $io->getErrorStyle()->writeln(get_class($entity) . '::' . $entity->getId());
                     foreach ($violations as $error) {
-                        $output->writeln(" -> {$error}");
+                        $io->getErrorStyle()->writeln(" -> {$error}");
                     }
                 }
             }
