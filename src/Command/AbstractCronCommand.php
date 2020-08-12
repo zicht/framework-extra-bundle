@@ -20,6 +20,7 @@ use Zicht\Util\Str;
 
 /**
  * Simple utility class for console applications. Uses Monolog for logging and error/exception reporting.
+ * @deprecated Locking should be done by exonet and the logging can be done simpler using the GetStdLoggerTrait
  */
 abstract class AbstractCronCommand extends Command
 {
