@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Generates an overview of all images used in the defined Entity and the defined fields.
@@ -37,6 +38,8 @@ class ListUserImagesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
+
         /** @var EntityManager $em */
         $em = $this->getContainer()->get('doctrine')->getManager();
 
@@ -80,7 +83,7 @@ class ListUserImagesCommand extends ContainerAwareCommand
 
                             $list[$fileSize][] = $arr;
                         } else {
-                            $output->writeln('File not found ' . $image);
+                            $io->getErrorStyle()->error('File not found ' . $image);
                         }
                     }
                 }
@@ -91,7 +94,7 @@ class ListUserImagesCommand extends ContainerAwareCommand
 
         foreach ($list as $fileSize => $sizes) {
             foreach ($sizes as $size => $info) {
-                $output->writeln(implode(', ', $info));
+                $io->writeln(implode(', ', $info));
             }
         }
     }

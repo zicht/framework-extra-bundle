@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.3.0 - 2020-08-11
+### Added
+- Added `CreateSAtdLoggerTrait` to help console commands output to either stdout or stderr depending on log level.
+
 ## 8.2.2 - 2020-06-30
 ### Changed
 - Fix bug in parsing requirejs config
