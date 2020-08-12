@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.0.2 - 2020-08-12
+### Fixed
+- Forward merge from 8.2.2 and 8.3.0.
+
 ## 9.0.1 - 2020-06-22
 ### Fixed
 - `Builder::create` allows for both `string` and `array` values.
@@ -20,6 +24,14 @@ Nothing so far
 - RequireJs and Uglify JS toolings
 ### Changed
 - Removed Zicht(Test)/Bundle/FrameworkExtraBundle/ directory depth: moved all code up directly into src/ and test/
+
+## 8.3.0 - 2020-08-11
+### Added
+- Added `CreateSAtdLoggerTrait` to help console commands output to either stdout or stderr depending on log level.
+
+## 8.2.2 - 2020-06-30
+### Changed
+- Fix bug in parsing requirejs config
 
 ## 8.2.1 - 2020-04-29
 ### Changed
