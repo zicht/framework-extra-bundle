@@ -10,6 +10,7 @@
     ],
     "require": {
         "php": "^7",
+        "swaggest/json-schema": "^0.12",
         "symfony/symfony": "^3.4",
         "twig/twig": "^2",
         "zicht/util": "~1.1"

@@ -29,6 +29,11 @@
             <tag name="form.type" alias="zicht_markup_type"/>
         </service>
 
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaType" class="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaType">
+            <argument>%kernel.root_dir%/../web</argument>
+            <tag name="form.type" />
+        </service>
+
         <service
                 id="zicht_framework_extra.event_listener.update_schema_doctrine_command_listener"
                 class="Zicht\Bundle\FrameworkExtraBundle\EventListener\UpdateSchemaDoctrineCommandListener">
