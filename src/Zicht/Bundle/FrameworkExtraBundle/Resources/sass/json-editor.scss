@@ -1,0 +1,12 @@
+@import "../../../../../../node_modules/alertifyjs/build/css/alertify";
+@import "../../../../../../node_modules/alertifyjs/build/css/themes/semantic.css";
+@import "../../../../../../node_modules/@trevoreyre/autocomplete-js/dist/style.css";
+
+.alertify {
+    &.c-json-editor-popup {
+        .ajs-dialog {
+            max-width: 70%;
+            min-height: 70%;
+        }
+    }
+}

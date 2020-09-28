@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.4.0 - 2020-09-17
+### Added
+- `JsonSchemaType` form type that renders a form based on a json-schema.
+- Autocompletion for the json-schema editor.
+- javascript and css code to include on the admin site.
+
 ## 8.3.0 - 2020-08-11
 ### Added
 - Added `CreateSAtdLoggerTrait` to help console commands output to either stdout or stderr depending on log level.
