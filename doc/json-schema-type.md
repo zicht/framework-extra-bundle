@@ -77,7 +77,6 @@ i.e. if your feed supports special structures such as: `id:123`.  While the `"im
 are used add an image to the result.  For example:
 ```json
 {
-    "usage": "",
     "result": [
         {"info": "Remember that you can also search for dates using: 'date:2020-07-24'"},
         {"image": "/image/123.jpg", "label": "hello everyone", "value": "123"},
