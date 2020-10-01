@@ -51,7 +51,7 @@ Alternatively:
 {"result": ["Hello everyone", "Hello Boudewijn", "Nice world you have there"]}
 ```
 
-However, when you want to show label that is different than the stored value:
+However, when you want to show label that is different from the stored value:
 ```json
 [
     {"label": "hello everyone", "value": "123"},
@@ -71,14 +71,15 @@ Alternatively:
 }
 ```
 
-But wait, there is more!  You can optionally specify `"usage"` or `"image"` fields.
-The `"usage"` can be used to explain how the search works, i.e. if your feed
-supports special structures such as: `id:123`.  While the `"image"` fields are used
-add an image to the result.  For example:
+But wait, there is more!  You can also specify `"info": "Lorem ipsum"` to add a non-selectable
+item in the results list.  This could, for example, be used to explain how the search works,
+i.e. if your feed supports special structures such as: `id:123`.  While the `"image"` fields
+are used add an image to the result.  For example:
 ```json
 {
-    "usage": "Remember that you can also search for dates using: 'date:2020-07-24'",
+    "usage": "",
     "result": [
+        {"info": "Remember that you can also search for dates using: 'date:2020-07-24'"},
         {"image": "/image/123.jpg", "label": "hello everyone", "value": "123"},
         {"image": "/image/042.jpg", "label": "hello Boudewijn", "value": "42"},
         {"image": "/image/321.jpg", "label": "Nice world you have there", "value": "321"}

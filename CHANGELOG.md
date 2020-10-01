@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.4.1 - 2020-10-01
+### Fixed
+- `autocomplete.ts` now allows for non-selectable `{"info":"Lorem"}` items to be
+  included in the results.  This provides flexibility for feeds that want to enhance
+  the user experience.
+
 ## 8.4.0 - 2020-09-17
 ### Added
 - `JsonSchemaType` form type that renders a form based on a json-schema.
