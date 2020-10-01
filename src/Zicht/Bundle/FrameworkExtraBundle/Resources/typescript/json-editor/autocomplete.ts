@@ -16,7 +16,7 @@ interface PropsInterface {
 interface ResultItemInterface {
     image?:string;
     label?:string;
-    type:'result' | 'usage';
+    type:'result' | 'info';
     value:string;
 }
 
@@ -34,6 +34,11 @@ const resultItemConvertor:{ (data:any):ResultItemInterface } = (data:any):Result
         return {image: typeof data.image === 'string' ? data.image : undefined, label: data.label, type: 'result', value: data.value};
     }
 
+    // Handle case where `info` is required
+    if (typeof data === 'object' && typeof data.info === 'string') {
+        return {type: 'info', value: data.info};
+    }
+
     console.error(data);
     throw new Error('Unable to convert data to auto complete item');
 };
@@ -42,25 +47,18 @@ const resultItemConvertor:{ (data:any):ResultItemInterface } = (data:any):Result
  * Tries to convert data into a ResultItemInterface[]
  */
 const jsonFeedResultConvertor:{ (data:any):ResultItemInterface[] } = (data:any):ResultItemInterface[] => {
-    const results:ResultItemInterface[] = [];
-
+    // Handle feeds that return the list directly
     if (Array.isArray(data)) {
-        // Handle feeds that return the list directly
-        results.push(...data.map(resultItemConvertor));
-    } else if (typeof data === 'object' && Array.isArray(data.result)) {
-        // Handle feeds that return the list in a result property
-        results.push(...data.result.map(resultItemConvertor));
-    } else {
-        console.error(data);
-        throw new Error('Unable to convert data to auto complete items');
+        return data.map(resultItemConvertor);
     }
 
-    // Perhaps usage information was provided
-    if (typeof data === 'object' && typeof data.usage === 'string') {
-        results.push({type: 'usage', value: data.usage});
+    // Handle feeds that return the list in a result property
+    if (typeof data === 'object' && Array.isArray(data.result)) {
+        return data.result.map(resultItemConvertor);
     }
 
-    return results;
+    console.error(data);
+    throw new Error('Unable to convert data to auto complete items');
 };
 
 export const setupAutocomplete:{ ():void } = ():void => {
@@ -69,17 +67,17 @@ export const setupAutocomplete:{ ():void } = ():void => {
             // Render the result (i.e. the visible representation of the result)
             json_feed_render: (_editor:any, result:ResultItemInterface, props:PropsInterface):string => {
                 switch (result.type) {
-                    case 'usage':
+                    case 'info':
                         return [
-                            '<li style="padding:15px;">',
-                            `<div>${result.value}</div>`,
+                            '<li style="padding:15px; background-color:lightgray;">',
+                            `${result.value}`,
                             '</li>',
                         ].join('');
 
                     case 'result':
                         return [
                             `<li ${props.toString()}>`,
-                            result.image ? `<img src="${result.image}" style="float:left; width:60px; height:40px; display:block; object-fit:contain; margin-right:5px">` : '',
+                            result.image ? `<img src="${result.image}" style="float:left; width:60px; height:40px; display:block; object-fit:contain; margin-right:5px;">` : '',
                             `<div>${result.label ? result.label : result.value}</div>`,
                             result.label ? `<div><small>${result.value}</small></div>` : '',
                             `</li>`,
