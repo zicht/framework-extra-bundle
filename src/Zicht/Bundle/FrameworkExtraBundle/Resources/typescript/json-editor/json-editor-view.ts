@@ -20,6 +20,7 @@ import * as alertify from 'alertifyjs';
  * Either the data-json-editor-schema or the data-json-editor-schema-url is required.
  */
 export class JsonEditorView extends View<HTMLInputElement> {
+    public static defaultDebug:boolean = false;
     public static defaultPopup:boolean = true;
     public static defaultOptions:any = {};
 
@@ -28,19 +29,13 @@ export class JsonEditorView extends View<HTMLInputElement> {
     }
 
     private _editor:any;
+    private readonly _debug:boolean;
     private readonly _popup:boolean;
     private readonly _options:any;
 
-    public get value():any {
-        try {
-            return JSON.parse(this._element.value);
-        } catch (error) {
-            return {};
-        }
-    }
-
     private constructor(element:HTMLInputElement) {
         super(element);
+        this._debug = getRequiredBooleanAttribute(this._element, 'data-json-editor-debug', JsonEditorView.defaultDebug);
         this._popup = getRequiredBooleanAttribute(this._element, 'data-json-editor-popup', JsonEditorView.defaultPopup);
         this._options = {
             ...JsonEditorView.defaultOptions,
@@ -54,12 +49,32 @@ export class JsonEditorView extends View<HTMLInputElement> {
         const schema:any = await this._getSchema();
         // Initialize the editor
         this._editor = new JSONEditor(element, {...this._options, schema});
-        this._editor.setValue(this.value);
+        // Disable the editor when the _element is disabled
+        if (this._element instanceof HTMLInputElement && this._element.disabled) {
+            this._editor.disable();
+        }
+        // Populate the editor with the value from this._element
+        this._editor.on('ready', ():void => {
+            let value:any = {};
+            try {
+                value = JSON.parse(this._element.value);
+            } catch (error) {
+                window.console.warn('Unable to parse json value in element', error);
+            }
+            if (this._debug) {
+                window.console.debug('Initial value', value);
+            }
+            this._editor.setValue(value);
+        });
         // Store the resulting JSON in the input element
         this._editor.on('change', ():void => {
-            const value:string = JSON.stringify(this._editor.getValue());
-            if (this._element.value !== value) {
-                this._element.value = value;
+            const value:any = this._editor.getValue();
+            const strValue:string = JSON.stringify(value);
+            if (this._element.value !== strValue) {
+                if (this._debug) {
+                    window.console.debug('Update value', value);
+                }
+                this._element.value = strValue;
             }
         });
     }
@@ -95,9 +110,13 @@ export class JsonEditorView extends View<HTMLInputElement> {
         dialog.show();
     }
 
-    private _createEditorWrapperElement(element:HTMLElement):HTMLDivElement {
+    private _createEditorWrapperElement(element:HTMLElement):void {
         if (!element.parentElement) {
             throw new Error('Unable to inject JsonEditor, given element does not have a parent element');
+        }
+
+        if (element instanceof HTMLInputElement && element.disabled) {
+            window.console.warn('The input element is disabled');
         }
 
         // Replace element with wrapper element
@@ -121,7 +140,5 @@ export class JsonEditorView extends View<HTMLInputElement> {
             wrapper.appendChild(editor);
             this._initializeEditor(editor);
         }
-
-        return wrapper;
     }
 }

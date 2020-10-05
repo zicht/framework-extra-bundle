@@ -30,7 +30,7 @@
         </service>
 
         <service id="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaType" class="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaType">
-            <argument>%kernel.root_dir%/../web</argument>
+            <argument type="service" id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService"/>
             <tag name="form.type" />
         </service>
 
@@ -42,6 +42,10 @@
 
         <service id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" class="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService">
             <argument type="service" id="request_stack"/>
+        </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService">
+            <argument>%kernel.root_dir%/../web</argument>
         </service>
     </services>
 </container>

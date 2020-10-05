@@ -30,21 +30,21 @@
         "style-loader": "^1.0.0",
         "stylelint-config-zicht": "~1.0.1",
         "stylelint-webpack-plugin": "^0.10.5",
-        "ts-loader": "^8.0.3",
+        "ts-loader": "^8.0.4",
         "tslint-loader": "^3.6.0",
         "typescript": "^3.6.3",
-        "webpack": "^4.41.0",
+        "webpack": "^4.44.2",
         "webpack-build-notifier": "^1.1.1",
         "webpack-cli": "^3.3.9",
         "webpack-fix-style-only-entries": "^0.3.1",
-        "webpack-merge-and-include-globally": "^2.1.25",
+        "webpack-merge-and-include-globally": "^2.1.26",
         "webpack-polyfill-injector": "^3.0.2"
     },
     "stylelint": {
         "extends": "stylelint-config-zicht"
     },
     "dependencies": {
-        "@json-editor/json-editor": "^2.3.0",
+        "@json-editor/json-editor": "^2.4.0",
         "@trevoreyre/autocomplete-js": "^2.2.0",
         "@zicht/js.component": "^0.2.3",
         "@zicht/js.util": "^2.4.5"

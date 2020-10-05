@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "/bundles/validate-object.schema.json",
+    "type": "object",
+    "properties": {
+        "str": {
+            "type": "string"
+        },
+        "int": {
+            "type": "number"
+        },
+        "bool": {
+            "type": "boolean"
+        }
+    }
+}
