@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 6.2.0 - 2020-10-09
+### Added
+- Merge from 5.5.0.
+
 ## 6.1.1 - 2019-07-18
 ### Added
 - Merge from 5.4.1.
@@ -20,6 +24,11 @@ Nothing so far
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id. 
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.5.0 - 2020-10-09
+### Added
+- Added CreateSAtdLoggerTrait to help console commands output to either stdout or stderr depending on log level.
+  Note that this trait was backported from 8.3.0 to be used in old projects that still rely on 5.x.
 
 ## 5.4.1 - 2019-07-18
 ### Fixed
