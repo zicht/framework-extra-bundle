@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.4.2 - 2020-10-09
+### Added
+- Merge from 7.2.0.
+  7.2.0 contains the backport for the `CreateSAtdLoggerTrait` already included in 8.x,
+  hence this is patch release.
+
 ## 8.4.1 - 2020-10-01
 ### Fixed
 - `autocomplete.ts` now allows for non-selectable `{"info":"Lorem"}` items to be
@@ -92,6 +98,10 @@ Nothing so far
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
 
+## 7.2.0 - 2020-10-09
+### Added
+- Merge from 6.2.0.
+
 ## 7.1.2 - 2019-07-18
 ### Added
 - Merge from 6.1.1.
@@ -113,6 +123,13 @@ Nothing so far
 - removed unnecessary parameters of the embed helper and hard dependency of service container. The second
   request argument is removed of the handleForm method and $handlerCallback will only get the form.
 
+<<<<<<< HEAD
+=======
+## 6.2.0 - 2020-10-09
+### Added
+- Merge from 5.5.0.
+
+>>>>>>> release/7.x
 ## 6.1.1 - 2019-07-18
 ### Added
 - Merge from 5.4.1.
@@ -125,6 +142,11 @@ Nothing so far
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id.
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.5.0 - 2020-10-09
+### Added
+- Added CreateSAtdLoggerTrait to help console commands output to either stdout or stderr depending on log level.
+  Note that this trait was backported from 8.3.0 to be used in old projects that still rely on 5.x.
 
 ## 5.4.1 - 2019-07-18
 ### Fixed
