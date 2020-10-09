@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 5.5.0 - 2020-10-09
+### Added
+- Added CreateSAtdLoggerTrait to help console commands output to either stdout or stderr depending on log level.
+  Note that this trait was backported from 8.3.0 to be used in old projects that still rely on 5.x.
+
 ## 5.4.1 - 2019-07-18
 ### Fixed
 - Fixed issue in `UrlCheckerService` where it would crash when no master request exists.
