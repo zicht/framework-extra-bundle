@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.0.3 - 2020-10-20
+### Changed
+- Allow `zicht_embed_helper` to be a public service.
+
 ## 9.0.2 - 2020-08-12
 ### Fixed
 - Forward merge from 8.2.2 and 8.3.0.
