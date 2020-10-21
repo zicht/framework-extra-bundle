@@ -55,7 +55,7 @@
             <argument>%kernel.cache_dir%</argument>
         </service>
 
-        <service id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" class="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService">
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" class="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService" public="true">
             <argument type="service" id="request_stack"/>
         </service>
     </services>

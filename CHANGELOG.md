@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.0.4 - 2020-10-21
+### Changed
+- Allow `Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService` to be a public service.
+
 ## 9.0.3 - 2020-10-20
 ### Changed
 - Allow `zicht_embed_helper` to be a public service.
