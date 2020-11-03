@@ -814,6 +814,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     {
         return [
             new TwigTest('numeric', [$this, 'isNumeric']),
+            new TwigTest('instanceof', [$this, 'isInstanceOf']),
         ];
     }
 
@@ -826,5 +827,17 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function isNumeric($value)
     {
         return is_numeric($value);
+    }
+
+    /**
+     * Checks if a given value is an instance of a certain object
+     *
+     * @param object $value
+     * @param string $instance
+     * @return bool
+     */
+    public function isInstanceof($value, $instance)
+    {
+        return is_object($value) && $value instanceof $instance;
     }
 }

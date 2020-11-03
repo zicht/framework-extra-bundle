@@ -23,7 +23,22 @@
 ## Tests ##
 
 ------------------  -------------------------------------------------------------------------------------------
+`instanceof`       Test that checks if a given value is an instance of a certain object  
 `numeric`       Test that checks if a given value is numeric  
+
+#### Examples
+```
+{% set item_id = 123 %}
+{% if item_id is numeric %}
+    {# ... your code here #}
+{% endif %}
+```
+
+```
+{% if page is instanceof('App\\Entity\\Page\\MySpecialPage') %}
+    {# ... your code here #}
+{# endif #}
+```
 ------------------  -------------------------------------------------------------------------------------------
 
 
