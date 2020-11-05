@@ -12,6 +12,7 @@ import * as alertify from 'alertifyjs';
  * Create a json editor based on a given schema
  *
  * Supported data attributes:
+ * - data-json-editor-debug: boolean to enable or disable debug logging
  * - data-json-editor-popup: boolean to indicate the form must be shown in a popup window, defaults to false
  * - data-json-editor-options: a json object that is passed to the json editor, defaults to {}
  * - data-json-editor-schema: a string containing the schema
@@ -32,6 +33,7 @@ export class JsonEditorView extends View<HTMLInputElement> {
     private readonly _debug:boolean;
     private readonly _popup:boolean;
     private readonly _options:any;
+    private readonly _submitElements:HTMLInputElement[];
 
     private constructor(element:HTMLInputElement) {
         super(element);
@@ -41,6 +43,8 @@ export class JsonEditorView extends View<HTMLInputElement> {
             ...JsonEditorView.defaultOptions,
             ...getRequiredJsonAttribute(this._element, 'data-json-editor-options', (_data:any):_data is any => true, {}),
         };
+        this._submitElements = this._findSubmitElements(element);
+        this._updateState(false);
         this._createEditorWrapperElement(element);
     }
 
@@ -55,16 +59,19 @@ export class JsonEditorView extends View<HTMLInputElement> {
         }
         // Populate the editor with the value from this._element
         this._editor.on('ready', ():void => {
-            let value:any = {};
-            try {
-                value = JSON.parse(this._element.value);
-            } catch (error) {
-                window.console.warn('Unable to parse json value in element', error);
+            if (this._element.value) {
+                let value:any = {};
+                try {
+                    value = JSON.parse(this._element.value);
+                } catch (error) {
+                    window.console.warn('Unable to parse json value in element', error);
+                }
+                if (this._debug) {
+                    window.console.debug('Initial value', value);
+                }
+                this._editor.setValue(value);
             }
-            if (this._debug) {
-                window.console.debug('Initial value', value);
-            }
-            this._editor.setValue(value);
+            this._updateState(this._editor.validate().length === 0);
         });
         // Store the resulting JSON in the input element
         this._editor.on('change', ():void => {
@@ -76,6 +83,7 @@ export class JsonEditorView extends View<HTMLInputElement> {
                 }
                 this._element.value = strValue;
             }
+            this._updateState(this._editor.validate().length === 0);
         });
     }
 
@@ -139,6 +147,26 @@ export class JsonEditorView extends View<HTMLInputElement> {
             const editor:HTMLDivElement = window.document.createElement('div');
             wrapper.appendChild(editor);
             this._initializeEditor(editor);
+        }
+    }
+
+    private _findSubmitElements(element:HTMLInputElement):HTMLInputElement[] {
+        // Find parent form
+        const form:null | HTMLFormElement = element.closest('form');
+        if (form === null) {
+            return [];
+        }
+
+        // Find child <input type="sumbit"> elements
+        return Array.from(form.querySelectorAll('input[type="submit"]'));
+    }
+
+    private _updateState(valid:boolean):void {
+        if (this._debug) {
+            window.console.debug(`State ${valid ? 'Valid' : 'Invalid'}`);
+        }
+        for (const submitElement of this._submitElements) {
+            submitElement.disabled = !valid;
         }
     }
 }

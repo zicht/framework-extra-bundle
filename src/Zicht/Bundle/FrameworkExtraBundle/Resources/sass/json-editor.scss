@@ -2,11 +2,8 @@
 @import "../../../../../../node_modules/alertifyjs/build/css/themes/semantic.css";
 @import "../../../../../../node_modules/@trevoreyre/autocomplete-js/dist/style.css";
 
-.alertify {
-    &.c-json-editor-popup {
-        .ajs-dialog {
-            max-width: 70%;
-            min-height: 70%;
-        }
-    }
+/* stylelint-disable  selector-max-compound-selectors, selector-max-combinators */
+.alertify.ajs-frameless .ajs-body .ajs-content {
+    position: relative;
 }
+/* stylelint-enable  selector-max-compound-selectors, selector-max-combinators */
