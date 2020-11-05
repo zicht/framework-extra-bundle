@@ -7,15 +7,25 @@ namespace Zicht\Bundle\FrameworkExtraBundle\JsonSchema;
 
 use Swaggest\JsonSchema\Context;
 use Swaggest\JsonSchema\Schema;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class SchemaService
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
     /** @var string */
     private $webDir;
 
-    public function __construct(string $webDir)
+    public function __construct(TranslatorInterface $translator, string $webDir)
     {
+        $this->translator = $translator;
         $this->webDir = $webDir;
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
