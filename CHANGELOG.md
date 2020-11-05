@@ -14,6 +14,7 @@ Nothing so far
   + create `Schema` instance (using a special loader to resolve `"$ref"` on disk)
   + validate data
   + migrate data
+- `JsonSchemaAutoCompleteType` was added.
 - `json-editor-view.ts` will now disable any `<input type="submit">` buttons that
   are in the same `<form>` as the schema while the data is invalid.
 ### Changed

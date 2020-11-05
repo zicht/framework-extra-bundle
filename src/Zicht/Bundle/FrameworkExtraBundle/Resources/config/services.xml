@@ -34,6 +34,11 @@
             <tag name="form.type" />
         </service>
 
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaAutoCompleteType" class="Zicht\Bundle\FrameworkExtraBundle\Form\JsonSchemaAutoCompleteType">
+            <argument type="service" id="translator" />
+            <tag name="form.type" />
+        </service>
+
         <service
                 id="zicht_framework_extra.event_listener.update_schema_doctrine_command_listener"
                 class="Zicht\Bundle\FrameworkExtraBundle\EventListener\UpdateSchemaDoctrineCommandListener">
