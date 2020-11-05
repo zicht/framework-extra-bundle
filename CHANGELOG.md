@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.5.0 - 2020-11-05
+### Added
+- `SchemaService` was added.  This service can...
+  + create `Schema` instance (using a special loader to resolve `"$ref"` on disk)
+  + validate data
+  + migrate data
+- `json-editor-view.ts` will now disable any `<input type="submit">` buttons that
+  are in the same `<form>` as the schema while the data is invalid.
+### Changed
+- `JsonSchemaType` now takes `SchemaService` as the first argument instead of the webdir.
+  While this is not backwards compatible, the only place where this type is currently used,
+  is inside this library, hence the major version was not incremented.
+### Fixed
+- `json-editor.scss` fixes styling issue for editors inside a popup.
+
 ## 8.4.2 - 2020-10-09
 ### Added
 - Merge from 7.2.0.
@@ -44,7 +59,7 @@ Nothing so far
 
 ## 8.1.7 - 2020-01-29
 ### Fixed
-- Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array. 
+- Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array.
   But is used as an array.
 
 ## 8.1.4 - 2019-09-20
