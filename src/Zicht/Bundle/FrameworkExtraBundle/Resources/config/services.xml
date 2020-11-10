@@ -51,7 +51,7 @@
 
         <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService">
             <argument type="service" id="translator"/>
-            <argument>%kernel.root_dir%/../web</argument>
+            <argument>%kernel.project_dir%/web</argument>
         </service>
     </services>
 </container>

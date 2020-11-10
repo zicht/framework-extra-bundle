@@ -227,7 +227,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
      */
     public function shaOne($string)
     {
-
         if (is_string($string) || $string instanceof \Twig_Markup) {
             return sha1($string);
         }

@@ -18,6 +18,10 @@ class WebDirRefProvider extends BasicFetcher implements RemoteRefProvider
         $this->webDir = $webDir;
     }
 
+    /**
+     * @param string $url
+     * @return mixed
+     */
     public function getSchemaData($url)
     {
         if (preg_match('#^/bundles/#', $url) && is_file($this->webDir . $url)) {

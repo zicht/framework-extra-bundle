@@ -20,7 +20,7 @@ class JsonSchemaAutoCompleteType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -43,7 +43,7 @@ class JsonSchemaAutoCompleteType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getParent()
     {
@@ -52,6 +52,8 @@ class JsonSchemaAutoCompleteType extends AbstractType
 
     /**
      * Returns the json_encoded schema used by the editor to render an input with autocomplete
+     *
+     * @return \closure
      */
     private function getSchemaGenerator()
     {

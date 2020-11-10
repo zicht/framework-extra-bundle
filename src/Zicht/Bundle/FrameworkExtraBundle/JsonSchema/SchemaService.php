@@ -59,12 +59,20 @@ class SchemaService
         throw new \RuntimeException('$schema should be either a Schema instance, a string (file path) or \stdClass (schema)');
     }
 
+    /**
+     * Try to validate a given value
+     *
+     * @param Schema|string|\stdClass $schema
+     * @param bool|int|float|string|array $data
+     * @param null|string $message
+     * @return bool Returns false when the validation failed
+     */
     public function validate($schema, $data, &$message = null): bool
     {
         // PHP is unable to distinguish between an empty array and an empty object,
         // that causes `[]` to become an empty array, while the schema expects an
         // empty object.  We fix this case manually and hope this does not occur
-        // anywhere else $data.
+        // anywhere else.
         if ($data === []) {
             $data = (object)$data;
         }
@@ -84,7 +92,7 @@ class SchemaService
      *
      * @param Schema|string|\stdClass $schema
      * @param bool|int|float|string|array $data
-     * @param null|string &$message
+     * @param null|string $message
      * @return bool|int|float|string|array|null Returns null when the validation failed
      */
     public function migrate($schema, $data, &$message = null)
@@ -98,7 +106,7 @@ class SchemaService
         // PHP is unable to distinguish between an empty array and an empty object,
         // that causes `[]` to become an empty array, while the schema expects an
         // empty object.  We fix this case manually and hope this does not occur
-        // anywhere else $data.
+        // anywhere else.
         if ($objectValue === []) {
             $objectValue = (object)$objectValue;
         }
@@ -106,8 +114,7 @@ class SchemaService
         // json_encode and then json_decode to return php array structure instead of object structure because the key-value-bundle uses php arrays
         try {
             return json_decode(json_encode($this->getSchema($schema)->process($objectValue, $context)), true);
-        } catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             $message = $exception->getMessage();
             return null;
         }

@@ -6,6 +6,7 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\JsonSchema;
 
 use Swaggest\JsonSchema\Schema;
+use Symfony\Component\Translation\TranslatorInterface;
 use Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService;
 
 class SchemaServiceTest extends \PHPUnit_Framework_TestCase
@@ -15,44 +16,20 @@ class SchemaServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->schemaService = new SchemaService(__DIR__);
+        $translator = $this->getMockBuilder(TranslatorInterface::class)->disableOriginalConstructor()->getMock();
+        $this->schemaService = new SchemaService($translator, __DIR__);
     }
 
     /**
      * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
      * @dataProvider validateSchemaTypesProvider
-     * @dataProvider validateProvider
+     * @throws \Swaggest\JsonSchema\Exception
+     * @throws \Swaggest\JsonSchema\InvalidValue
      */
-    public function testValidate($schema, $data, $expected, $expectedMessageRegExp = null)
+    public function testGetSchema($schema)
     {
-        $result = $this->schemaService->validate($schema, $data, $message);
-        if ($expectedMessageRegExp === null) {
-            self::assertNull($message);
-        } else {
-            self::assertRegExp($expectedMessageRegExp, $message);
-        }
-        self::assertEquals($expected, $result);
-    }
-
-    /**
-     * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
-     * @dataProvider migrateProvider
-     */
-    public function testMigrate($schema, $data, $expected, $expectedMessageRegExp = null)
-    {
-        $result = $this->schemaService->migrate($schema, $data, $message);
-        if ($expectedMessageRegExp === null) {
-            self::assertNull($message);
-        } else {
-            self::assertRegExp($expectedMessageRegExp, $message);
-        }
-        self::assertEquals($expected, $result);
+        $result = $this->schemaService->getSchema($schema);
+        $this->assertInstanceOf(Schema::class, $result);
     }
 
     /**
@@ -68,23 +45,41 @@ class SchemaServiceTest extends \PHPUnit_Framework_TestCase
             //
             // Schema can be a Schema instance
             //
-            [Schema::import(__DIR__ . '/bundles/validate-foo.schema.json'), 'foo', true],
+            [Schema::import(__DIR__ . '/bundles/validate-foo.schema.json')],
 
             //
             // Schema can be a string
             //
             // Allows relative path without starting '/'
-            ['bundles/validate-foo.schema.json', 'foo', true],
+            ['bundles/validate-foo.schema.json'],
             // Allows relative path with starting '/'
-            ['/bundles/validate-foo.schema.json', 'foo', true],
+            ['/bundles/validate-foo.schema.json'],
             // Allows absolute path
-            [__DIR__ . '/bundles/validate-foo.schema.json', 'foo', true],
+            [__DIR__ . '/bundles/validate-foo.schema.json'],
 
             //
             // Schema can be an object
             //
-            [json_decode(file_get_contents(__DIR__ . '/bundles/validate-foo.schema.json')), 'foo', true],
+            [json_decode(file_get_contents(__DIR__ . '/bundles/validate-foo.schema.json'))],
         ];
+    }
+
+    /**
+     * @param Schema|string|object|array $schema
+     * @param null|string|int|object|array $data
+     * @param null|string|int|object|array $expected
+     * @param null|string $expectedMessageRegExp
+     * @dataProvider validateProvider
+     */
+    public function testValidate($schema, $data, $expected, $expectedMessageRegExp = null)
+    {
+        $result = $this->schemaService->validate($schema, $data, $message);
+        if ($expectedMessageRegExp === null) {
+            self::assertNull($message);
+        } else {
+            self::assertRegExp($expectedMessageRegExp, $message);
+        }
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -109,6 +104,24 @@ class SchemaServiceTest extends \PHPUnit_Framework_TestCase
             // Support refs
             ['/bundles/validate-refs.schema.json', ['number' => 123, 'string' => 'foo'], true],
         ];
+    }
+
+    /**
+     * @param Schema|string|object|array $schema
+     * @param null|string|int|object|array $data
+     * @param null|string|int|object|array $expected
+     * @param null|string $expectedMessageRegExp
+     * @dataProvider migrateProvider
+     */
+    public function testMigrate($schema, $data, $expected, $expectedMessageRegExp = null)
+    {
+        $result = $this->schemaService->migrate($schema, $data, $message);
+        if ($expectedMessageRegExp === null) {
+            self::assertNull($message);
+        } else {
+            self::assertRegExp($expectedMessageRegExp, $message);
+        }
+        self::assertEquals($expected, $result);
     }
 
     /**
