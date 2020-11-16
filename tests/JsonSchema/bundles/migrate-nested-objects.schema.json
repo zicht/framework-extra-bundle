@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "/bundles/validate-object.schema.json",
+    "type": "object",
+    "required": ["nest"],
+    "default": {"nest": {"requiredString": "foo"}},
+    "properties": {
+        "nest": {
+            "type": "object",
+            "required": ["requiredString"],
+            "default": {"requiredString": "foo"},
+            "properties": {
+                "string": {
+                    "type": "string"
+                },
+                "requiredString": {
+                    "type": "string",
+                    "default": "foo"
+                }
+            }
+        }
+    }
+}

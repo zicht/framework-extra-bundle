@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "allowJs": false,
+        "baseUrl": "./",
+        "lib": ["dom", "dom.iterable", "es2019", "es2019.object"],
+        "module": "commonjs",
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es5",
+
+        // Support transpiling generators and Iterators in ES5
+        // See: https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#new---downleveliteration
+        "downlevelIteration": true,
+
+        // Import emit helpers from tslib instead of defining them multiple times in the compiled code.
+        // See: https://blog.mariusschulz.com/2016/12/16/typescript-2-1-external-helpers-library
+        "importHelpers": true
+    },
+    "files": [
+        "./src/Zicht/Bundle/FrameworkExtraBundle/Resources/typescript/json-editor.ts",
+        "./src/Zicht/Bundle/FrameworkExtraBundle/Resources/typescript/types/json-editor.d.ts",
+        "./node_modules/@zicht/js.component/types/alertifyjs.typings.d.ts"
+    ]
+}
