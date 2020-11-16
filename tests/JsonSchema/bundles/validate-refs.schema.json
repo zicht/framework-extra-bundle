@@ -1,0 +1,9 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "/bundles/validate-refs.schema.json",
+    "type": "object",
+    "properties": {
+        "number": {"$ref": "/bundles/validate-123.schema.json"},
+        "string": {"$ref": "/bundles/validate-foo.schema.json"}
+    }
+}

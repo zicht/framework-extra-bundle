@@ -1,0 +1,7 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "/bundles/validate-123.schema.json",
+    "type": "number",
+    "minimum": 123,
+    "maximum": 123
+}

@@ -50,7 +50,7 @@ trait CreateStdLoggerTrait
             OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::DEBUG,
             OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
         ];
-        $level = $levelMap[$output->getVerbosity()] ?? Logger::ERROR;
+        $level = $levelMap[$output->getVerbosity()] ?: Logger::ERROR;
 
         $logger = new Logger($name);
         $logger->pushHandler(new FilterHandler(new StreamHandler(STDOUT, $level), Logger::DEBUG, Logger::ERROR - 1));

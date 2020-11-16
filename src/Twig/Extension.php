@@ -227,7 +227,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     /**
      * Returns a 40 byte string representing the sha1 digest of the input string.
      *
-     * @param string|\Twig_Markup $string
+     * @param string|Markup $string
      * @return string
      */
     public function shaOne($string)

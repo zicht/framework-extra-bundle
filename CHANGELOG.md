@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.2.0 - 2020-11-16
+### Added
+- Forward merge from 8.4.0, 8.4.1, 8.4.2, and 8.5.0.
+  + `JsonSchemaType`
+  + `SchemaService`
+
 ## 9.1.0 - 2020-11-03
 ### Added
 - Add test `instanceof` in Twig extensions.
@@ -37,6 +43,40 @@ Nothing so far
 ### Changed
 - Removed Zicht(Test)/Bundle/FrameworkExtraBundle/ directory depth: moved all code up directly into src/ and test/
 
+## 8.5.0 - 2020-11-05
+### Added
+- `SchemaService` was added.  This service can...
+  + create `Schema` instance (using a special loader to resolve `"$ref"` on disk)
+  + validate data
+  + migrate data
+- `JsonSchemaAutoCompleteType` was added.
+- `json-editor-view.ts` will now disable any `<input type="submit">` buttons that
+  are in the same `<form>` as the schema while the data is invalid.
+### Changed
+- `JsonSchemaType` now takes `SchemaService` as the first argument instead of the webdir.
+  While this is not backwards compatible, the only place where this type is currently used,
+  is inside this library, hence the major version was not incremented.
+### Fixed
+- `json-editor.scss` fixes styling issue for editors inside a popup.
+
+## 8.4.2 - 2020-10-09
+### Added
+- Merge from 7.2.0.
+  7.2.0 contains the backport for the `CreateSAtdLoggerTrait` already included in 8.x,
+  hence this is patch release.
+
+## 8.4.1 - 2020-10-01
+### Fixed
+- `autocomplete.ts` now allows for non-selectable `{"info":"Lorem"}` items to be
+  included in the results.  This provides flexibility for feeds that want to enhance
+  the user experience.
+
+## 8.4.0 - 2020-09-17
+### Added
+- `JsonSchemaType` form type that renders a form based on a json-schema.
+- Autocompletion for the json-schema editor.
+- javascript and css code to include on the admin site.
+
 ## 8.3.0 - 2020-08-11
 ### Added
 - Added `CreateSAtdLoggerTrait` to help console commands output to either stdout or stderr depending on log level.
@@ -55,7 +95,7 @@ Nothing so far
 
 ## 8.1.7 - 2020-01-29
 ### Fixed
-- Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array. 
+- Fix a bug inside the `EmbedHelper::getFormState` where the variable `$state` is `null` and not an array.
   But is used as an array.
 
 ## 8.1.4 - 2019-09-20
@@ -109,6 +149,10 @@ Nothing so far
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
 
+## 7.2.0 - 2020-10-09
+### Added
+- Merge from 6.2.0.
+
 ## 7.1.2 - 2019-07-18
 ### Added
 - Merge from 6.1.1.
@@ -130,6 +174,13 @@ Nothing so far
 - removed unnecessary parameters of the embed helper and hard dependency of service container. The second
   request argument is removed of the handleForm method and $handlerCallback will only get the form.
 
+<<<<<<< HEAD
+=======
+## 6.2.0 - 2020-10-09
+### Added
+- Merge from 5.5.0.
+
+>>>>>>> release/7.x
 ## 6.1.1 - 2019-07-18
 ### Added
 - Merge from 5.4.1.
@@ -142,6 +193,11 @@ Nothing so far
 - Added an extra callback to `EmbedHelper::handleForm` to control the determination of the form-id.
 When having multiple versions of the same form (with different data, but data of the same type) on one page, the handling fails because the Handler cannot reliably distinguish between forms anymore.
 This results in errors and data always being handled on the first form.
+
+## 5.5.0 - 2020-10-09
+### Added
+- Added CreateSAtdLoggerTrait to help console commands output to either stdout or stderr depending on log level.
+  Note that this trait was backported from 8.3.0 to be used in old projects that still rely on 5.x.
 
 ## 5.4.1 - 2019-07-18
 ### Fixed
