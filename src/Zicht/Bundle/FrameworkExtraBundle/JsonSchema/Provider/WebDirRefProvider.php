@@ -3,12 +3,11 @@
  * @copyright Zicht Online <http://www.zicht.nl>
  */
 
-namespace Zicht\Bundle\FrameworkExtraBundle\JsonSchema;
+namespace Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider;
 
-use Swaggest\JsonSchema\RemoteRef\BasicFetcher;
 use Swaggest\JsonSchema\RemoteRefProvider;
 
-class WebDirRefProvider extends BasicFetcher implements RemoteRefProvider
+class WebDirRefProvider implements RemoteRefProvider
 {
     /** @var string */
     private $webDir;
@@ -20,7 +19,7 @@ class WebDirRefProvider extends BasicFetcher implements RemoteRefProvider
 
     /**
      * @param string $url
-     * @return mixed
+     * @return \stdClass|false json_decode of $url resource content
      */
     public function getSchemaData($url)
     {
@@ -30,6 +29,6 @@ class WebDirRefProvider extends BasicFetcher implements RemoteRefProvider
             }
         }
 
-        return parent::getSchemaData($url);
+        return false;
     }
 }

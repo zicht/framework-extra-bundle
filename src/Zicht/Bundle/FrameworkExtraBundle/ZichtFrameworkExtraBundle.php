@@ -20,8 +20,9 @@ class ZichtFrameworkExtraBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new DependencyInjection\Compiler\RemoveExtensionsPass());
         $container->addCompilerPass(new DependencyInjection\Compiler\FilesystemCacheForceUmaskPass());
+        $container->addCompilerPass(new DependencyInjection\Compiler\JsonSchemaRefProviderPass());
+        $container->addCompilerPass(new DependencyInjection\Compiler\RemoveExtensionsPass());
         $container->addCompilerPass(new DependencyInjection\Compiler\ReplaceTranslatorPass());
     }
 }

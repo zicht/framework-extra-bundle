@@ -6,26 +6,21 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\JsonSchema;
 
 use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\RemoteRefProvider;
 use Swaggest\JsonSchema\Schema;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class SchemaService
 {
-    /** @var TranslatorInterface */
-    private $translator;
+    /** @var RemoteRefProvider|null */
+    private $provider;
 
     /** @var string */
     private $webDir;
 
-    public function __construct(TranslatorInterface $translator, string $webDir)
+    public function __construct(RemoteRefProvider $provider, string $webDir)
     {
-        $this->translator = $translator;
+        $this->provider = $provider;
         $this->webDir = $webDir;
-    }
-
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -41,15 +36,17 @@ class SchemaService
         }
 
         if (is_string($schema)) {
-            if (is_file($this->webDir . '/' . $schema)) {
-                return Schema::import($this->webDir . '/' . $schema, $this->getContext());
-            }
+            return Schema::import($schema, $this->getContext());
 
-            if (is_file($schema)) {
-                return Schema::import($schema, $this->getContext());
-            }
-
-            throw new \RuntimeException(sprintf('"%s" should point to an existing file within "%s"', $schema, $this->webDir));
+//            if (is_file($this->webDir . '/' . $schema)) {
+//                return Schema::import($this->webDir . '/' . $schema, $this->getContext());
+//            }
+//
+//            if (is_file($schema)) {
+//                return Schema::import($schema, $this->getContext());
+//            }
+//
+//            throw new \RuntimeException(sprintf('"%s" should point to an existing file within "%s"', $schema, $this->webDir));
         }
 
         if (is_object($schema)) {
@@ -122,6 +119,6 @@ class SchemaService
 
     private function getContext(): Context
     {
-        return new Context(new WebDirRefProvider($this->webDir));
+        return new Context($this->provider);
     }
 }

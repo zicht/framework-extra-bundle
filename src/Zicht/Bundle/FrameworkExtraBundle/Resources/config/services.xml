@@ -50,8 +50,28 @@
         </service>
 
         <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService">
-            <argument type="service" id="translator"/>
+            <argument type="service" id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\DelegatorRefProvider"/>
             <argument>%kernel.project_dir%/web</argument>
         </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\DelegatorRefProvider" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\DelegatorRefProvider">
+            <argument type="constant">null</argument>
+        </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\TranslateRefProvider" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\TranslateRefProvider">
+            <argument type="service" id="twig"/>
+            <argument type="string">jsonSchema</argument>
+            <tag name="json_schema.remote_ref_provider" priority="128"/>
+        </service>
+
+        <service id="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\WebDirRefProvider" class="Zicht\Bundle\FrameworkExtraBundle\JsonSchema\Provider\WebDirRefProvider">
+            <argument>%kernel.project_dir%/web</argument>
+            <tag name="json_schema.remote_ref_provider" priority="0"/>
+        </service>
+
+        <service id="Swaggest\JsonSchema\RemoteRef\BasicFetcher" class="Swaggest\JsonSchema\RemoteRef\BasicFetcher">
+            <tag name="json_schema.remote_ref_provider" priority="-512"/>
+        </service>
+
     </services>
 </container>
