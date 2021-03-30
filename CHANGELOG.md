@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.2.1 - 2021-03-30
+### Fixed
+- Removed usage of deprecated Doctrine classes to be compatible with newer versions
+
 ## 9.2.0 - 2020-11-16
 ### Added
 - Forward merge from 8.4.0, 8.4.1, 8.4.2, and 8.5.0.
