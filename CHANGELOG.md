@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.3.0 - 2021-04-08
+### Added
+- Merge from 8.6.0 and 7.3.0.
+
 ## 9.2.1 - 2021-03-30
 ### Fixed
 - Removed usage of deprecated Doctrine classes to be compatible with newer versions
@@ -46,6 +50,10 @@ Nothing so far
 - RequireJs and Uglify JS toolings
 ### Changed
 - Removed Zicht(Test)/Bundle/FrameworkExtraBundle/ directory depth: moved all code up directly into src/ and test/
+
+## 8.6.0 - 2021-04-08
+### Added
+- Merge from 7.3.0
 
 ## 8.5.0 - 2020-11-05
 ### Added
@@ -152,6 +160,18 @@ Nothing so far
 - Support for Symfony 3.x and Twig 2.x
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
+
+## 7.3.0 - 2021-04-08
+### Added
+- Support for Itertools v2.15.0 and higher, where (1) its name in Twig can be
+  configured and (2) the legacy Twig filters and functions can be disabled.
+
+  ```yaml
+  zicht_framework_extra:
+    itertools:
+        twig_name: it                   # use `it` (default)
+        twig_enable_legacy_api: true    # enable legacy api (default)
+  ```
 
 ## 7.2.0 - 2020-10-09
 ### Added

@@ -44,7 +44,13 @@ class ZichtFrameworkExtraExtension extends DIExtension
         }
 
         if (class_exists('Zicht\Itertools\twig\Extension')) {
-            $container->setDefinition('zicht_itertools_twig_extension', (new Definition('Zicht\Itertools\twig\Extension'))->addTag('twig.extension'));
+            $definition = new Definition('Zicht\Itertools\twig\Extension');
+            // Note that the following two arguments are only available by Itertools v2.15.0 and higher,
+            // luckely PHP doesn't care when you provide arguments that are not used, so this is backwards compatible.
+            $definition->addArgument($config['itertools']['twig_name']);
+            $definition->addArgument($config['itertools']['twig_enable_legacy_api']);
+            $definition->addTag('twig.extension');
+            $container->setDefinition('zicht_itertools_twig_extension', $definition);
         }
     }
 }
