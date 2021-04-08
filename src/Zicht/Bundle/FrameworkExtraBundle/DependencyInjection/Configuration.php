@@ -31,7 +31,14 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('mark_exceptions_as_errors')->defaultValue(false)->end()
                     ->end()
                 ->end()
-                ->booleanNode('disable_schema-update')->defaultTrue()
+                ->booleanNode('disable_schema-update')->defaultTrue()->end()
+                ->arrayNode('itertools')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('twig_name')->defaultValue('it')->end()
+                        ->scalarNode('twig_enable_legacy_api')->defaultValue(true)->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

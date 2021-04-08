@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 8.6.0 - 2021-04-08
+### Added
+- Merge from 7.3.0
+
 ## 8.5.0 - 2020-11-05
 ### Added
 - `SchemaService` was added.  This service can...
@@ -113,6 +117,18 @@ Nothing so far
 - Support for Symfony 3.x and Twig 2.x
 ### Removed
 - Support for Symfony 2.x and Twig 1.x
+
+## 7.3.0 - 2021-04-08
+### Added
+- Support for Itertools v2.15.0 and higher, where (1) its name in Twig can be
+  configured and (2) the legacy Twig filters and functions can be disabled.
+
+  ```yaml
+  zicht_framework_extra:
+    itertools:
+        twig_name: it                   # use `it` (default)
+        twig_enable_legacy_api: true    # enable legacy api (default)
+  ```
 
 ## 7.2.0 - 2020-10-09
 ### Added
