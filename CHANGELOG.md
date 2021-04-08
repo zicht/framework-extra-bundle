@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 7.3.0 - 2021-04-08
+### Added
+- Support for Itertools v2.15.0 and higher, where (1) its name in Twig can be
+  configured and (2) the legacy Twig filters and functions can be disabled.
+
+  ```yaml
+  zicht_framework_extra:
+    itertools:
+        twig_name: it                   # use `it` (default)
+        twig_enable_legacy_api: true    # enable legacy api (default)
+  ```
+
 ## 7.2.0 - 2020-10-09
 ### Added
 - Merge from 6.2.0.
