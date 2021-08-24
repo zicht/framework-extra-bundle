@@ -14,6 +14,7 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService"/>
         </service>
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper" alias="zicht_embed_helper" />
 
         <service id="zicht_twig_extension" class="Zicht\Bundle\FrameworkExtraBundle\Twig\Extension">
             <argument type="service" id="zicht_embed_helper"/>
@@ -24,6 +25,7 @@
         </service>
 
         <service id="zicht_annotation_registry" class="Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry"/>
+        <service id="Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry" alias="zicht_annotation_registry"/>
 
         <service id="zicht_framework_extra.form.zicht_markup_type" class="Zicht\Bundle\FrameworkExtraBundle\Form\MarkupType">
             <tag name="form.type" alias="zicht_markup_type"/>
