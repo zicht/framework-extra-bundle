@@ -173,12 +173,12 @@ class EmbedHelper
      * The return value is either a Response object that can be returned as the result of the action, or it is an
      * array which can be used in a template.
      *
-     * @param Form $form
-     * @param \callback $handlerCallback
+     * @param Form|FormInterface $form
+     * @param callable $handlerCallback
      * @param string $formTargetRoute
      * @param array $formTargetParams
      * @param array $extraViewVars
-     * @param null|\callable $formIdHandler
+     * @param null|callable $formIdHandler
      * @return array|Response
      * @throws \Exception
      */
