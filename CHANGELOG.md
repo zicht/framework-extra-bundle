@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.3.1 - 2021-08-27
+### Added
+- Added FQCN aliases in service configuration for services that are typically injected
+
 ## 9.3.0 - 2021-04-08
 ### Added
 - Merge from 8.6.0 and 7.3.0.
