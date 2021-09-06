@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm() Docblock types
 ### Added|Changed|Deprecated|Removed|Fixed|Security
-Nothing so far
+Nothing else so far
 
 ## 9.3.1 - 2021-08-27
 ### Added
