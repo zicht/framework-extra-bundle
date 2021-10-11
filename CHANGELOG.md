@@ -5,10 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added|Changed|Deprecated|Removed|Fixed|Security
+Nothing so far
+
+## 9.3.2 - 2021-10-11
+### Added
+- Added login logo in SVG format. To use this new logo, change the path for `title_logo`
+ in the file `config/packages/sonata_admin.yml`:
+```yaml
+sonata_admin:
+    title_logo: 'bundles/zichtframeworkextra/images/logo_login.svg'
+```
 ### Fixed
 - Fixed \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm() Docblock types
-### Added|Changed|Deprecated|Removed|Fixed|Security
-Nothing else so far
 
 ## 9.3.1 - 2021-08-27
 ### Added
