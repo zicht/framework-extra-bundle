@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.3.3 - 2021-10-25
+### Fixed
+- Passing a `null` to `method_exists` is deprecated and will break in PHP 8.
+
 ## 9.3.2 - 2021-10-11
 ### Added
 - Added login logo in SVG format. To use this new logo, change the path for `title_logo`

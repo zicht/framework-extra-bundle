@@ -61,7 +61,7 @@ class Builder
      */
     public function __call($method, $args)
     {
-        if (method_exists($this->current(), $method)) {
+        if ($this->current() && method_exists($this->current(), $method)) {
             call_user_func_array([$this->current(), $method], $args);
         } else {
             $entity = $method;
