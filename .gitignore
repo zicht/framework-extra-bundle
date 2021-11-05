@@ -1,6 +1,8 @@
-/.idea/*
-/build
-/composer.lock
+/.env
+/.idea/
+/.phpunit.result.cache
 /node_modules
 /package-lock.json
 /vendor
+/composer.lock
+/docker-compose.y*ml

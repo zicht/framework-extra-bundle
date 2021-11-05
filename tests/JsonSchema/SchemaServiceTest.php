@@ -15,7 +15,7 @@ class SchemaServiceTest extends TestCase
     /** @var SchemaService */
     protected $schemaService = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)->disableOriginalConstructor()->getMock();
         $this->schemaService = new SchemaService($translator, __DIR__);

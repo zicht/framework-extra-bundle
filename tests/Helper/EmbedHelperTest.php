@@ -54,7 +54,7 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     /** @var UrlCheckerService */
     protected $urlChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
         $this->request = new RequestStack();
@@ -157,6 +157,6 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
     public function testGetFormId()
     {
         $form = $this->form;
-        $this->assertInternalType('string', $this->helper->getFormId($form));
+        $this->assertIsString($this->helper->getFormId($form));
     }
 }

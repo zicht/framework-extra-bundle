@@ -19,7 +19,7 @@ class ExtensionTest extends TestCase
      */
     protected $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,26 +27,6 @@ class ExtensionTest extends TestCase
         $this->annotationRegistry = $this->getMockBuilder('Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry')->getMock();
 
         $this->extension = new Extension($this->embedHelper, $this->annotationRegistry);
-    }
-
-
-    /**
-     * @covers \Zicht\Bundle\FrameworkExtraBundle\Twig\Extension::getFilters
-     */
-    public function testAvailableFilters()
-    {
-        $this->getFilter('re_replace');
-        $this->getFilter('dump');
-        $this->getFilter('str_uscore');
-        $this->getFilter('str_dash');
-        $this->getFilter('str_camel');
-        $this->getFilter('date_format');
-        $this->getFilter('relative_date');
-        $this->getFilter('ga_trackevent');
-        $this->getFilter('with');
-        $this->getFilter('without');
-        $this->getFilter('ceil');
-        $this->getFilter('floor');
     }
 
     /**
