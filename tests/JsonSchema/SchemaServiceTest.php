@@ -5,11 +5,12 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\JsonSchema;
 
+use PHPUnit\Framework\TestCase;
 use Swaggest\JsonSchema\Schema;
 use Symfony\Component\Translation\TranslatorInterface;
 use Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService;
 
-class SchemaServiceTest extends \PHPUnit_Framework_TestCase
+class SchemaServiceTest extends TestCase
 {
     /** @var SchemaService */
     protected $schemaService = null;

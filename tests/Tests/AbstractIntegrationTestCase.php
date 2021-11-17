@@ -5,10 +5,11 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractIntegrationTestCase extends TestCase
 {
     /** @var array */
     protected static $testParams = [];

@@ -5,11 +5,12 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Url;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 
-class UrlCheckerServiceTest extends \PHPUnit_Framework_TestCase
+class UrlCheckerServiceTest extends TestCase
 {
     public function testEmptyUrlIsUnsafe()
     {
