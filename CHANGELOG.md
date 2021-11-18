@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.3.4 - 2021-11-17
+### Changed
+- Upgraded to phpunit 7.
+
 ## 9.3.3 - 2021-10-25
 ### Fixed
 - Passing a `null` to `method_exists` is deprecated and will break in PHP 8.

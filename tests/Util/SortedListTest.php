@@ -5,9 +5,10 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Util;
 
+use PHPUnit\Framework\TestCase;
 use Zicht\Bundle\FrameworkExtraBundle\Util\SortedList;
 
-class SortedListTest extends \PHPUnit_Framework_TestCase
+class SortedListTest extends TestCase
 {
     /**
      * Test handling of priorities by SortedList.

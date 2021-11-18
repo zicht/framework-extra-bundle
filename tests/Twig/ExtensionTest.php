@@ -5,13 +5,14 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Twig;
 
+use PHPUnit\Framework\TestCase;
 use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension;
 use Zicht\Util\Str;
 
 /**
  * @covers \Zicht\Bundle\FrameworkExtraBundle\Twig\Extension
  */
-class ExtensionTest extends \PHPUnit_Framework_TestCase
+class ExtensionTest extends TestCase
 {
     /**
      * @var \Twig_Extension

@@ -6,9 +6,10 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
 
+    use PHPUnit\Framework\TestCase;
     use Zicht\Bundle\FrameworkExtraBundle\Fixture\Builder;
 
-    class BuilderTest extends \PHPUnit_Framework_TestCase
+    class BuilderTest extends TestCase
     {
         public $builder;
 
