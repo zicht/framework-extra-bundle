@@ -214,11 +214,9 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\JsonResponse', $response);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testExceptionHandlingWillThrowExceptionIfNotMarkedAsError()
     {
+        $this->expectException('\Exception');
         $this->request->getCurrentRequest()->setMethod('POST');
         $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
 

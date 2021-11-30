@@ -13,7 +13,7 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
     {
         public $builder;
 
-        function setUp()
+        public function setUp(): void
         {
             $this->builder = Builder::create(['ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets']);
         }
@@ -80,28 +80,22 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
         }
 
 
-        /**
-         * @expectedException \BadMethodCallException
-         */
         public function testBadMethodCall()
         {
+            $this->expectException('\BadMethodCallException');
             $this->builder->A()->setSomethingElse('foo');
         }
 
 
-        /**
-         * @expectedException \UnexpectedValueException
-         */
         public function testEmptyStack()
         {
+            $this->expectException('\UnexpectedValueException');
             $this->builder->A()->end()->end();
         }
 
-        /**
-         * @expectedException \UnexpectedValueException
-         */
         public function testEmptyStackPeek()
         {
+            $this->expectException('\UnexpectedValueException');
             $this->builder->A()->end()->peek();
         }
     }
