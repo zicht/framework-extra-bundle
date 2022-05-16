@@ -13,7 +13,7 @@ interface Pageable
     /**
      * Returns the absolute total of the pageable set of elements.
      *
-     * @return void
+     * @return int
      */
     public function getTotal();
 
@@ -23,7 +23,6 @@ interface Pageable
      *
      * @param int $start
      * @param int $length
-     * @return void
      */
     public function setRange($start, $length);
 }

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.4.1 - 2022-05-16
+### Fixed
+- Fixed Pageable interface types
+
 ## 9.4.0 - 2021-11-16
 ### Added
 - Support for PHP 8.
