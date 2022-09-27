@@ -81,7 +81,7 @@ class ParentChoiceType extends AbstractType
                 'parent',
                 ChoiceType::class,
                 $parentId,
-                ['choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false]
+                ['choices' => array_flip($choices), 'mapped' => false, 'auto_initialize' => false, 'choice_translation_domain' => false]
             );
         };
 

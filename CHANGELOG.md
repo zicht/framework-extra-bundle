@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.4.2 - 2022-09-26
+### Fixed
+- Added `'choice_translation_domain' => false` to ParentChoiceType. Choice labels do not need translation.
+
 ## 9.4.1 - 2022-05-16
 ### Fixed
 - Fixed Pageable interface types
