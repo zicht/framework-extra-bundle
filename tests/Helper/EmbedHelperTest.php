@@ -72,6 +72,7 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
         $this->urlChecker->method('getSafeUrl')->willReturnArgument(0);
 
         $this->form = $this->getMockBuilder(Form\Form::class)->disableOriginalConstructor()->getMock();
+        $this->form->method('getName')->willReturn('MyForm');
 
         $router = $this->getMockBuilder(RouterInterface::class)->disableOriginalConstructor()->getMock();
         $this->router = $router;

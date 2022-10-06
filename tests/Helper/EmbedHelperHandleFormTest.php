@@ -101,7 +101,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
     public function testHandleFormStateWillContainErrorsIfAddedByCallback()
     {
         $this->request->getCurrentRequest()->setMethod('POST');
-        $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
+        $this->request->getCurrentRequest()->request->set($this->form->getName(), ['foo' => '321']);
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $error = new FormError('FooBar');
         $this->form->expects($this->once())->method('addError');
