@@ -17,12 +17,10 @@ class AnnotationRegistry
      */
     private $annotations = [];
 
-
     public function __construct()
     {
         $this->annotations = [];
     }
-
 
     /**
      * @param string $name
@@ -77,7 +75,6 @@ class AnnotationRegistry
     {
         return $this->annotations;
     }
-
 
     /**
      * Add multiple annotations, or an annotated object that implements the getPublicAnnotations() method.

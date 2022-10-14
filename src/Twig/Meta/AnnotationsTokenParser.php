@@ -5,8 +5,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
-use Twig\TokenParser\AbstractTokenParser;
 use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
 class AnnotationsTokenParser extends AbstractTokenParser
 {

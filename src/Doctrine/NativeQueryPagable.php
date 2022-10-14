@@ -5,17 +5,13 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
+use Doctrine\DBAL\Statement;
+use Doctrine\ORM\NativeQuery;
 use Pdo;
 use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
-use Doctrine\ORM\NativeQuery;
-use Doctrine\DBAL\Statement;
 
 class NativeQueryPagable implements Pageable
 {
-    /**
-     * @param NativeQuery $queryWrapper
-     * @param Statement $countQuery
-     */
     public function __construct(NativeQuery $queryWrapper, Statement $countQuery)
     {
         $this->query = $queryWrapper;

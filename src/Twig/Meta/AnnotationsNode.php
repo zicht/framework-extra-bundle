@@ -11,9 +11,6 @@ use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExten
 
 class AnnotationsNode extends Node
 {
-    /**
-     * @param Compiler $compiler
-     */
     public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);

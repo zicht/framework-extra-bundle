@@ -67,9 +67,9 @@ class SchemaServiceTest extends TestCase
 
     /**
      * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
+     * @param string|int|object|array|null $data
+     * @param string|int|object|array|null $expected
+     * @param string|null $expectedMessageRegExp
      * @dataProvider validateProvider
      */
     public function testValidate($schema, $data, $expected, $expectedMessageRegExp = null)
@@ -109,9 +109,9 @@ class SchemaServiceTest extends TestCase
 
     /**
      * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
+     * @param string|int|object|array|null $data
+     * @param string|int|object|array|null $expected
+     * @param string|null $expectedMessageRegExp
      * @dataProvider migrateProvider
      */
     public function testMigrate($schema, $data, $expected, $expectedMessageRegExp = null)

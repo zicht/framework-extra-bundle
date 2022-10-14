@@ -39,7 +39,6 @@ class StrictTokenParser extends AbstractTokenParser
         return new StrictNode(['body' => $body, 'expr' => $strictExpr], [], $lineno);
     }
 
-
     /**
      * Checks if the token is part of the current control structure.
      *

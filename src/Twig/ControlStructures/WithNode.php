@@ -17,7 +17,7 @@ class WithNode extends Node
      * @param array $items
      * @param array $body
      * @param int $options
-     * @param null|string $line
+     * @param string|null $line
      * @param string $tag
      */
     public function __construct($items, $body, $options, $line, $tag)
@@ -29,7 +29,6 @@ class WithNode extends Node
             $tag
         );
     }
-
 
     /**
      * Checks if an option is set.
@@ -43,7 +42,6 @@ class WithNode extends Node
             $this->getAttribute('options')
             && in_array($value, $this->getAttribute('options'));
     }
-
 
     /**
      * @param \Twig_Compiler $compiler
@@ -98,7 +96,6 @@ class WithNode extends Node
         }
         $compiler->write('$context = array_pop($withStack);' . "\n");
     }
-
 
     /**
      * @param Twig_Compiler $compiler

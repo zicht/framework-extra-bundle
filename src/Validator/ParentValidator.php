@@ -13,7 +13,6 @@ class ParentValidator
      * Validates parents of a MenuItem
      *
      * @param object $object
-     * @param ExecutionContextInterface $context
      */
     public static function validate($object, ExecutionContextInterface $context)
     {

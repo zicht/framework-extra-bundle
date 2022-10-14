@@ -5,8 +5,8 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
-use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
 use Doctrine\ORM\QueryBuilder;
+use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
 
 /**
  * Pageable for doctrine DQL queries
@@ -34,7 +34,6 @@ class DoctrineQueryPager implements Pageable
     protected $countQuery;
 
     /**
-     * @param \Doctrine\ORM\QueryBuilder $q
      * @param string $alias
      * @param string $countAlias
      */
@@ -46,7 +45,6 @@ class DoctrineQueryPager implements Pageable
         $this->countQuery = null;
     }
 
-
     /**
      * Set the count query to override the default generated count query.
      *
@@ -57,7 +55,6 @@ class DoctrineQueryPager implements Pageable
     {
         $this->countQuery = $countQuery;
     }
-
 
     /**
      * {@inheritDoc}

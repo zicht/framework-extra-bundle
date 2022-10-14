@@ -30,7 +30,6 @@ class SchemaService
 
     /**
      * @param Schema|string|\stdClass $schema
-     * @return Schema
      * @throws \Swaggest\JsonSchema\Exception
      * @throws \Swaggest\JsonSchema\InvalidValue
      */
@@ -64,7 +63,7 @@ class SchemaService
      *
      * @param Schema|string|\stdClass $schema
      * @param bool|int|float|string|array $data
-     * @param null|string $message
+     * @param string|null $message
      * @return bool Returns false when the validation failed
      */
     public function validate($schema, $data, &$message = null): bool
@@ -92,7 +91,7 @@ class SchemaService
      *
      * @param Schema|string|\stdClass $schema
      * @param bool|int|float|string|array $data
-     * @param null|string $message
+     * @param string|null $message
      * @return bool|int|float|string|array|null Returns null when the validation failed
      */
     public function migrate($schema, $data, &$message = null)

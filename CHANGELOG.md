@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.4.3 - 2022-10-14
+### Changed
+- Swapped the zicht/standards-php (PHPCS) linter for PHP CS Fixer.
+
 ## 9.4.2 - 2022-09-26
 ### Fixed
 - Added `'choice_translation_domain' => false` to ParentChoiceType. Choice labels do not need translation.

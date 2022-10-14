@@ -17,18 +17,12 @@ use Twig\Node\Node;
  */
 class DecoratedRenderNode extends Node
 {
-    /**
-     * @param BaseRenderNode $wrappedNode
-     */
     public function __construct(BaseRenderNode $wrappedNode)
     {
         parent::__construct();
         $this->wrapped = $wrappedNode;
     }
 
-    /**
-     * @param Compiler $compiler
-     */
     public function compile(Compiler $compiler)
     {
         $getExtension = sprintf('$this->env->getExtension(\'%s\')', ZichtFrameworkExtraExtension::class);

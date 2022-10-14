@@ -16,8 +16,8 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\Markup;
@@ -67,12 +67,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
      */
     protected $authChecker;
 
-    /**
-     * @param EmbedHelper $embedHelper
-     * @param AnnotationRegistry $annotationRegistry
-     * @param TranslatorInterface|null $translator
-     * @param AuthorizationCheckerInterface|null $authChecker
-     */
     public function __construct(
         EmbedHelper $embedHelper,
         AnnotationRegistry $annotationRegistry,
@@ -172,14 +166,13 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function transMultiple($messages, $parameters = [], $domain = null, $locale = null)
     {
         foreach ($messages as $message) {
-            yield  $this->translator->trans($message, $parameters, $domain, $locale);
+            yield $this->translator->trans($message, $parameters, $domain, $locale);
         }
     }
 
     /**
      * Returns the root of the form
      *
-     * @param FormView $formView
      * @return FormView
      */
     public function formRoot(FormView $formView)
@@ -189,8 +182,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
 
     /**
      * Returns true when the form, or any of its children, has one or more errors.
-     *
-     * @param FormView $form
      *
      * @return bool
      */
@@ -242,7 +233,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Filter a collection based on properties of the collection's items
      *
      * @param array|Collection $items
-     * @param array $keyValuePairs
      * @param string $comparator
      * @param string $booleanOperator
      * @return \Doctrine\Common\Collections\Collection
@@ -383,7 +373,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      *  --> "data:image/jpg;base64,BLABLABLA"
      *
      * @param string $filename
-     * @return null|string
+     * @return string|null
      */
     public function embeddedImage($filename)
     {
@@ -534,7 +524,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     /**
      * Camelcase
      *
-     * @param String $str
+     * @param string $str
      * @return string
      */
     public function strCamel($str)
@@ -822,7 +812,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Checks if a given value is numeric
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function isNumeric($value)
     {

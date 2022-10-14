@@ -12,8 +12,6 @@ class UpdateSchemaDoctrineCommandListener
 {
     /**
      * Disables the doctrine:schema:update-command.
-     *
-     * @param ConsoleCommandEvent $event
      */
     public function onConsoleCommand(ConsoleCommandEvent $event)
     {

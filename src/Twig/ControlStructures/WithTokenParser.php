@@ -72,7 +72,6 @@ class WithTokenParser extends AbstractTokenParser
         return new WithNode($arguments, $body, $options, $start->getLine(), $start->getValue());
     }
 
-
     /**
      * Checks for the end of the control structure.
      *

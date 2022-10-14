@@ -18,9 +18,6 @@ use Twig\Node\Node;
  */
 class StrictNode extends Node
 {
-    /**
-     * @param Compiler $compiler
-     */
     public function compile(Compiler $compiler)
     {
         $compiler

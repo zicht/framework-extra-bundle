@@ -101,7 +101,6 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->assertNull($this->session->get($this->helper->getFormId($this->form)));
     }
 
-
     /**
      * @return void
      */

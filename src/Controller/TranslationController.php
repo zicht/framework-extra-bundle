@@ -34,7 +34,6 @@ class TranslationController extends AbstractController
      *  Multiple id's:
      *  /translate/nl/messages?id[]=eticket.can_not_be_rendered_no_barcode&id[]=eticket.col1&id[]=eticket.copy_warning&id[]=form_label.form.email
      *
-     * @param Request $request
      * @param string $locale
      * @param string $domain
      * @return JsonResponse

@@ -17,7 +17,6 @@ interface Pageable
      */
     public function getTotal();
 
-
     /**
      * Sets the range that needs to be displayed on the current page
      *
