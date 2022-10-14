@@ -119,9 +119,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('trans_multiple', [$this, 'transMultiple']),
             new TwigFilter('truncate_html', [$this, 'truncateHtml']),
 
-            new TwigFilter('with', [$this, 'with']),
-            new TwigFilter('without', [$this, 'without']),
-
             new TwigFilter('where', [$this, 'where']),
             new TwigFilter('not_where', [$this, 'notWhere']),
             new TwigFilter('where_split', [$this, 'whereSplit']),
