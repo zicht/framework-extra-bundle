@@ -15,8 +15,8 @@ class WithNode extends Node
 {
     /**
      * @param array $items
-     * @param array $body
-     * @param int $options
+     * @param Node $body
+     * @param array $options
      * @param string|null $line
      * @param string $tag
      */
@@ -44,7 +44,6 @@ class WithNode extends Node
     }
 
     /**
-     * @param \Twig_Compiler $compiler
      * @return void
      */
     public function compile(Compiler $compiler)
@@ -98,11 +97,10 @@ class WithNode extends Node
     }
 
     /**
-     * @param Twig_Compiler $compiler
      * @param mixed $argument
      * @return void
      */
-    public function compileArgument($compiler, $argument)
+    public function compileArgument(Compiler $compiler, $argument)
     {
         if (empty($argument['name'])) {
             $compiler

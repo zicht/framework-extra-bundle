@@ -6,6 +6,9 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Twig;
 
 use PHPUnit\Framework\TestCase;
+use Twig\Extension\ExtensionInterface;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry;
+use Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper;
 use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension;
 use Zicht\Util\Str;
 
@@ -14,17 +17,15 @@ use Zicht\Util\Str;
  */
 class ExtensionTest extends TestCase
 {
-    /**
-     * @var \Twig_Extension
-     */
+    /** @var ExtensionInterface */
     protected $extension;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->embedHelper = $this->getMockBuilder('Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper')->disableOriginalConstructor()->getMock();
-        $this->annotationRegistry = $this->getMockBuilder('Zicht\Bundle\FrameworkExtraBundle\Helper\AnnotationRegistry')->getMock();
+        $this->embedHelper = $this->getMockBuilder(EmbedHelper::class)->disableOriginalConstructor()->getMock();
+        $this->annotationRegistry = $this->getMockBuilder(AnnotationRegistry::class)->getMock();
 
         $this->extension = new Extension($this->embedHelper, $this->annotationRegistry);
     }
@@ -47,7 +48,7 @@ class ExtensionTest extends TestCase
      */
     private function getFilter($filterName)
     {
-        foreach ($this->extension->getFilters() as $k => $filter) {
+        foreach ($this->extension->getFilters() as $filter) {
             if ($filter->getName() === $filterName) {
                 return $filter;
             }

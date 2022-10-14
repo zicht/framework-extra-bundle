@@ -42,29 +42,19 @@ class Extension extends AbstractExtension implements GlobalsInterface
         's' => ['second', 'seconds'],
     ];
 
-    /**
-     * @var EmbedHelper
-     */
+    /** @var EmbedHelper */
     protected $embedHelper;
 
-    /**
-     * @var array
-     */
-    protected $globals;
+    /** @var array */
+    protected $globals = [];
 
-    /**
-     * @var AnnotationRegistry
-     */
+    /** @var AnnotationRegistry */
     protected $annotationRegistry;
 
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     protected $translator;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     protected $authChecker;
 
     public function __construct(
@@ -73,7 +63,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
         TranslatorInterface $translator = null,
         AuthorizationCheckerInterface $authChecker = null
     ) {
-        $this->globals = [];
         $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $annotationRegistry;
         $this->translator = $translator;
@@ -302,7 +291,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * </form>
      *
      * @param string $url
-     * @return array
+     * @return string
      */
     public function urlStripQuery($url)
     {
@@ -326,7 +315,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Prepares a nested array for use in form fields.
      *
      * @param mixed[] $values
-     * @param string $parent
+     * @param string|null $parent
      * @return array
      */
     private function valuesToFormParameters($values, $parent)
@@ -455,8 +444,8 @@ class Extension extends AbstractExtension implements GlobalsInterface
         usort(
             $collection,
             function ($left, $right) use ($types, $idToIndexMap, $numTypes) {
-                $localClassNameLeft = Str::classname(get_class($left));
-                $localClassNameRight = Str::classname(get_class($right));
+                $localClassNameLeft = StrUtil::classname(get_class($left));
+                $localClassNameRight = StrUtil::classname(get_class($right));
 
                 // if same type, use original sorting
                 if ($localClassNameRight === $localClassNameLeft) {

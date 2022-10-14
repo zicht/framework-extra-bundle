@@ -29,7 +29,7 @@ class DoctrineQueryPager implements Pageable
     protected $countAlias;
 
     /**
-     * @var null
+     * @var \Doctrine\ORM\Query|null
      */
     protected $countQuery;
 

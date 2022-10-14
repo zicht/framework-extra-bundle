@@ -5,9 +5,10 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\JsonSchema;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swaggest\JsonSchema\Schema;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService;
 
 class SchemaServiceTest extends TestCase
@@ -17,6 +18,7 @@ class SchemaServiceTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @var TranslatorInterface&MockObject $translator */
         $translator = $this->getMockBuilder(TranslatorInterface::class)->disableOriginalConstructor()->getMock();
         $this->schemaService = new SchemaService($translator, __DIR__);
     }

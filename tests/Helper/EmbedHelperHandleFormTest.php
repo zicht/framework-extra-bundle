@@ -5,21 +5,13 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Routing\Router as RouterAlias;
 
 /**
  * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
  */
 class EmbedHelperHandleFormTest extends EmbedHelperTest
 {
-    /** @var Form */
-    protected $form;
-
-    /** @var RouterAlias */
-    protected $router;
-
     /**
      * @return void
      */
@@ -33,6 +25,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
             },
             'user_login'
         );
+        /** @var array{form_url: string} $ret */
         $this->assertEquals($value, $ret['form_url']);
     }
 
@@ -52,6 +45,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
                     }
                 )
             );
+        /** @var array{form_url: string} $ret */
         $ret = $this->helper->handleForm(
             $this->form,
             function () {
@@ -142,7 +136,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
 
         $response = $this->helper->handleForm(
             $this->form,
-            function ($form) {
+            function ($_form) {
                 return true;
             },
             'user_login'
@@ -163,7 +157,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->any())->method('getName')->will($this->returnValue('mock'));
         $response = $this->helper->handleForm(
             $this->form,
-            function ($form) {
+            function ($_form) {
                 return false;
             },
             'user_login'
@@ -184,7 +178,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->request->getCurrentRequest()->request->set('mock', ['foo' => '321']);
         $response = $this->helper->handleForm(
             $this->form,
-            function ($form) {
+            function ($_form) {
                 return true;
             },
             'user_login'
@@ -205,7 +199,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $response = $this->helper->handleForm(
             $this->form,
-            function ($form) {
+            function ($_form) {
                 return true;
             },
             'user_login'

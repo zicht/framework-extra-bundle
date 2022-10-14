@@ -11,6 +11,10 @@ Nothing so far
 ## 9.4.3 - 2022-10-14
 ### Changed
 - Swapped the zicht/standards-php (PHPCS) linter for PHP CS Fixer.
+### Added
+- Introduced Vimeo Psalm and fixed codebase
+### Removed
+- Removed serveral unused elements
 
 ## 9.4.2 - 2022-09-26
 ### Fixed

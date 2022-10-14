@@ -16,12 +16,26 @@
         "symfony/form": "^4.4",
         "symfony/http-foundation": "^4.4",
         "symfony/routing": "^4.4",
+        "symfony/security-acl": "^3",
+        "symfony/security-core": "^4.4",
+        "symfony/translation": "^4.4",
         "twig/twig": "^2.7 || ^3",
         "zicht/util": "^2"
     },
     "require-dev": {
+        "doctrine/cache": "^1",
+        "doctrine/dbal": "^2",
+        "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/orm": "^2.13",
         "friendsofphp/php-cs-fixer": "^3",
-        "phpunit/phpunit": "^8"
+        "gedmo/doctrine-extensions": "^3",
+        "phpunit/phpunit": "^8",
+        "symfony/cache": "^4.4",
+        "symfony/doctrine-bridge": "^4.4",
+        "symfony/framework-bundle": "^4.4",
+        "symfony/twig-bundle": "^4.4",
+        "symfony/validator": "^4.4",
+        "vimeo/psalm": "^4"
     },
     "autoload": {
         "psr-4": {
@@ -35,6 +49,7 @@
     },
     "license": "MIT",
     "scripts": {
+        "analysis": "psalm",
         "lint": "php-cs-fixer fix --dry-run --diff -vvv",
         "lint-fix": "php-cs-fixer fix",
         "test": "phpunit"

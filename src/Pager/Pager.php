@@ -157,7 +157,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     /**
      * Returns the total of entire pageable set
      *
-     * @return null
+     * @return int|null
      */
     public function getItemTotal()
     {

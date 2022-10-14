@@ -11,9 +11,6 @@ use Zicht\Bundle\FrameworkExtraBundle\Twig\Extension as ZichtFrameworkExtraExten
 
 class AnnotateNode extends Node
 {
-    /**
-     * @param Twig_Compiler $compiler
-     */
     public function compile(Compiler $compiler)
     {
         $prio = ($this->hasNode('prio')) ? $this->getNode('prio') : 0;

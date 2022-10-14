@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class FilesystemCacheForceUmaskPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(ContainerBuilder $container)
     {
         if ($container->hasDefinition('annotations.filesystem_cache')) {

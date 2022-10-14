@@ -5,6 +5,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
+use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
@@ -40,8 +41,8 @@ class AnnotationsTokenParser extends AbstractTokenParser
     }
 
     /**
-     * @param string $token
-     * @return mixed
+     * @param Token $token
+     * @return bool
      */
     public function decideEndAnnotations($token)
     {

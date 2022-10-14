@@ -35,7 +35,7 @@ class EmbedHelper
     protected $session;
 
     /**
-     * @var Session
+     * @var RouterInterface
      */
     protected $router;
 
@@ -267,7 +267,7 @@ class EmbedHelper
             if (!empty($formState['form_errors'])) {
                 // 1. You cannot serialize or un-serialize PDO instances
                 // 2. We do not want to store cause and origin in the session since these can become quite large
-                foreach ($formState['form_errors'] as $key => $error) {
+                foreach ($formState['form_errors'] as $error) {
                     $refObject = new \ReflectionObject($error);
                     $refCauseProperty = $refObject->getProperty('cause');
                     $refCauseProperty->setAccessible(true);

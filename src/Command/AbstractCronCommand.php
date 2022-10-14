@@ -29,6 +29,7 @@ abstract class AbstractCronCommand extends Command
 
     /**
      * @var Logger
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $logger;
 
@@ -59,6 +60,7 @@ abstract class AbstractCronCommand extends Command
         if ($paranoid) {
             register_shutdown_function([$this, 'endOfScript']);
         }
+        /** @psalm-suppress InvalidArgument */
         set_error_handler([$this, 'errorHandler']);
         set_exception_handler([$this, 'exceptionHandler']);
 
@@ -105,7 +107,6 @@ abstract class AbstractCronCommand extends Command
             case E_RECOVERABLE_ERROR:
                 $this->logger->addError($errstr, [$file, $line]);
                 exit();
-                break;
             case E_WARNING:
             case E_USER_WARNING:
                 $this->logger->addWarning($errstr, [$file, $line]);

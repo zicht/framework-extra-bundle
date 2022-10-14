@@ -72,6 +72,8 @@ class ValidateEntityCommand extends Command
                 }
             }
         }
+
+        return 0;
     }
 
     /**

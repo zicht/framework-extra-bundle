@@ -106,11 +106,13 @@ class ListUserImagesCommand extends Command
 
         krsort($list);
 
-        foreach ($list as $fileSize => $sizes) {
-            foreach ($sizes as $size => $info) {
+        foreach ($list as $sizes) {
+            foreach ($sizes as $info) {
                 $io->writeln(implode(', ', $info));
             }
         }
+
+        return 0;
     }
 
     /**
@@ -124,6 +126,7 @@ class ListUserImagesCommand extends Command
     private function humanFilesize($bytes, $decimals = 2)
     {
         $sz = 'BKMGTP';
+        /** @var 0|1|2|3|4|5 $factor */
         $factor = (int)floor((strlen($bytes) - 1) / 3);
 
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];

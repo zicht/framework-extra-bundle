@@ -13,7 +13,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 class AnnotationRegistry
 {
     /**
-     * @var array
+     * @var array<int|string, array>
      */
     private $annotations = [];
 
@@ -59,7 +59,7 @@ class AnnotationRegistry
 
     /**
      * @param string $key
-     * @param string $annotation
+     * @param array $annotation
      */
     public function setAnnotation($key, $annotation)
     {

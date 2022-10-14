@@ -12,6 +12,13 @@ use Zicht\Util\Str;
  */
 class Builder
 {
+    /** @var array */
+    private $namespaces;
+
+    private $stack = [];
+
+    private $alwaysDo = [];
+
     /**
      * Constructor, initializes the builder object. To use the builder, call Builder::create(...)
      *
@@ -20,8 +27,6 @@ class Builder
     private function __construct($namespaces)
     {
         $this->namespaces = (array)$namespaces;
-        $this->stack = [];
-        $this->alwaysDo = [];
     }
 
     /**

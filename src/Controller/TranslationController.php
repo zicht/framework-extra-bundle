@@ -5,10 +5,10 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TranslationController extends AbstractController

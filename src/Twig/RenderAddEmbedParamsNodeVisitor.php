@@ -5,28 +5,22 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
-use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Twig\Environment;
 use Twig\Node\Expression\ArrayExpression;
+use Twig\Node\Expression\FunctionExpression;
 use Twig\Node\Node;
 use Twig\NodeVisitor\NodeVisitorInterface;
 
 class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function enterNode(Node $node, Environment $env): Node
     {
         return $node;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function leaveNode(Node $node, Environment $env): Node
     {
-        if ($node instanceof ExpressionFunction) {
+        if ($node instanceof FunctionExpression) {
             if ($node->getAttribute('name') === 'controller') {
                 $args = $node->getNode('arguments');
                 if (!$args->hasNode(1)) {
@@ -34,7 +28,7 @@ class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
                 }
                 $args->setNode(
                     1,
-                    new ExpressionFunction(
+                    new FunctionExpression(
                         'embed',
                         new Node([$args->getNode(1)]),
                         $node->getTemplateLine()
@@ -45,10 +39,7 @@ class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 0;
     }

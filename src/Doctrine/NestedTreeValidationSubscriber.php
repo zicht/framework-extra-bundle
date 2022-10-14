@@ -62,7 +62,7 @@ class NestedTreeValidationSubscriber implements EventSubscriber
     public function postFlush(PostFlushEventArgs $e)
     {
         $repo = $e->getEntityManager()->getRepository($this->entityName);
-        if (true !== ($issues = $repo->verify())) {
+        if (true !== $repo->verify()) {
             throw new \UnexpectedValueException(sprintf("The repository '%s' did not validate. Run the '%s' console command to find out what's going on", $this->entityName, RepairNestedTreeCommand::COMMAND_NAME));
         }
     }

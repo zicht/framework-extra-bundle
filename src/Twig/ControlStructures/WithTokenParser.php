@@ -37,8 +37,7 @@ class WithTokenParser extends AbstractTokenParser
     /**
      * Parses a token and returns a node.
      *
-     * @param Token $token A Token instance
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @return WithNode
      */
     public function parse(Token $token)
     {

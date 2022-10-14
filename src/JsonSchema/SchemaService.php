@@ -7,7 +7,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\JsonSchema;
 
 use Swaggest\JsonSchema\Context;
 use Swaggest\JsonSchema\Schema;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SchemaService
 {
