@@ -16,8 +16,8 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\Markup;
@@ -42,44 +42,27 @@ class Extension extends AbstractExtension implements GlobalsInterface
         's' => ['second', 'seconds'],
     ];
 
-    /**
-     * @var EmbedHelper
-     */
+    /** @var EmbedHelper */
     protected $embedHelper;
 
-    /**
-     * @var array
-     */
-    protected $globals;
+    /** @var array */
+    protected $globals = [];
 
-    /**
-     * @var AnnotationRegistry
-     */
+    /** @var AnnotationRegistry */
     protected $annotationRegistry;
 
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     protected $translator;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     protected $authChecker;
 
-    /**
-     * @param EmbedHelper $embedHelper
-     * @param AnnotationRegistry $annotationRegistry
-     * @param TranslatorInterface|null $translator
-     * @param AuthorizationCheckerInterface|null $authChecker
-     */
     public function __construct(
         EmbedHelper $embedHelper,
         AnnotationRegistry $annotationRegistry,
         TranslatorInterface $translator = null,
         AuthorizationCheckerInterface $authChecker = null
     ) {
-        $this->globals = [];
         $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $annotationRegistry;
         $this->translator = $translator;
@@ -125,9 +108,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('trans_multiple', [$this, 'transMultiple']),
             new TwigFilter('truncate_html', [$this, 'truncateHtml']),
 
-            new TwigFilter('with', [$this, 'with']),
-            new TwigFilter('without', [$this, 'without']),
-
             new TwigFilter('where', [$this, 'where']),
             new TwigFilter('not_where', [$this, 'notWhere']),
             new TwigFilter('where_split', [$this, 'whereSplit']),
@@ -172,14 +152,13 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function transMultiple($messages, $parameters = [], $domain = null, $locale = null)
     {
         foreach ($messages as $message) {
-            yield  $this->translator->trans($message, $parameters, $domain, $locale);
+            yield $this->translator->trans($message, $parameters, $domain, $locale);
         }
     }
 
     /**
      * Returns the root of the form
      *
-     * @param FormView $formView
      * @return FormView
      */
     public function formRoot(FormView $formView)
@@ -189,8 +168,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
 
     /**
      * Returns true when the form, or any of its children, has one or more errors.
-     *
-     * @param FormView $form
      *
      * @return bool
      */
@@ -242,7 +219,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Filter a collection based on properties of the collection's items
      *
      * @param array|Collection $items
-     * @param array $keyValuePairs
      * @param string $comparator
      * @param string $booleanOperator
      * @return \Doctrine\Common\Collections\Collection
@@ -315,7 +291,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * </form>
      *
      * @param string $url
-     * @return array
+     * @return string
      */
     public function urlStripQuery($url)
     {
@@ -339,7 +315,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Prepares a nested array for use in form fields.
      *
      * @param mixed[] $values
-     * @param string $parent
+     * @param string|null $parent
      * @return array
      */
     private function valuesToFormParameters($values, $parent)
@@ -383,7 +359,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      *  --> "data:image/jpg;base64,BLABLABLA"
      *
      * @param string $filename
-     * @return null|string
+     * @return string|null
      */
     public function embeddedImage($filename)
     {
@@ -468,8 +444,8 @@ class Extension extends AbstractExtension implements GlobalsInterface
         usort(
             $collection,
             function ($left, $right) use ($types, $idToIndexMap, $numTypes) {
-                $localClassNameLeft = Str::classname(get_class($left));
-                $localClassNameRight = Str::classname(get_class($right));
+                $localClassNameLeft = StrUtil::classname(get_class($left));
+                $localClassNameRight = StrUtil::classname(get_class($right));
 
                 // if same type, use original sorting
                 if ($localClassNameRight === $localClassNameLeft) {
@@ -534,7 +510,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     /**
      * Camelcase
      *
-     * @param String $str
+     * @param string $str
      * @return string
      */
     public function strCamel($str)
@@ -822,7 +798,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * Checks if a given value is numeric
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function isNumeric($value)
     {

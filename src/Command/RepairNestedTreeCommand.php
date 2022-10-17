@@ -81,5 +81,7 @@ class RepairNestedTreeCommand extends Command
         } else {
             $io->getErrorStyle()->error('Given entity is not of instance NestedTreeRepository');
         }
+
+        return 0;
     }
 }

@@ -5,9 +5,10 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\JsonSchema;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swaggest\JsonSchema\Schema;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Zicht\Bundle\FrameworkExtraBundle\JsonSchema\SchemaService;
 
 class SchemaServiceTest extends TestCase
@@ -17,6 +18,7 @@ class SchemaServiceTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @var TranslatorInterface&MockObject $translator */
         $translator = $this->getMockBuilder(TranslatorInterface::class)->disableOriginalConstructor()->getMock();
         $this->schemaService = new SchemaService($translator, __DIR__);
     }
@@ -67,9 +69,9 @@ class SchemaServiceTest extends TestCase
 
     /**
      * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
+     * @param string|int|object|array|null $data
+     * @param string|int|object|array|null $expected
+     * @param string|null $expectedMessageRegExp
      * @dataProvider validateProvider
      */
     public function testValidate($schema, $data, $expected, $expectedMessageRegExp = null)
@@ -109,9 +111,9 @@ class SchemaServiceTest extends TestCase
 
     /**
      * @param Schema|string|object|array $schema
-     * @param null|string|int|object|array $data
-     * @param null|string|int|object|array $expected
-     * @param null|string $expectedMessageRegExp
+     * @param string|int|object|array|null $data
+     * @param string|int|object|array|null $expected
+     * @param string|null $expectedMessageRegExp
      * @dataProvider migrateProvider
      */
     public function testMigrate($schema, $data, $expected, $expectedMessageRegExp = null)

@@ -14,8 +14,6 @@ use Twig\Node\Node;
 class SwitchNode extends Node
 {
     /**
-     * @param Node $cases
-     * @param Node $expression
      * @param int $line
      */
     public function __construct(Node $cases, Node $expression, $line)
@@ -23,16 +21,14 @@ class SwitchNode extends Node
         parent::__construct(
             [
                 'expression' => $expression,
-                'cases' => $cases
+                'cases' => $cases,
             ],
             [],
             $line
         );
     }
 
-
     /**
-     * @param Compiler $compiler
      * @return void
      */
     public function compile(Compiler $compiler)
@@ -46,7 +42,7 @@ class SwitchNode extends Node
             ->indent();
 
         $total = count($this->getNode('cases'));
-        for ($i = 0; $i < $total; $i++) {
+        for ($i = 0; $i < $total; ++$i) {
             $expr = $this->getNode('cases')->getNode($i)->getAttribute('expression');
             $body = $this->getNode('cases')->getNode($i)->getNode('body');
             if (is_null($expr)) {

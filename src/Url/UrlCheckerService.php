@@ -38,7 +38,6 @@ class UrlCheckerService
     private $masterRequest;
 
     /**
-     * @param RequestStack $requestStack
      * @param string[] $safeUrlMatches
      */
     public function __construct(RequestStack $requestStack, array $safeUrlMatches = [])

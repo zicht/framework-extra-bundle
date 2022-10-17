@@ -37,9 +37,9 @@ class Translator extends BaseTranslator
                 sprintf('@%s', $domain),
             ];
             if (!empty($parameters)) {
-                $parts [] = json_encode($parameters);
+                $parts[] = json_encode($parameters);
             }
-            $parts [] = '}';
+            $parts[] = '}';
             return join('', $parts);
         } else {
             return parent::trans($id, $parameters, $domain, $locale);
@@ -65,9 +65,9 @@ class Translator extends BaseTranslator
                 sprintf('@%s', $domain),
             ];
             if (!empty($parameters)) {
-                $parts [] = sprintf('[%s]', join(', ', array_keys($parameters)));
+                $parts[] = sprintf('[%s]', join(', ', array_keys($parameters)));
             }
-            $parts [] = '}';
+            $parts[] = '}';
             return join('', $parts);
         } else {
             $parameters['%count%'] = $number;

@@ -6,16 +6,15 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Provides a choice type for "parent" (tree) entities.
@@ -27,9 +26,6 @@ class ParentChoiceType extends AbstractType
      */
     protected $doctrine;
 
-    /**
-     * @param Registry $doctrine
-     */
     public function __construct(Registry $doctrine)
     {
         $this->doctrine = $doctrine;
@@ -47,7 +43,7 @@ class ParentChoiceType extends AbstractType
                     'data_class' => function (Options $o) {
                         return $o->offsetGet('class');
                     },
-                    'required' => false
+                    'required' => false,
                 ]
             );
     }
@@ -87,7 +83,7 @@ class ParentChoiceType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function ($e) use ($formFactory, $doctrine, $createParentChoice, $options) {
+            function ($e) use ($doctrine, $createParentChoice, $options) {
                 $data = $e->getData();
                 $form = $e->getForm();
                 $parentId = $data['parent'];
@@ -104,7 +100,7 @@ class ParentChoiceType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $e) use ($formFactory, $doctrine, $createParentChoice) {
+            function (FormEvent $e) use ($createParentChoice) {
                 $parentId = null;
                 if (null !== $e->getData()) {
                     $selectedItem = $e->getData();

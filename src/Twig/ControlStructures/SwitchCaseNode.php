@@ -13,7 +13,7 @@ use Twig\Node\Node;
 class SwitchCaseNode extends Node
 {
     /**
-     * @param array $body
+     * @param Node $body
      * @param array $expression
      * @param int $fallthrough
      * @param int $lineno

@@ -12,6 +12,23 @@ use Zicht\Util\Str;
  */
 class Builder
 {
+    /** @var array */
+    private $namespaces;
+
+    private $stack = [];
+
+    private $alwaysDo = [];
+
+    /**
+     * Constructor, initializes the builder object. To use the builder, call Builder::create(...)
+     *
+     * @param string $namespaces
+     */
+    private function __construct($namespaces)
+    {
+        $this->namespaces = (array)$namespaces;
+    }
+
     /**
      * Creates a builder for the specified namespace
      *
@@ -22,20 +39,6 @@ class Builder
     {
         return new self($namespaces);
     }
-
-
-    /**
-     * Constructor, initializes the builder object. To use the builder, call Builder::create(...)
-     *
-     * @param string $namespaces
-     */
-    private function __construct($namespaces)
-    {
-        $this->namespaces = (array)$namespaces;
-        $this->stack = [];
-        $this->alwaysDo = [];
-    }
-
 
     /**
      * Adds a method call to all fixture objects, typically array($manager, 'persist')
@@ -48,7 +51,6 @@ class Builder
         $this->alwaysDo[] = $do;
         return $this;
     }
-
 
     /**
      * Implements the builder / fluent interface for building fixture objects.
@@ -76,26 +78,18 @@ class Builder
                 }
                 $this->push($entityInstance);
             } else {
-                throw new \BadMethodCallException(
-                    "No class found for {$entity} in [" . join(', ', $this->namespaces) . ']'
-                    . (
-                    $this->current()
-                        ? ', nor is it a method in ' . get_class($this->current())
-                        : ''
-                    )
-                );
+                throw new \BadMethodCallException("No class found for {$entity} in [" . join(', ', $this->namespaces) . ']' . ($this->current() ? ', nor is it a method in ' . get_class($this->current()) : ''));
             }
         }
         return $this;
     }
-
 
     /**
      * Resolve the entity name to any of the configured namespaces.
      * Returns null if not found.
      *
      * @param string $entity
-     * @return null|string
+     * @return string|null
      */
     private function resolve($entity)
     {
@@ -107,7 +101,6 @@ class Builder
         }
         return null;
     }
-
 
     /**
      * Returns the top of the stack.
@@ -122,7 +115,6 @@ class Builder
         return null;
     }
 
-
     /**
      * Pushes an object onto the stack
      *
@@ -132,7 +124,6 @@ class Builder
     {
         $this->stack[] = $entity;
     }
-
 
     /**
      * Returns one level up in the tree.
@@ -194,7 +185,6 @@ class Builder
         }
         return $this;
     }
-
 
     /**
      * Returns the object that is currently the subject of building

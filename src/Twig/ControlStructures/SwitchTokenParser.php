@@ -32,7 +32,6 @@ class SwitchTokenParser extends AbstractTokenParser
         $stream = $this->parser->getStream();
         $stream->expect(Token::BLOCK_END_TYPE);
 
-
         // skip whitespace between switch and first case
         while ($stream->test(Token::TEXT_TYPE)) {
             if (trim($stream->getCurrent()->getValue()) != '') {
@@ -83,7 +82,6 @@ class SwitchTokenParser extends AbstractTokenParser
 
         return new SwitchNode(new Node($tests), $switchExpr, $lineno);
     }
-
 
     /**
      * Checks if the token is part of the current control structure.

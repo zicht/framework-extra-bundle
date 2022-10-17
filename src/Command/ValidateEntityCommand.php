@@ -8,9 +8,9 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -37,7 +37,6 @@ class ValidateEntityCommand extends Command
         $this->doctrine = $doctrine;
         $this->validator = $validator;
     }
-
 
     /**
      * {@inheritDoc}
@@ -73,6 +72,8 @@ class ValidateEntityCommand extends Command
                 }
             }
         }
+
+        return 0;
     }
 
     /**

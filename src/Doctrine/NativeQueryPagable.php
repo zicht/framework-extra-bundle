@@ -5,17 +5,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Doctrine;
 
-use Pdo;
-use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
-use Doctrine\ORM\NativeQuery;
 use Doctrine\DBAL\Statement;
+use Doctrine\ORM\NativeQuery;
+use Zicht\Bundle\FrameworkExtraBundle\Pager\Pageable;
 
 class NativeQueryPagable implements Pageable
 {
-    /**
-     * @param NativeQuery $queryWrapper
-     * @param Statement $countQuery
-     */
+    /** @var NativeQuery */
+    private $query;
+
+    /** @var Statement */
+    private $countQuery;
+
     public function __construct(NativeQuery $queryWrapper, Statement $countQuery)
     {
         $this->query = $queryWrapper;
@@ -28,7 +29,7 @@ class NativeQueryPagable implements Pageable
     public function getTotal()
     {
         $this->countQuery->execute();
-        return $this->countQuery->fetch(Pdo::FETCH_COLUMN);
+        return $this->countQuery->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -36,7 +37,7 @@ class NativeQueryPagable implements Pageable
      */
     public function setRange($start, $length)
     {
-        $this->query->setParameter(':limit', (int)$length, Pdo::PARAM_INT);
-        $this->query->setParameter(':offset', (int)$start, Pdo::PARAM_INT);
+        $this->query->setParameter(':limit', (int)$length, \PDO::PARAM_INT);
+        $this->query->setParameter(':offset', (int)$start, \PDO::PARAM_INT);
     }
 }

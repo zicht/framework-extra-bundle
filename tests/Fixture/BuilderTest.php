@@ -1,11 +1,9 @@
 <?php
-// phpcs:ignoreFile
 /**
  * @copyright Zicht Online <https://zicht.nl>
  */
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
-
     use PHPUnit\Framework\TestCase;
     use Zicht\Bundle\FrameworkExtraBundle\Fixture\Builder;
 
@@ -26,7 +24,6 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             $this->assertInstanceOf('ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets\B', $a->b[0]);
         }
 
-
         public function testBuilderCallsParentSetterOnEnd()
         {
             $a = $this->builder->A()->B()->end()->peek();
@@ -34,7 +31,6 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             list($b) = $a->b;
             $this->assertSame($a, $b->a);
         }
-
 
         public function testBuilderCallsChildAdder()
         {
@@ -51,7 +47,6 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             $this->assertInstanceOf('ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets\B', $a->customSet);
         }
 
-
         public function testBuilderCallsSetParentIfSameClass()
         {
             $a = $this->builder->A()->A()->end()->peek();
@@ -60,7 +55,6 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             $this->assertNotSame($child->parent, $child);
             $this->assertSame($child->parent, $a);
         }
-
 
         public function testCallerIsAlwaysCalled()
         {
@@ -72,20 +66,17 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture {
             $this->assertEquals(2, count($calls));
         }
 
-
         public function testMethodCall()
         {
             $a = $this->builder->A()->setSomething('foo')->peek();
             $this->assertEquals('foo', $a->getSomething());
         }
 
-
         public function testBadMethodCall()
         {
             $this->expectException('\BadMethodCallException');
             $this->builder->A()->setSomethingElse('foo');
         }
-
 
         public function testEmptyStack()
         {
@@ -105,41 +96,39 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets {
     class A
     {
         public $b;
+
         public $children;
+
         public $parent;
+
         public $something;
 
-        function addB(B $b)
+        public function addB(B $b)
         {
             $this->b[] = $b;
         }
 
-
-        function addChildren(A $a)
+        public function addChildren(A $a)
         {
             $this->children[] = $a;
         }
 
-
-        function setParent(A $a)
+        public function setParent(A $a)
         {
             $this->parent = $a;
         }
 
-
-        function customSetter(B $b)
+        public function customSetter(B $b)
         {
             $this->customSet = $b;
         }
 
-
-        function setSomething($something)
+        public function setSomething($something)
         {
             $this->something = $something;
         }
 
-
-        function getSomething()
+        public function getSomething()
         {
             return $this->something;
         }
@@ -149,7 +138,7 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets {
     {
         public $a;
 
-        function setA(A $a)
+        public function setA(A $a)
         {
             $this->a = $a;
         }

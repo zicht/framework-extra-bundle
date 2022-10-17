@@ -6,15 +6,13 @@
 namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Exception;
-
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Monolog\Processor\MemoryUsageProcessor;
+use Monolog\Logger;
 use Monolog\Processor\MemoryPeakUsageProcessor;
-
+use Monolog\Processor\MemoryUsageProcessor;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Zicht\Util\Mutex;
 use Zicht\Util\Str;
 
@@ -31,6 +29,7 @@ abstract class AbstractCronCommand extends Command
 
     /**
      * @var Logger
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $logger;
 
@@ -51,7 +50,6 @@ abstract class AbstractCronCommand extends Command
     /**
      * Initialize the logger and attach it to error/exception handling and the clean shutdown function.
      *
-     * @param \Monolog\Logger $logger
      * @param int $verbosity
      * @param bool $paranoid Whether or not non-clean shutdown should be logged.
      * @return void
@@ -62,6 +60,7 @@ abstract class AbstractCronCommand extends Command
         if ($paranoid) {
             register_shutdown_function([$this, 'endOfScript']);
         }
+        /** @psalm-suppress InvalidArgument */
         set_error_handler([$this, 'errorHandler']);
         set_exception_handler([$this, 'exceptionHandler']);
 
@@ -69,8 +68,8 @@ abstract class AbstractCronCommand extends Command
             $logger->pushHandler(
                 new StreamHandler(fopen('php://stdout', 'w'), Logger::DEBUG, false)
             );
-            $logger->pushProcessor(new MemoryUsageProcessor);
-            $logger->pushProcessor(new MemoryPeakUsageProcessor);
+            $logger->pushProcessor(new MemoryUsageProcessor());
+            $logger->pushProcessor(new MemoryPeakUsageProcessor());
         }
         if ($verbosity == OutputInterface::VERBOSITY_NORMAL) {
             $logger->pushHandler(
@@ -80,11 +79,9 @@ abstract class AbstractCronCommand extends Command
         $logger->pushHandler(new StreamHandler(fopen('php://stderr', 'w'), Logger::WARNING));
     }
 
-
     /**
      * Exception handler; will log the exception and exit the script.
      *
-     * @param \Exception $exception
      * @return void
      */
     public function exceptionHandler(Exception $exception)
@@ -92,7 +89,6 @@ abstract class AbstractCronCommand extends Command
         $this->logger->addError($exception->getMessage(), [$exception->getFile(), $exception->getLine()]);
         exit(-1);
     }
-
 
     /**
      * Error handler; will log the error and exit the script.
@@ -111,7 +107,6 @@ abstract class AbstractCronCommand extends Command
             case E_RECOVERABLE_ERROR:
                 $this->logger->addError($errstr, [$file, $line]);
                 exit();
-                break;
             case E_WARNING:
             case E_USER_WARNING:
                 $this->logger->addWarning($errstr, [$file, $line]);
@@ -121,7 +116,6 @@ abstract class AbstractCronCommand extends Command
                 break;
         }
     }
-
 
     /**
      * Triggered on shutddown of the script.
@@ -135,7 +129,6 @@ abstract class AbstractCronCommand extends Command
         }
     }
 
-
     /**
      * Tells the app that the end was reached without trouble.
      *
@@ -148,10 +141,7 @@ abstract class AbstractCronCommand extends Command
         restore_exception_handler();
     }
 
-
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
      */
     public function run(InputInterface $input, OutputInterface $output)
@@ -179,19 +169,15 @@ abstract class AbstractCronCommand extends Command
         return $result;
     }
 
-
     /**
      * Wrapped in a separate method so we can call it from the mutex closure.
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @return int
      */
     final public function doParentRun(InputInterface $input, OutputInterface $output)
     {
         return parent::run($input, $output);
     }
-
 
     /**
      * Returns a path to the file which can be used as a mutex.

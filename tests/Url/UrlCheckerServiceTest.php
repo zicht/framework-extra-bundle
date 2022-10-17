@@ -5,6 +5,7 @@
 
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Url;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -146,7 +147,7 @@ class UrlCheckerServiceTest extends TestCase
 
     /**
      * @param string $host
-     * @return \PHPUnit_Framework_MockObject_MockObject|RequestStack
+     * @return RequestStack&MockObject
      */
     private function getRequestStackMock($host = 'localhost')
     {

@@ -5,18 +5,18 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 
 /**
@@ -35,7 +35,7 @@ class EmbedHelper
     protected $session;
 
     /**
-     * @var Session
+     * @var RouterInterface
      */
     protected $router;
 
@@ -50,10 +50,7 @@ class EmbedHelper
     protected $urlChecker;
 
     /**
-     * @param RouterInterface $router
      * @param Session $session
-     * @param RequestStack $requestStack
-     * @param UrlCheckerService $urlChecker
      * @param bool $markExceptionsAsFormErrors
      */
     public function __construct(RouterInterface $router, SessionInterface $session, RequestStack $requestStack, UrlCheckerService $urlChecker, $markExceptionsAsFormErrors = false)
@@ -80,7 +77,6 @@ class EmbedHelper
         return $parent;
     }
 
-
     /**
      * Generate an embedded url, adding the embedded parameters to the url
      *
@@ -96,7 +92,6 @@ class EmbedHelper
         return $this->router->generate($route, $params);
     }
 
-
     /**
      * Returns the parameters to add to an embedded url from the current request.
      *
@@ -109,7 +104,7 @@ class EmbedHelper
             'return_url' => $this->getParamFromRequest('return_url', $checkSafety),
             'success_url' => $this->getParamFromRequest('success_url', $checkSafety),
             // eg: do=change
-            'do' => $this->getParamFromRequest('do')
+            'do' => $this->getParamFromRequest('do'),
         ];
     }
 
@@ -141,7 +136,6 @@ class EmbedHelper
     }
 
     /**
-     * @param Form $form
      * @param int $formId
      * @return FormErrorIterator|null
      */
@@ -174,11 +168,10 @@ class EmbedHelper
      * array which can be used in a template.
      *
      * @param Form|FormInterface $form
-     * @param callable $handlerCallback
      * @param string $formTargetRoute
      * @param array $formTargetParams
      * @param array $extraViewVars
-     * @param null|callable $formIdHandler
+     * @param callable|null $formIdHandler
      * @return array|Response
      * @throws \Exception
      */
@@ -274,7 +267,7 @@ class EmbedHelper
             if (!empty($formState['form_errors'])) {
                 // 1. You cannot serialize or un-serialize PDO instances
                 // 2. We do not want to store cause and origin in the session since these can become quite large
-                foreach ($formState['form_errors'] as $key => $error) {
+                foreach ($formState['form_errors'] as $error) {
                     $refObject = new \ReflectionObject($error);
                     $refCauseProperty = $refObject->getProperty('cause');
                     $refCauseProperty->setAccessible(true);
@@ -331,11 +324,9 @@ class EmbedHelper
         return $response;
     }
 
-
     /**
      * Returns the ID the form's state is stored by in the session
      *
-     * @param \Symfony\Component\Form\FormInterface $form
      * @return mixed
      */
     public function getFormId(FormInterface $form)
@@ -352,7 +343,6 @@ class EmbedHelper
         return $ret;
     }
 
-
     /**
      * @param bool $markExceptionsAsFormErrors
      */
@@ -360,7 +350,6 @@ class EmbedHelper
     {
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
     }
-
 
     /**
      * Provides a way of customizing error messages based on type of exception, etc.
@@ -383,9 +372,7 @@ class EmbedHelper
      *
      * Messages will be pushed to a viewVars called 'messages' see $this->handleForm
      *
-     * @param Form $form
      * @param string $message
-     * @param SessionInterface|null $session
      */
     public function setFlashMessage(Form $form, $message, SessionInterface $session = null)
     {

@@ -37,8 +37,7 @@ class WithTokenParser extends AbstractTokenParser
     /**
      * Parses a token and returns a node.
      *
-     * @param Token $token A Token instance
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @return WithNode
      */
     public function parse(Token $token)
     {
@@ -71,7 +70,6 @@ class WithTokenParser extends AbstractTokenParser
         $stream->expect(Token::BLOCK_END_TYPE);
         return new WithNode($arguments, $body, $options, $start->getLine(), $start->getValue());
     }
-
 
     /**
      * Checks for the end of the control structure.

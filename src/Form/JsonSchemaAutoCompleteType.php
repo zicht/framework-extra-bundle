@@ -7,7 +7,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JsonSchemaAutoCompleteType extends AbstractType
 {
@@ -53,7 +53,7 @@ class JsonSchemaAutoCompleteType extends AbstractType
     /**
      * Returns the json_encoded schema used by the editor to render an input with autocomplete
      *
-     * @return \closure
+     * @return \Closure
      */
     private function getSchemaGenerator()
     {

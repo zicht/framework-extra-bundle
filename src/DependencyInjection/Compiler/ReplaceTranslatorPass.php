@@ -21,6 +21,7 @@ class ReplaceTranslatorPass implements CompilerPassInterface
     {
         if (class_exists(BaseTranslator::class) && $container->hasDefinition('translator.default')
             && $container->hasParameter('translator.class')) {
+            /** @var class-string $class */
             $class = $container->getParameter('translator.class');
             $definition = $container->getDefinition('translator.default');
             $definition->setClass($class);

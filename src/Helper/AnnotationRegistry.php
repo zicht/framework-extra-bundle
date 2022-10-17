@@ -13,16 +13,14 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Helper;
 class AnnotationRegistry
 {
     /**
-     * @var array
+     * @var array<int|string, array>
      */
     private $annotations = [];
-
 
     public function __construct()
     {
         $this->annotations = [];
     }
-
 
     /**
      * @param string $name
@@ -61,7 +59,7 @@ class AnnotationRegistry
 
     /**
      * @param string $key
-     * @param string $annotation
+     * @param array $annotation
      */
     public function setAnnotation($key, $annotation)
     {
@@ -77,7 +75,6 @@ class AnnotationRegistry
     {
         return $this->annotations;
     }
-
 
     /**
      * Add multiple annotations, or an annotated object that implements the getPublicAnnotations() method.
