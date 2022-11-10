@@ -10,11 +10,11 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
@@ -28,11 +28,6 @@ class EmbedHelper
      * @var bool Whether or not to consider exceptions thrown by the handler as formerrors.
      */
     protected $isMarkExceptionsAsFormErrors;
-
-    /**
-     * @var Session
-     */
-    protected $session;
 
     /**
      * @var RouterInterface
@@ -49,14 +44,9 @@ class EmbedHelper
      */
     protected $urlChecker;
 
-    /**
-     * @param Session $session
-     * @param bool $markExceptionsAsFormErrors
-     */
-    public function __construct(RouterInterface $router, SessionInterface $session, RequestStack $requestStack, UrlCheckerService $urlChecker, $markExceptionsAsFormErrors = false)
+    public function __construct(RouterInterface $router, RequestStack $requestStack, UrlCheckerService $urlChecker, $markExceptionsAsFormErrors = false)
     {
         $this->router = $router;
-        $this->session = $session;
         $this->requestStack = $requestStack;
         $this->urlChecker = $urlChecker;
         $this->isMarkExceptionsAsFormErrors = $markExceptionsAsFormErrors;
@@ -310,7 +300,7 @@ class EmbedHelper
 
             $viewVars['messages'] = [];
             if ($request->hasPreviousSession()) {
-                $messages = $this->session->getFlashBag()->get($formId);
+                $messages = $this->requestStack->getSession()->getFlashBag()->get($formId);
                 if ($messages) {
                     foreach ($messages as $value) {
                         $viewVars['messages'][] = $prefix . $value;
@@ -381,7 +371,7 @@ class EmbedHelper
                 "Please do not rely on the container's instance of the session, but fetch it from the Request",
                 E_USER_DEPRECATED
             );
-            $session = $this->session;
+            $session = $this->requestStack->getSession();
         }
         $session->getFlashBag()->set($this->getFormId($form), $message);
     }

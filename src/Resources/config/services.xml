@@ -10,7 +10,6 @@
 
         <service id="zicht_embed_helper" class="%zicht_framework_extra.embed_helper.class%" public="true">
             <argument type="service" id="router"/>
-            <argument type="service" id="session"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService"/>
         </service>
