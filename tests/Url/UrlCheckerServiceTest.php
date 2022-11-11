@@ -154,8 +154,8 @@ class UrlCheckerServiceTest extends TestCase
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(['getHost'])->getMock();
         $requestMock->method('getHost')->willReturn($host);
 
-        $requestStackMock = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->setMethods(['getMasterRequest'])->getMock();
-        $requestStackMock->method('getMasterRequest')->willReturn($requestMock);
+        $requestStackMock = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->setMethods(['getMainRequest'])->getMock();
+        $requestStackMock->method('getMainRequest')->willReturn($requestMock);
 
         return $requestStackMock;
     }

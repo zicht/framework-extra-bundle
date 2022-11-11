@@ -16,19 +16,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValidateEntityCommand extends Command
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected static $defaultName = 'zicht:entity:validate';
 
-    /**
-     * @var ManagerRegistry
-     */
+    /** @var ManagerRegistry */
     private $doctrine;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $validator;
 
     public function __construct(ManagerRegistry $doctrine, ValidatorInterface $validator, string $name = null)
@@ -67,6 +61,7 @@ class ValidateEntityCommand extends Command
                 if (count($violations)) {
                     $io->getErrorStyle()->writeln(get_class($entity) . '::' . $entity->getId());
                     foreach ($violations as $error) {
+                        /** @var \Symfony\Component\Validator\ConstraintViolation $error */
                         $io->getErrorStyle()->writeln(" -> {$error}");
                     }
                 }
