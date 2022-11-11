@@ -76,7 +76,7 @@ class EmbedHelperTest extends AbstractIntegrationTestCase
 
         $router = $this->getMockBuilder(RouterInterface::class)->disableOriginalConstructor()->getMock();
         $this->router = $router;
-        $this->helper = new EmbedHelper($router, $this->session, $this->request, $this->urlChecker);
+        $this->helper = new EmbedHelper($router, $this->request, $this->urlChecker);
     }
 
     /**

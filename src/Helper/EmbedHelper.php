@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -117,7 +116,7 @@ class EmbedHelper
             return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }
 
-        if ((null !== $request = $this->requestStack->getMasterRequest()) && null !== $request->get($name)) {
+        if ((null !== $request = $this->requestStack->getMainRequest()) && null !== $request->get($name)) {
             $value = $request->get($name);
             return $checkSafety ? $this->urlChecker->getSafeUrl($value) : $value;
         }

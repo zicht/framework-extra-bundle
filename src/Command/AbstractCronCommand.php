@@ -106,7 +106,7 @@ abstract class AbstractCronCommand extends Command
             case E_ERROR:
             case E_RECOVERABLE_ERROR:
                 $this->logger->addError($errstr, [$file, $line]);
-                exit();
+                exit;
             case E_WARNING:
             case E_USER_WARNING:
                 $this->logger->addWarning($errstr, [$file, $line]);

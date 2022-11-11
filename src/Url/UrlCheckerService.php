@@ -35,24 +35,24 @@ class UrlCheckerService
     protected $safeUrlMatches;
 
     /** @var Request|null */
-    private $masterRequest;
+    private $mainRequest;
 
     /**
      * @param string[] $safeUrlMatches
      */
     public function __construct(RequestStack $requestStack, array $safeUrlMatches = [])
     {
-        $this->masterRequest = $requestStack->getMasterRequest();
+        $this->mainRequest = $requestStack->getMainRequest();
         $this->safeUrlMatches = $safeUrlMatches;
 
-        if ($this->masterRequest && empty($this->safeUrlMatches)) {
+        if ($this->mainRequest && empty($this->safeUrlMatches)) {
             // When no matches are configured we will accept relative urls
             // Do *not* tweak this matcher without running the unit tests
             $this->safeUrlMatches[] = '#^/([^/]|$)#';
 
             // When no matches are configured we will accept absolute urls to the same domain
             // Do *not* tweak this matcher without running the unit tests
-            $hostParts = array_slice(explode('.', $this->masterRequest->getHost()), -2);
+            $hostParts = array_slice(explode('.', $this->mainRequest->getHost()), -2);
             $this->safeUrlMatches[] = sprintf('#^((https?://)|(/{0,2}))?([a-z0-9.\-]+[.])?%s(/|$)#i', join('[.]', $hostParts));
         }
     }

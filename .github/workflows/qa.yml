@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-22.04
         strategy:
             matrix:
-                php: [ '7.2', '7.4', '8.0', '8.1' ]
+                php: [ '7.4', '8.0', '8.1' ]
         name: PHP ${{ matrix.php }}
         steps:
             -   uses: actions/checkout@v2
@@ -34,6 +34,6 @@ jobs:
             -   if: always()
                 run: composer run-script lint -- --format=checkstyle | cs2pr
             -   if: always()
-                run: composer run-script analysis -- --no-suggestions --output-format=github
+                run: composer run-script analysis -- --php-version=${{ matrix.php }} --no-suggestions --output-format=github
             -   if: always()
                 run: composer run-script test

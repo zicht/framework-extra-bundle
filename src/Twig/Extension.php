@@ -136,7 +136,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function prefixMultiple($values, $prefix)
     {
         foreach ($values as $value) {
-            yield "${prefix}${value}";
+            yield "{$prefix}{$value}";
         }
     }
 

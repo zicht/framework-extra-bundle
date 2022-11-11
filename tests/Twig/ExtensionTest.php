@@ -78,7 +78,7 @@ class ExtensionTest extends TestCase
             ['url_to_form_params', [''], []],
             ['url_to_form_params', ['/'], []],
             ['url_to_form_params', ['/?'], []],
-            ['url_to_form_params', ['/?a'], ['a' => '']], //< --- this is intended behaviour
+            ['url_to_form_params', ['/?a'], ['a' => '']], // < --- this is intended behaviour
             ['url_to_form_params', ['/?a=b'], ['a' => 'b']],
             ['url_to_form_params', ['/?a[x][y]=b'], ['a[x][y]' => 'b']],
             ['url_to_form_params', ['/?a[x][y]=b&c=1'], ['a[x][y]' => 'b', 'c' => '1']],

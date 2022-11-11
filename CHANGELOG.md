@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 10.0.0 - 2022-11-11
+### Added
+- Support for Symfony ^5.4
+### Removed
+- Support for Symfony 4
+- Support for PHP 7.2 & 7.3
+
 ## 9.4.3 - 2022-10-14
 ### Changed
 - Swapped the zicht/standards-php (PHPCS) linter for PHP CS Fixer.
