@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 10.0.1 - 2022-11-14
+### Removed
+- Removed several console commands due to inactive use
+
 ## 10.0.0 - 2022-11-11
 ### Added
 - Support for Symfony ^5.4

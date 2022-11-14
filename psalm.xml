@@ -17,7 +17,6 @@
         <ignoreFiles>
             <directory name="vendor" />
             <file name="src/Admin/TreeAdmin.php" />
-            <file name="src/Command/AbstractCronCommand.php" />
         </ignoreFiles>
     </projectFiles>
 
