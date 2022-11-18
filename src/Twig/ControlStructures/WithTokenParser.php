@@ -5,6 +5,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
+use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
@@ -24,22 +25,15 @@ class WithTokenParser extends AbstractTokenParser
         'always',
     ];
 
-    /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return 'with';
     }
 
     /**
-     * Parses a token and returns a node.
-     *
      * @return WithNode
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $options = [];
         $stream = $this->parser->getStream();

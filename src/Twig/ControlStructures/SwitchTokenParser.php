@@ -12,18 +12,12 @@ use Twig\TokenParser\AbstractTokenParser;
 
 class SwitchTokenParser extends AbstractTokenParser
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return 'switch';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $lineno = $token->getLine();
 
