@@ -12,13 +12,9 @@ use Twig\TokenParser\AbstractTokenParser;
 class AnnotationsTokenParser extends AbstractTokenParser
 {
     /**
-     * Parses a token and returns a node.
-     *
-     * @param Token $token A Token instance
-     *
      * @return AnnotationsNode A Twig_NodeInterface instance
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $stream = $this->parser->getStream();
 
@@ -30,12 +26,7 @@ class AnnotationsTokenParser extends AbstractTokenParser
         return new AnnotationsNode(['body' => $body]);
     }
 
-    /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @return string The tag name
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return 'annotations';
     }

@@ -5,19 +5,16 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\Meta;
 
+use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
 class AnnotateTokenParser extends AbstractTokenParser
 {
     /**
-     * Parses a token and returns a node.
-     *
-     * @param Token $token A Token instance
-     *
-     * @return AnnotateNode A Twig_NodeInterface instance
+     * @return AnnotateNode
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $stream = $this->parser->getStream();
 
@@ -40,12 +37,7 @@ class AnnotateTokenParser extends AbstractTokenParser
         return $node;
     }
 
-    /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @return string The tag name
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return 'annotate';
     }

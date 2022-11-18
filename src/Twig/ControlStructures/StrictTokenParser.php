@@ -5,6 +5,7 @@
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig\ControlStructures;
 
+use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
@@ -13,18 +14,12 @@ use Twig\TokenParser\AbstractTokenParser;
  */
 class StrictTokenParser extends AbstractTokenParser
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return 'strict';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $lineno = $token->getLine();
 
