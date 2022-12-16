@@ -11,8 +11,6 @@ Nothing so far
 ## 10.1.0 - 2022-12-07
 ### Added
 - Support for `doctrine/dbal ^3`
-### Removed
-- Support for `doctrine/dbal ^2`
 
 ## 10.0.2 - 2022-11-16
 ### Added
