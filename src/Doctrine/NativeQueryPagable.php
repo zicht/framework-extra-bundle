@@ -28,8 +28,7 @@ class NativeQueryPagable implements Pageable
      */
     public function getTotal()
     {
-        $this->countQuery->execute();
-        return $this->countQuery->fetch(\PDO::FETCH_COLUMN);
+        return $this->countQuery->executeQuery()->rowCount();
     }
 
     /**
