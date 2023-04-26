@@ -9,17 +9,17 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8",
+        "php": "^8",
         "doctrine/dbal": "^2.13.1 || ^3",
         "doctrine/persistence": "1.3 - 3",
         "swaggest/json-schema": "^0.12",
-        "symfony/console": "^5.4",
-        "symfony/form": "^5.4",
-        "symfony/http-foundation": "^5.4",
-        "symfony/routing": "^5.4",
+        "symfony/console": "^5.4 || ^6",
+        "symfony/form": "^5.4 || ^6",
+        "symfony/http-foundation": "^5.4 || ^6",
+        "symfony/routing": "^5.4 || ^6",
         "symfony/security-acl": "^3",
-        "symfony/security-core": "^5.4",
-        "symfony/translation": "^5.4",
+        "symfony/security-core": "^5.4 || ^6",
+        "symfony/translation": "^5.4 || ^6",
         "twig/twig": "^2.7 || ^3",
         "zicht/util": "^2"
     },
@@ -29,13 +29,13 @@
         "doctrine/orm": "^2.13",
         "friendsofphp/php-cs-fixer": "^3",
         "gedmo/doctrine-extensions": "^3",
-        "phpunit/phpunit": "^8",
-        "symfony/cache": "^5.4",
-        "symfony/doctrine-bridge": "^5.4",
-        "symfony/framework-bundle": "^5.4",
-        "symfony/twig-bundle": "^5.4",
-        "symfony/validator": "^5.4",
-        "vimeo/psalm": "^4"
+        "phpunit/phpunit": "^9.6",
+        "symfony/cache": "^5.4 || ^6",
+        "symfony/doctrine-bridge": "^5.4 || ^6",
+        "symfony/framework-bundle": "^5.4 || ^6",
+        "symfony/twig-bundle": "^5.4 || ^6",
+        "symfony/validator": "^5.4 || ^6",
+        "vimeo/psalm": "^5"
     },
     "autoload": {
         "psr-4": {
@@ -50,8 +50,13 @@
     "license": "MIT",
     "scripts": {
         "analysis": "psalm",
-        "lint": "php-cs-fixer fix --dry-run --diff -vvv",
-        "lint-fix": "php-cs-fixer fix",
+        "lint": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff -vvv",
+        "lint-fix": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix",
         "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-feature-symfony-6": "11.x-dev"
+        }
     }
 }

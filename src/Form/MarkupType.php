@@ -57,7 +57,7 @@ class MarkupType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'zicht_markup_type';
     }

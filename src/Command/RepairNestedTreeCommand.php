@@ -7,6 +7,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,20 +19,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Checks if a NestedTree set is verified (correct), if not repairs the tree
  * using the NestedSet methods.
  */
+#[AsCommand(RepairNestedTreeCommand::COMMAND_NAME)]
 class RepairNestedTreeCommand extends Command
 {
-    /**
-     * This is const because it's referred by the exception thrown when a validation error occurs
-     */
-    const COMMAND_NAME = 'zicht:repair:nested-tree';
+    /** This is const because it's referred by the exception thrown when a validation error occurs */
+    public const COMMAND_NAME = 'zicht:repair:nested-tree';
 
-    /**
-     * @var string
-     */
-    protected static $defaultName = self::COMMAND_NAME;
-
-    /** @var ManagerRegistry */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     public function __construct(ManagerRegistry $doctrine, string $name = null)
     {
@@ -39,9 +33,6 @@ class RepairNestedTreeCommand extends Command
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function configure()
     {
         $this
@@ -54,10 +45,7 @@ class RepairNestedTreeCommand extends Command
             );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $entity = $input->getArgument('entity');
@@ -82,6 +70,6 @@ class RepairNestedTreeCommand extends Command
             $io->getErrorStyle()->error('Given entity is not of instance NestedTreeRepository');
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

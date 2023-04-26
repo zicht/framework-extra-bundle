@@ -17,7 +17,7 @@ class WithNode extends Node
      * @param array $items
      * @param Node $body
      * @param array $options
-     * @param string|null $line
+     * @param int $line
      * @param string $tag
      */
     public function __construct($items, $body, $options, $line, $tag)

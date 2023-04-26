@@ -2,14 +2,14 @@
 <psalm
     errorLevel="6"
     resolveFromConfigFile="true"
-
-    findUnusedVariablesAndParams="true"
-    usePhpDocMethodsWithoutMagicCall="true"
-    usePhpDocPropertiesWithoutMagicCall="true"
-
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+    findUnusedVariablesAndParams="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
 >
     <projectFiles>
         <directory name="src" />
@@ -21,6 +21,11 @@
     </projectFiles>
 
     <issueHandlers>
+        <PossiblyUndefinedMethod>
+            <errorLevel type="info">
+                <file name="src/DependencyInjection/Configuration.php"/>
+            </errorLevel>
+        </PossiblyUndefinedMethod>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <!-- tests -->
@@ -34,6 +39,16 @@
                 <referencedClass name="UnitEnum" />
             </errorLevel>
         </UndefinedDocblockClass>
+        <UndefinedMethod>
+            <errorLevel type="info">
+                <file name="src/DependencyInjection/Configuration.php"/>
+            </errorLevel>
+        </UndefinedMethod>
+        <UnusedMethodCall>
+            <errorLevel type="info">
+                <referencedMethod name="ReflectionProperty::setAccessible" />
+            </errorLevel>
+        </UnusedMethodCall>
     </issueHandlers>
 
     <forbiddenFunctions>

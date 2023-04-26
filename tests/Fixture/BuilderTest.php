@@ -101,6 +101,8 @@ namespace ZichtTest\Bundle\FrameworkExtraBundle\Fixture\Assets {
 
         public $parent;
 
+        public $customSet;
+
         public $something;
 
         public function addB(B $b)
