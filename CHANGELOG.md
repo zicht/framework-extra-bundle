@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Fixed
 - Return type of `Zicht\Bundle\FrameworkExtraBundle\Doctrine\DoctrineQueryPager::getTotal()`
+### Removed
+- Removed PHP v8.0 in GitHub Q&A
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
