@@ -1,7 +1,4 @@
 <?php
-/**
- * @copyright Zicht Online <https://zicht.nl>
- */
 
 namespace Zicht\Bundle\FrameworkExtraBundle\Twig;
 
@@ -13,6 +10,13 @@ use Twig\NodeVisitor\NodeVisitorInterface;
 
 class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
 {
+    private string $kernelProjectDir;
+
+    public function __construct(string $kernelProjectDir)
+    {
+        $this->kernelProjectDir = $kernelProjectDir;
+    }
+
     public function enterNode(Node $node, Environment $env): Node
     {
         return $node;
@@ -20,22 +24,33 @@ class RenderAddEmbedParamsNodeVisitor implements NodeVisitorInterface
 
     public function leaveNode(Node $node, Environment $env): Node
     {
-        if ($node instanceof FunctionExpression) {
-            if ($node->getAttribute('name') === 'controller') {
-                $args = $node->getNode('arguments');
-                if (!$args->hasNode(1)) {
-                    $args->setNode(1, new ArrayExpression([], $node->getTemplateLine()));
-                }
-                $args->setNode(
-                    1,
-                    new FunctionExpression(
-                        'embed',
-                        new Node([$args->getNode(1)]),
-                        $node->getTemplateLine()
-                    )
-                );
-            }
+        if (!($node instanceof FunctionExpression) || $node->getAttribute('name') !== 'controller') {
+            return $node;
         }
+        if (!($source = $node->getSourceContext()) || !($path = $source->getPath())
+            || (strpos($path, $this->kernelProjectDir . '/vendor/') === 0 && strpos($path, $this->kernelProjectDir . '/vendor/zicht/') === false)) {
+            // If this is a template from a vendor other than "zicht", don't add the embed params.
+            return $node;
+        }
+
+        $args = $node->getNode('arguments');
+        $attributesName = 'attributes';
+        $attributes = new ArrayExpression([], $node->getTemplateLine());
+        if ($args->hasNode(1)) {
+            $attributesName = 1;
+            $attributes = $args->getNode(1);
+        } elseif ($args->hasNode('attributes')) {
+            $attributes = $args->getNode('attributes');
+        }
+        $args->setNode(
+            $attributesName,
+            new FunctionExpression(
+                'embed',
+                new Node([$attributes]),
+                $node->getTemplateLine()
+            )
+        );
+
         return $node;
     }
 

@@ -20,6 +20,7 @@
             <argument type="service" id="zicht_annotation_registry"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="security.authorization_checker"/>
+            <argument>%kernel.project_dir%</argument>
             <tag name="twig.extension"/>
         </service>
 
