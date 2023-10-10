@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 10.1.1 - 2023-10-10
+### Fixed
+- Made `RenderAddEmbedParamsNodeVisitor` compatible with Twig named arguments
+  and excluded templates of vendors other than Zicht from processing.
+
 ## 10.1.0 - 2022-12-07
 ### Added
 - Support for `doctrine/dbal ^3`

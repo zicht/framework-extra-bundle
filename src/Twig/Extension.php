@@ -51,22 +51,26 @@ class Extension extends AbstractExtension implements GlobalsInterface
     /** @var AnnotationRegistry */
     protected $annotationRegistry;
 
-    /** @var TranslatorInterface */
+    /** @var TranslatorInterface|null */
     protected $translator;
 
-    /** @var AuthorizationCheckerInterface */
+    /** @var AuthorizationCheckerInterface|null */
     protected $authChecker;
+
+    protected string $kernelProjectDir;
 
     public function __construct(
         EmbedHelper $embedHelper,
         AnnotationRegistry $annotationRegistry,
         TranslatorInterface $translator = null,
-        AuthorizationCheckerInterface $authChecker = null
+        AuthorizationCheckerInterface $authChecker = null,
+        string $kernelProjectDir = ''
     ) {
         $this->embedHelper = $embedHelper;
         $this->annotationRegistry = $annotationRegistry;
         $this->translator = $translator;
         $this->authChecker = $authChecker;
+        $this->kernelProjectDir = $kernelProjectDir;
     }
 
     /**
@@ -639,7 +643,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function getNodeVisitors()
     {
         return [
-            'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor(),
+            'zicht_render_add_embed_params' => new RenderAddEmbedParamsNodeVisitor($this->kernelProjectDir),
         ];
     }
 
