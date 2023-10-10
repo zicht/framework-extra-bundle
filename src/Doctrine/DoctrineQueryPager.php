@@ -65,7 +65,7 @@ class DoctrineQueryPager implements Pageable
             $c = clone $this->qb;
             $this->countQuery = $c->select('COUNT(' . $this->alias . ') ' . $this->countAlias)->getQuery();
         }
-        return $this->countQuery->getSingleScalarResult();
+        return (int)$this->countQuery->getSingleScalarResult();
     }
 
     /**
