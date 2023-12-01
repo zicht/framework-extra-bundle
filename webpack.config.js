@@ -12,15 +12,15 @@ module.exports = function (env, argv) {
     return {
         entry: {
             'json-editor': [
-                `webpack-polyfill-injector?${JSON.stringify({modules: ['./src/Zicht/Bundle/FrameworkExtraBundle/Resources/typescript/json-editor.ts']})}!`,
-                './src/Zicht/Bundle/FrameworkExtraBundle/Resources/sass/json-editor.scss'
+                `webpack-polyfill-injector?${JSON.stringify({modules: ['./src/Resources/typescript/json-editor.ts']})}!`,
+                './src/Resources/sass/json-editor.scss'
             ],
         },
 
         output: {
             filename: '[name].js',
             publicPath: '/bundles/zichtframeworkextra/',
-            path: path.resolve('./src/Zicht/Bundle/FrameworkExtraBundle/Resources/public')
+            path: path.resolve('./src/Resources/public')
         },
 
         resolve: {
@@ -78,7 +78,7 @@ module.exports = function (env, argv) {
                 files: {
                     'json-editor+.js': [
                         './node_modules/@trevoreyre/autocomplete-js/dist/autocomplete.min.js',
-                        './src/Zicht/Bundle/FrameworkExtraBundle/Resources/public/json-editor.js'
+                        './src/Resources/public/json-editor.js'
                     ]
                 }
             }),
@@ -92,7 +92,7 @@ module.exports = function (env, argv) {
                 cssProcessorOptions: {colormin: false}
             }),
             new StyleLintPlugin({
-                files: './src/Zicht/Bundle/FrameworkExtraBundle/Resources/sass/**/*.scss'
+                files: './src/Resources/sass/**/*.scss'
             }),
             // To see notifications, you need `notify-osd` installed on your system, i.e. `sudo apt install notify-osd`
             new WebpackBuildNotifierPlugin({title: "framework-extra-bundle", sound: false})
