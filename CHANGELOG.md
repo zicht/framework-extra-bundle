@@ -5,12 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added|Changed|Deprecated|Removed|Fixed|Security
+Nothing so far
+
+## 10.1.2 - 2023-12-01
 ### Fixed
 - Return type of `Zicht\Bundle\FrameworkExtraBundle\Doctrine\DoctrineQueryPager::getTotal()`
 ### Removed
 - Removed PHP v8.0 in GitHub Q&A
-### Added|Changed|Deprecated|Removed|Fixed|Security
-Nothing so far
+### Changed
+- Forward merge of 9.4.4: Removed directory depth (removed in 9.0.0) from FE config files
+- Forward merge of 9.4.4: Added FE config files to .gitattributes
 
 ## 10.1.1 - 2023-10-10
 ### Fixed
