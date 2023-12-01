@@ -36,6 +36,11 @@ Nothing so far
 - Support for Symfony 4
 - Support for PHP 7.2 & 7.3
 
+## 9.4.4 - 2023-12-01
+### Changed
+- Removed directory depth (removed in 9.0.0) from FE config files
+- Added FE config files to .gitattributes
+
 ## 9.4.3 - 2022-10-14
 ### Changed
 - Swapped the zicht/standards-php (PHPCS) linter for PHP CS Fixer.

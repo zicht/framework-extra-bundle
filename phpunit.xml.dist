@@ -17,7 +17,7 @@
         <whitelist>
             <directory suffix=".php">src/</directory>
             <exclude>
-                <directory suffix=".php">src/Zicht/Bundle/FrameworkExtraBundle/Resources</directory>
+                <directory suffix=".php">src/Resources</directory>
             </exclude>
         </whitelist>
     </filter>

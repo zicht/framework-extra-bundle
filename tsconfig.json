@@ -21,8 +21,8 @@
         "importHelpers": true
     },
     "files": [
-        "./src/Zicht/Bundle/FrameworkExtraBundle/Resources/typescript/json-editor.ts",
-        "./src/Zicht/Bundle/FrameworkExtraBundle/Resources/typescript/types/json-editor.d.ts",
+        "./src/Resources/typescript/json-editor.ts",
+        "./src/Resources/typescript/types/json-editor.d.ts",
         "./node_modules/@zicht/js.component/types/alertifyjs.typings.d.ts"
     ]
 }
