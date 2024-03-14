@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 9.5.0 - 2023-04-15
+### Added
+- Feature to block search bots/crawlers, activated through an env var flag.
+
 ## 9.4.4 - 2023-12-01
 ### Changed
 - Removed directory depth (removed in 9.0.0) from FE config files
