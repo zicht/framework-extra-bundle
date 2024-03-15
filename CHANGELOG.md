@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
+## 10.2.0 - 2023-04-15
+### Added
+- Forward merge of v9.5.0: Feature to block search bots/crawlers, activated through an env var flag.
+
 ## 10.1.2 - 2023-12-01
 ### Fixed
 - Return type of `Zicht\Bundle\FrameworkExtraBundle\Doctrine\DoctrineQueryPager::getTotal()`
@@ -40,6 +44,10 @@ Nothing so far
 ### Removed
 - Support for Symfony 4
 - Support for PHP 7.2 & 7.3
+
+## 9.5.0 - 2023-04-15
+### Added
+- Feature to block search bots/crawlers, activated through an env var flag.
 
 ## 9.4.4 - 2023-12-01
 ### Changed
