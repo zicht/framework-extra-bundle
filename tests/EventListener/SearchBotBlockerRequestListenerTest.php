@@ -16,9 +16,7 @@ final class SearchBotBlockerRequestListenerTest extends TestCase
     {
         $searchBotsListPatterns = array_filter(
             file(dirname(__DIR__, 2) . '/src/Resources/config/search_bots.list', \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES) ?: [],
-            static function ($line) {
-                return strpos($line, '#') !== 0;
-            }
+            static fn (string $line): bool => strpos($line, '#') !== 0
         );
 
         $listener = new SearchBotBlockerRequestListener();
@@ -26,7 +24,7 @@ final class SearchBotBlockerRequestListenerTest extends TestCase
 
         $kernel = $this->createMock(HttpKernelInterface::class);
         $request = new Request([], [], [], [], [], ['HTTP_USER_AGENT' => $userAgent], null);
-        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         return [$listener, $event];
     }

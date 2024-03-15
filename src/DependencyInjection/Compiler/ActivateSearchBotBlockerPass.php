@@ -31,9 +31,7 @@ class ActivateSearchBotBlockerPass implements CompilerPassInterface
         if (is_readable($searchBotsListFile)) {
             $searchBotsListPatterns = array_filter(
                 file($searchBotsListFile, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES) ?: [],
-                static function ($line) {
-                    return strpos($line, '#') !== 0;
-                }
+                static fn (string $line): bool => strpos($line, '#') !== 0
             );
             if (count($searchBotsListPatterns) > 0) {
                 $definition->addMethodCall('setSearchBotsListPatterns', [$searchBotsListPatterns]);

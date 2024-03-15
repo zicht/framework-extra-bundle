@@ -13,7 +13,7 @@ use Zicht\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\ActivateSearc
 class SearchBotBlockerRequestListener
 {
     /** @var non-empty-string[] List of regular expressions to match against the User-Agent header */
-    private $searchBotsListPatterns = ['(bot|spider|crawler|slurp|mediapartners)'];
+    private array $searchBotsListPatterns = ['(bot|spider|crawler|slurp|mediapartners)'];
 
     /** @param non-empty-string[] $searchBotsListPatterns */
     public function setSearchBotsListPatterns(array $searchBotsListPatterns): void
@@ -24,7 +24,7 @@ class SearchBotBlockerRequestListener
     /** @throws AccessDeniedHttpException */
     public function onKernelRequestBlockSearchBots(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
