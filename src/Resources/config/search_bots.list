@@ -1,0 +1,50 @@
+# List containing regular expressions to detect search bot User Agents. Empty lines and lines starting with # are ignored.
+# The regular expressions are case insensitive. The regular expression delimiter used is `/`.
+
+# "AhrefsBot" is also a bot, but we don't include it because it belongs to the Ahrefs SEO tool.
+# We also don't include social media bots (Facebook, Twitter, LinkedIn, Slack, etc.) because they do not actively crawl,
+# but generate previews of URLs shared on their platforms and we probably want to test that on protected environments.
+
+^AcademicBotRTU( )
+^AdsBot-Google( )
+(?<!\w)AdsBot-Google-Mobile;
+(?<!\w)Amazonbot(-Video)?\/
+(?<!\w)Applebot\/
+(?<!\w)Baiduspider\/
+(?<!\w)Barkrowler\/
+(?<!\w)bingbot\/
+(?<!\w)BLEXBot\/
+^Buck\/
+(?<!\w)BW\/
+(?<!\w)coccocbot(-image)?\/
+(?<!\w)DataForSeoBot\/
+(?<!\w)DotBot\/
+(?<!\w)DuckDuckBot(-Https)?\/
+(?<!\w)DuckDuckGo-Favicons-Bot\/
+(?<!\w)ev-crawler\/
+(?<!\w)fluid\/
+(?<!\w)GenomeCrawlerd\/
+(?<!\w)Googlebot\/
+^Gabanzabot\/
+^Googlebot-Image\/
+^IABot\/
+(?<!\w)ImagesiftBot;
+(?<!\w)laboraybot;
+^magpie-crawler\/
+(?<!\w)MJ12bot\/
+(?<!\w)MojeekBot\/
+(?<!\w)Paqlebot\/
+(?<!\w)PetalBot;
+(?<!\w)robots-txt-checker;
+(?<!\w)SemrushBot(-BA|-COUB|-CT|-SI|-SWA)?(\/|;)
+(?<!\w)SeznamBot\/
+(?<!\w)SplitSignalBot\/
+(?<!\w)SurdotlyBot\/
+^Turnitin( )
+^WikiDo\/
+(?<!\w)wpbot\/
+(?<!\w)Y!J-WSC\/
+(?<!\w)YandexBot\/
+(?<!\w)Yeti\/
+^YisouSpider$
+(?<!\w)ZoominfoBot( )

@@ -41,6 +41,10 @@ Nothing so far
 - Support for Symfony 4
 - Support for PHP 7.2 & 7.3
 
+## 9.5.0 - 2023-04-15
+### Added
+- Feature to block search bots/crawlers, activated through an env var flag.
+
 ## 9.4.4 - 2023-12-01
 ### Changed
 - Removed directory depth (removed in 9.0.0) from FE config files
