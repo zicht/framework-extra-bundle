@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
-## 10.2.0 - 2023-04-15
+## 10.2.1 - 2024-03-26
+### Fixed
+- Forward merge of v9.5.1: Default value for parameter `env(BLOCK_SEARCH_BOTS)` must be string.
+
+## 10.2.0 - 2024-03-15
 ### Added
 - Forward merge of v9.5.0: Feature to block search bots/crawlers, activated through an env var flag.
 
