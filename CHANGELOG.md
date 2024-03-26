@@ -45,7 +45,11 @@ Nothing so far
 - Support for Symfony 4
 - Support for PHP 7.2 & 7.3
 
-## 9.5.0 - 2023-04-15
+## 9.5.1 - 2024-03-26
+### Fixed
+- Default value for parameter `env(BLOCK_SEARCH_BOTS)` must be string.
+
+## 9.5.0 - 2024-03-15
 ### Added
 - Feature to block search bots/crawlers, activated through an env var flag.
 
