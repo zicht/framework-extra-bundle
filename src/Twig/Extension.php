@@ -9,9 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\PersistentCollection;
-use DOMDocument;
-use SimpleXMLElement;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
@@ -222,10 +221,10 @@ class Extension extends AbstractExtension implements GlobalsInterface
     /**
      * Filter a collection based on properties of the collection's items
      *
-     * @param array|Collection $items
+     * @param array|(Collection&Selectable) $items
      * @param string $comparator
      * @param string $booleanOperator
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function where($items, array $keyValuePairs, $comparator = 'eq', $booleanOperator = 'and')
     {
@@ -309,7 +308,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
      */
     public function urlToFormParameters($url)
     {
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = (string)parse_url($url, PHP_URL_QUERY);
         $vars = [];
         parse_str($query, $vars);
         return $this->valuesToFormParameters($vars, null);
@@ -562,12 +561,13 @@ class Extension extends AbstractExtension implements GlobalsInterface
         $now = new \DateTime();
         $diff = $date->diff($now);
         // natively, diff doesn't contain 'weeks'.
-        $diff->w = round($diff->d / 7);
+        $parts = ['y' => $diff->y, 'm' => $diff->m, 'd' => $diff->d, 'h' => $diff->h, 'i' => $diff->i, 's' => $diff->s];
+        $parts['w'] = round($diff->d / 7);
         $message = '';
         foreach (['y', 'm', 'w', 'd', 'h', 'i', 's'] as $part) {
-            if ($diff->$part > 0) {
+            if ($parts[$part] > 0) {
                 list($singular, $plural) = self::$RELATIVE_DATE_PART_MAP[$part];
-                if ($diff->$part > 1) {
+                if ($parts[$part] > 1) {
                     $denominator = $plural;
                 } else {
                     $denominator = $singular;
@@ -576,10 +576,10 @@ class Extension extends AbstractExtension implements GlobalsInterface
                 if (null !== $this->translator) {
                     $message = $this->translator->trans(
                         '%count% ' . $denominator . ' ago',
-                        ['%count%' => $diff->$part]
+                        ['%count%' => $parts[$part]]
                     );
                 } else {
-                    $message = sprintf('%d %s ago', $diff->$part, $denominator);
+                    $message = sprintf('%d %s ago', $parts[$part], $denominator);
                 }
                 break;
             }
@@ -748,15 +748,15 @@ class Extension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param object $data
+     * @param \SimpleXMLElement|string $data
      * @return string
      */
     public function xml($data)
     {
-        if ($data instanceof SimpleXMLElement) {
+        if ($data instanceof \SimpleXMLElement) {
             $data = $data->saveXML();
         }
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->loadXml($data);
         $dom->formatOutput = true;
         return $dom->saveXML();

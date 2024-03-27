@@ -143,7 +143,7 @@ class ParentChoiceType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'zicht_parent_choice';
     }

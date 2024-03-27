@@ -15,7 +15,7 @@ class SwitchCaseNode extends Node
     /**
      * @param Node $body
      * @param array $expression
-     * @param int $fallthrough
+     * @param bool $fallthrough
      * @param int $lineno
      * @param null $tag
      */

@@ -20,6 +20,8 @@ use Zicht\Bundle\FrameworkExtraBundle\Url\UrlCheckerService;
 
 /**
  * Helper class to facilitate embedded forms in ESI with redirection handling.
+ *
+ * @psalm-type FormStateType = array{data: array, form_errors: FormErrorIterator, has_errors: bool}
  */
 class EmbedHelper
 {
@@ -126,7 +128,7 @@ class EmbedHelper
 
     /**
      * @param int $formId
-     * @return FormErrorIterator|null
+     * @return FormStateType|null
      */
     protected function getFormState(Form $form, $formId)
     {
@@ -137,9 +139,10 @@ class EmbedHelper
             // cannot store errors iterator in session because somewhere there is a closure that can't be serialized
             // therefore convert the errors iterator to array, on get from session convert to iterator
             // see [1]
+            /** @var FormStateType $state */
             $state = $request->getSession()->get($formId);
-            $state['form_errors'] = (is_array($state) && is_array($state['form_errors'])) ? $state['form_errors'] : [];
-            $state['form_errors'] = new FormErrorIterator($form, $state['form_errors']);
+            $formErrors = (is_array($state) && is_array($state['form_errors'])) ? $state['form_errors'] : [];
+            $state['form_errors'] = new FormErrorIterator($form, $formErrors);
         }
 
         return $state;
@@ -220,14 +223,14 @@ class EmbedHelper
                     $formStatus = 'errors';
 
                     $formState['has_errors'] = true;
-                    $formState['data'] = $request->request->get($form->getName());
+                    $formState['data'] = $request->request->all($form->getName());
                     $formState['form_errors'] = $form->getErrors();
                 }
             } else {
                 $formStatus = 'errors';
 
                 $formState['has_errors'] = true;
-                $formState['data'] = $request->request->get($form->getName());
+                $formState['data'] = $request->request->all($form->getName());
                 $formState['form_errors'] = $form->getErrors();
             }
             // redirect to the return url, if available
@@ -294,7 +297,7 @@ class EmbedHelper
 
             $prefix = '';
             if ($root = self::getFormRoot($viewVars['form'])) {
-                $prefix = sprintf('form_messages.%s.', strtolower($root->vars['name']));
+                $prefix = sprintf('form_messages.%s.', strtolower($root->vars['name'] ?? $form->getRoot()->getName()));
             }
 
             $viewVars['messages'] = [];

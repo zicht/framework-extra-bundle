@@ -7,6 +7,10 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Pager;
 
 /**
  * Pager implementation to handle paging over a countable set of elements
+ *
+ * @psalm-type PageMetaDataType = array{index: int, title: int, is_previous: bool, is_current: bool, is_next: bool}
+ * @implements \Iterator<int, PageMetaDataType>
+ * @implements \ArrayAccess<int, PageMetaDataType>
  */
 class Pager implements \Iterator, \ArrayAccess, \Countable
 {
@@ -32,9 +36,9 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     private $results;
 
     /**
-     * @var int|null Used for iterator implementation
+     * @var int Used for iterator implementation
      */
-    private $ptr;
+    private $ptr = 0;
 
     /**
      * Constructs the pager with the given set of elements to page over, and the given amount of items per page.
@@ -188,7 +192,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
      * Returns a set of meta information on the current page.
      * See itemAt() for the available information
      *
-     * @return array
+     * @return PageMetaDataType
      */
     public function getCurrent()
     {
@@ -198,7 +202,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     /**
      * Returns the meta data for the next page, and 'null' if there is none
      *
-     * @return array|null
+     * @return PageMetaDataType|null
      */
     public function getNext()
     {
@@ -211,7 +215,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     /**
      * Returns the meta data for the previous page, and 'null' if there is none
      *
-     * @return array|null
+     * @return PageMetaDataType|null
      */
     public function getPrevious()
     {
@@ -230,7 +234,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
      * - is_next: Whether the page is the next page
      *
      * @param int $i
-     * @return array
+     * @return PageMetaDataType
      */
     private function itemAt($i)
     {
@@ -244,75 +248,50 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     }
 
     /**
-     * Iterator::current() implementation
      * Returns the meta data for the current item in the iterator.
      *
-     * @return array
+     * @return PageMetaDataType
      */
-    public function current()
+    public function current(): array
     {
         return $this->itemAt($this->ptr);
     }
 
-    /**
-     * Iterator::next() implementation, advances the iterator one item.
-     *
-     * @return void
-     */
-    public function next()
+    public function next(): void
     {
         ++$this->ptr;
     }
 
-    /**
-     * Returns the key of the current Iterator item, which is the page index.
-     *
-     * @return int
-     */
-    public function key()
+    public function key(): int
     {
         return $this->ptr;
     }
 
-    /**
-     * Iterator::valid() implementation, checks if the current iterator index is valid
-     *
-     * @return bool
-     */
-    public function valid()
+    public function valid(): bool
     {
         return $this->offsetExists($this->ptr);
     }
 
-    /**
-     * Iterator::rewind() implementation; rewinds the iterator to the start of the range
-     *
-     * @return void
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->ptr = $this->getFirst();
     }
 
     /**
-     * ArrayAccess:offsetExists() implementation, checks if the given page index is valid.
-     *
      * @param int $offset
-     * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return is_int($offset) && $offset >= $this->getFirst() && $offset <= $this->getLast();
     }
 
     /**
-     * ArrayAccess::offsetGet() implementation; returns the meta data for the given page index, and null
-     * if it does not exist.
+     * Returns the meta data for the given page index, and null if it does not exist.
      *
      * @param int $offset
-     * @return array
+     * @return PageMetaDataType|null
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?array
     {
         if ($this->offsetExists($offset)) {
             return $this->itemAt($offset);
@@ -321,38 +300,29 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
     }
 
     /**
-     * ArrayAccess::offsetSet() implementation, throws an exception as the page set is read only
+     * Throws an exception as the page set is read only
      *
      * @param int $offset
      * @param mixed $value
-     * @return void
-     *
      * @throws \BadMethodCallException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
     /**
-     * ArrayAccess::offsetUnset() implementation, throws an exception as the page set is read only
+     * Throws an exception as the page set is read only
      *
      * @param int $offset
-     * @return void
-     *
      * @throws \BadMethodCallException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new \BadMethodCallException(__CLASS__ . ' is read only');
     }
 
-    /**
-     * Countable::count() implementation; Returns the number of pages in the page set.
-     *
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return $this->numPages;
     }
@@ -367,7 +337,7 @@ class Pager implements \Iterator, \ArrayAccess, \Countable
 
     /**
      * @param int $surround
-     * @return array
+     * @return array<non-negative-int, PageMetaDataType|null>
      */
     public function withGaps($surround = 2)
     {

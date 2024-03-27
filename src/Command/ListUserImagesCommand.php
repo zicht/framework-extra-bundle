@@ -7,6 +7,7 @@ namespace Zicht\Bundle\FrameworkExtraBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,15 +20,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * Results are sorted by size descending.
  */
+#[AsCommand('zicht:content:list-images')]
 class ListUserImagesCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'zicht:content:list-images';
-
-    /** @var ManagerRegistry */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     public function __construct(ManagerRegistry $doctrine, string $name = null)
     {
@@ -35,9 +31,6 @@ class ListUserImagesCommand extends Command
         parent::__construct($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function configure()
     {
         $this
@@ -47,10 +40,7 @@ class ListUserImagesCommand extends Command
             ->setDescription('List images used in specific fields of an Entity and show their file size.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -88,7 +78,7 @@ class ListUserImagesCommand extends Command
                             $arr = [
                                 'id' => $record['id'],
                                 'image' => $image,
-                                'size' => $this->humanFilesize($fileSize),
+                                'size' => $fileSize !== false ? $this->humanFilesize($fileSize) : null,
                             ];
 
                             if ('' !== $input->getOption('concat')) {
@@ -112,13 +102,13 @@ class ListUserImagesCommand extends Command
             }
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
      * Kindly ripped from PHP.net :P.
      *
-     * @param string $bytes
+     * @param int $bytes
      * @param int $decimals
      *
      * @return string

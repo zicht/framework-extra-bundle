@@ -17,6 +17,12 @@ use Zicht\Util\Str;
  */
 class ExtensionTest extends TestCase
 {
+    /** @var EmbedHelper */
+    protected $embedHelper;
+
+    /** @var AnnotationRegistry */
+    protected $annotationRegistry;
+
     /** @var ExtensionInterface */
     protected $extension;
 

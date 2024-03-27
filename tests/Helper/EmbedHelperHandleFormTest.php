@@ -6,6 +6,7 @@
 namespace ZichtTest\Bundle\FrameworkExtraBundle\Helper;
 
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
 
 /**
  * @covers \Zicht\Bundle\FrameworkExtraBundle\Helper\EmbedHelper::handleForm
@@ -17,7 +18,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
      */
     public function testHandleFormReturnsExpectedFormUrl()
     {
-        $value = rand(1, 1000);
+        $value = (string)rand(1, 1000);
         $this->router->expects($this->once())->method('generate')->with('user_login')->will($this->returnValue($value));
         $ret = $this->helper->handleForm(
             $this->form,
@@ -105,7 +106,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $error = new FormError('FooBar');
         $this->form->expects($this->once())->method('addError');
-        $this->form->expects($this->once())->method('getErrors')->will($this->returnValue([$error]));
+        $this->form->expects($this->once())->method('getErrors')->will($this->returnValue(new FormErrorIterator($this->form, [$error])));
         $this->form->expects($this->any())->method('getName')->will($this->returnValue('mock'));
 
         $this->helper->handleForm(
@@ -238,6 +239,7 @@ class EmbedHelperHandleFormTest extends EmbedHelperTest
         $this->form->expects($this->once())->method('addError')->will(
             $this->returnCallback(function ($e) use (&$errors) {
                 $errors[] = $e;
+                return $this->form;
             })
         );
         $this->helper->handleForm(

@@ -5,10 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Support for Symfony 6
+### Removed
+- Support for PHP 7.4
+### Changed
+- Using attributes instead of annotations for routes and commands
 ### Added|Changed|Deprecated|Removed|Fixed|Security
 Nothing so far
 
-## 10.2.0 - 2023-04-15
+## 10.2.1 - 2024-03-26
+### Fixed
+- Forward merge of v9.5.1: Default value for parameter `env(BLOCK_SEARCH_BOTS)` must be string.
+
+## 10.2.0 - 2024-03-15
 ### Added
 - Forward merge of v9.5.0: Feature to block search bots/crawlers, activated through an env var flag.
 
@@ -45,7 +55,11 @@ Nothing so far
 - Support for Symfony 4
 - Support for PHP 7.2 & 7.3
 
-## 9.5.0 - 2023-04-15
+## 9.5.1 - 2024-03-26
+### Fixed
+- Default value for parameter `env(BLOCK_SEARCH_BOTS)` must be string.
+
+## 9.5.0 - 2024-03-15
 ### Added
 - Feature to block search bots/crawlers, activated through an env var flag.
 

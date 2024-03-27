@@ -80,7 +80,7 @@ class SchemaServiceTest extends TestCase
         if ($expectedMessageRegExp === null) {
             self::assertNull($message);
         } else {
-            self::assertRegExp($expectedMessageRegExp, $message);
+            self::assertMatchesRegularExpression($expectedMessageRegExp, $message);
         }
         self::assertEquals($expected, $result);
     }
@@ -122,7 +122,7 @@ class SchemaServiceTest extends TestCase
         if ($expectedMessageRegExp === null) {
             self::assertNull($message);
         } else {
-            self::assertRegExp($expectedMessageRegExp, $message);
+            self::assertMatchesRegularExpression($expectedMessageRegExp, $message);
         }
         self::assertEquals($expected, $result);
     }

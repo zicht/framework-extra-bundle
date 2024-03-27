@@ -22,7 +22,7 @@ class Translator extends BaseTranslator
     /**
      * {@inheritDoc}
      */
-    public function trans($id, array $parameters = [], $domain = 'messages', $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = 'messages', ?string $locale = null): string
     {
         if (null === $locale) {
             $locale = $this->getLocale();
